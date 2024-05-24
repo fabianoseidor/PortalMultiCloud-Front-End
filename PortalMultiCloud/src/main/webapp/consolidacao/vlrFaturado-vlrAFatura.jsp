@@ -112,7 +112,7 @@
 											<div class="tab-content" id="myTabContent">
 											
 												<div class="tab-pane fade show active" id="recursoContrato" role="tabpanel" aria-labelledby="recurso-tab">
-                                                  <div style="height: 300px; overflow: scroll;">
+                                                  <div style="height: 500px; overflow: scroll;">
 													<table class="table table-striped table-hover table-sm table-bordered table-responsive-sm">
 													  <thead>
 													    <tr>

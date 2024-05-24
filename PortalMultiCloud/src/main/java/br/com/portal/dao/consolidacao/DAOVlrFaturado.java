@@ -22,9 +22,8 @@ public class DAOVlrFaturado {
 		
 		List<ModelVlrFaturado> listVlrFaturados = new ArrayList<ModelVlrFaturado>();
 		
-		String sql = "SELECT PEP, VLR_TOTAL FROM VIEW_VALOR_CONTRATO_ADITIVO ORDER BY PEP";
-		
-		
+		String sql = "SELECT RTRIM( PEP ) AS PEP, VLR_TOTAL FROM VIEW_VALOR_CONTRATO_ADITIVO ORDER BY PEP";
+				
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ResultSet set = ps.executeQuery();
@@ -50,7 +49,7 @@ public class DAOVlrFaturado {
 		
 		List<ModelVlrFaturado> listVlrFaturados = this.getvlrFaturado( desvioPadrao );
 		List<ModelVlrFaturado> listVlrAFaturar = new ArrayList<ModelVlrFaturado>();
-		String sql = "SELECT PEP, SUM(VALOR) VLR FROM AFATURA AS AF WHERE ANO = ? AND MES = ? GROUP BY PEP ORDER BY PEP";
+		String sql = "SELECT RTRIM( PEP ) AS PEP, SUM(VALOR) VLR FROM AFATURA AS AF WHERE ANO = ? AND MES = ? GROUP BY PEP ORDER BY PEP";
 
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
@@ -60,10 +59,18 @@ public class DAOVlrFaturado {
 			
 			while(set.next()) {
 				boolean isfind = false;
+				String pepAFaturar = set.getString("PEP").trim();
 				for(int i = 0; i < listVlrFaturados.size(); i++ ) {	
 				    String pepFaturado = listVlrFaturados.get(i).getPepFaturado().trim();
-				    String pepAFaturar = set.getString("PEP").trim();
+				    
 					if( !pepFaturado.isEmpty() && pepFaturado != null ) {
+/*						
+						if( pepAFaturar.equals( "BR-MC-SUPLEY_PUB-HOST" ) ) 
+							System.out.println("pepFaturado: " + pepFaturado + " - pepAFaturar: " + pepAFaturar);
+												
+						if( pepFaturado.equals( "BR-MC-SUPLEY_PUB-HOST" ) ) 
+							System.out.println("pepFaturado: " + pepFaturado + " - pepAFaturar: " + pepAFaturar);
+*/												
 						if( pepFaturado.equals( pepAFaturar ) ) {
 							
 							listVlrFaturados.get(i).setPepAFaturar(set.getString("PEP"));
