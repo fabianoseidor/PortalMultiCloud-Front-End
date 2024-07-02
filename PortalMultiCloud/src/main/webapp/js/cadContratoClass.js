@@ -63,7 +63,6 @@ class Contrato{
             let td_site           = tr.insertCell();
             let td_editar         = tr.insertCell();
             let td_delete         = tr.insertCell();
-            let teste;
              // Inseri os valores do objeto nas celulas
             td_tipo_servico.innerText   = ( this.listRecursos[i].tipo_servico   !== undefined ? this.listRecursos[i].tipo_servico   : '' );
             td_status_rec.innerText     = ( this.listRecursos[i].status_rec     !== undefined ? this.listRecursos[i].status_rec     : '' );

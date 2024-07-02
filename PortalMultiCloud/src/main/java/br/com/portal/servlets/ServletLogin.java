@@ -12,6 +12,7 @@ import java.util.List;
 import br.com.portal.dao.DAOLoginRepository;
 import br.com.portal.model.ModelLogin;
 import br.com.portal.modelPerfil.ModelPerfilLogado;
+import br.com.portal.modelPerfil.ModelSecao;
 import br.com.portal.util.Md5Criptografia;
 
 // import br.com.portal.util.EnviarEmail;
@@ -26,7 +27,26 @@ public class ServletLogin extends ServletGeniricUtil {
     
     /**/
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       doPost(request, response);
+		try {
+			String acao = request.getParameter("acao");
+			
+			if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("MontaSecaoInicial") ) {	
+
+
+			
+			
+			
+			}else {
+		    	 RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");
+				 request.setAttribute("msg", "Erro ao efetuar Login! Favor tentar novamente");
+			     requestDispatcher.forward(request, response);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+			RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");
+			request.setAttribute("msg", e.getMessage());
+			requestDispatcher.forward(request, response);			
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

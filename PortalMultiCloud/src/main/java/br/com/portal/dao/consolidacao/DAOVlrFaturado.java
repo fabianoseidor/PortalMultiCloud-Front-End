@@ -22,8 +22,9 @@ public class DAOVlrFaturado {
 		
 		List<ModelVlrFaturado> listVlrFaturados = new ArrayList<ModelVlrFaturado>();
 		
-		String sql = "SELECT RTRIM( PEP ) AS PEP, VLR_TOTAL FROM VIEW_VALOR_CONTRATO_ADITIVO ORDER BY PEP";
-				
+		// String sql = "SELECT RTRIM( PEP ) AS PEP, VLR_TOTAL FROM VIEW_VALOR_CONTRATO_ADITIVO ORDER BY PEP";
+		String sql = "SELECT RTRIM( PEP ) AS PEP,  SUM(VLR_TOTAL) AS VLR_TOTAL FROM VIEW_VALOR_CONTRATO_ADITIVO GROUP BY PEP ORDER BY PEP";
+		
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ResultSet set = ps.executeQuery();
