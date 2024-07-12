@@ -155,6 +155,85 @@ public class DAOLoginRepository {
 	    
 		return perfilLogados;
 	}
+
+	
+	public List<ModelPerfilLogado> getPerfilUserLogadoPorLogin( String login )throws SQLException {
+		
+		List<ModelPerfilLogado> perfilLogados = null;
+/*		
+		String sql = "SELECT  COL.ID_COLABORADORES                    "
+			       + "      , COL.ID_PERFIL                           "
+			       + "      , PSE.NOME_PAG_EXTENSAO                   "
+			       + "      , SEC.NOME_SECAO                          "
+			       + "      , COL.USERADMIN                           "
+			       + "      , COL.PRIMEIRO_ACESSO                     "
+			       + "      , PER.NOME_PERFIL                         "
+			       + "      , PER.OBS                                 "
+			       + "  FROM                                          "
+			       + "    COLABORADORES     AS COL                    "
+			       + "  , PERFIL            AS PER                    "
+			       + "  , ITEM_PERFIL_SECAO AS IPC                    "
+			       + "  , PAGINA_SECAO      AS PSE                    "
+			       + "  , SECAO             AS SEC                    "
+			       + " WHERE COL.LOGIN            = ?                 "
+			       + "   AND PER.ID_PERFIL        = COL.ID_PERFIL     "
+			       + "   AND IPC.ID_PERFIL        = PER.ID_PERFIL     "
+			       + "   AND PSE.ID_SECAO         = IPC.ID_SECAO      "
+			       + "   AND PSE.ID_PAG_SECAO     = IPC.ID_PAG        "
+			       + "   AND SEC.ID_SECAO         = PSE.ID_SECAO      "
+			       + " ORDER BY SEC.NOME_SECAO, PSE.NOME_PAG_EXTENSAO " ;
+*/
+		String sql = "select                                              "
+				+ "    us.id_users                                        "
+				+ "  , ua.id_perfil                                       "
+				+ "  , PSE.NOME_PAG_EXTENSAO                              "
+				+ "  , SEC.NOME_SECAO                                     "
+				+ "  , ua.admin                                           "
+				+ "  , pe.primeiro_acesso                                 "
+				+ "  , PER.NOME_PERFIL                                    "
+				+ "  , PER.OBS                                            "
+				+ "  from                                                 "
+				+ "    [LOGINUNIFICADO_PRD].[dbo].[users]           as us "
+				+ "  , [LOGINUNIFICADO_PRD].[dbo].[user_aplicativo] as ua "
+				+ "  , [LOGINUNIFICADO_PRD].[dbo].[pessoa]          as pe "
+				+ "    , PERFIL            AS PER                         "
+				+ "  , ITEM_PERFIL_SECAO AS IPC                           "
+				+ "  , PAGINA_SECAO      AS PSE                           "
+				+ "  , SECAO             AS SEC                           "
+				+ "  where us.login     = ?                               "
+				+ "    and ua.id_users     = us.id_users                  "
+				+ "    and ua.id_aplicacao = 1                            "
+				+ "    and pe.id_pessoa    = us.id_pessoa                 "
+				+ "    AND PER.ID_PERFIL        = ua.id_perfil            "
+				+ "   AND IPC.ID_PERFIL        = PER.ID_PERFIL            "
+				+ "   AND PSE.ID_SECAO         = IPC.ID_SECAO             "
+				+ "   AND PSE.ID_PAG_SECAO     = IPC.ID_PAG               "
+				+ "   AND SEC.ID_SECAO         = PSE.ID_SECAO             "
+				+ " ORDER BY SEC.NOME_SECAO, PSE.NOME_PAG_EXTENSAO        ";
+
+		PreparedStatement statement = conexao.prepareStatement(sql);
+		statement.setString(1, login );
+		ResultSet resut = statement.executeQuery();
+		while(resut.next()) {
+			if( perfilLogados == null ) perfilLogados = new ArrayList<ModelPerfilLogado>();
+			ModelPerfilLogado perfilLogado = new ModelPerfilLogado();
+			perfilLogado.setId_colaboradores( resut.getLong  ( "id_users"         ) );
+			perfilLogado.setId_perfil       ( resut.getLong  ( "id_perfil"        ) );
+			perfilLogado.setNome_secao      ( resut.getString( "NOME_SECAO"       ) );
+			perfilLogado.setDesc_pagina     ( resut.getString( "NOME_PAG_EXTENSAO") );
+			perfilLogado.setUseradmin       ( resut.getInt   ( "admin"            ) );
+			perfilLogado.setPrimeiro_acesso ( resut.getInt   ( "primeiro_acesso"  ) );
+			perfilLogado.setNome_perfil     ( resut.getString( "NOME_PERFIL"      ) );
+			perfilLogado.setObs             ( resut.getString( "OBS"              ) );
+			perfilLogado.setIsVisivel       ( true                                  );
+			perfilLogados.add(perfilLogado);
+		}
+	    
+		return perfilLogados;
+	}
+	
+	
+	
 	
 	public String getNomeDataBase( )  {
 		try {	

@@ -1,6 +1,7 @@
 package br.com.portal.filter;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -15,6 +16,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @WebFilter(urlPatterns = {"/principal/*","/perfil/*","/manutencao/*","/cadastro/*", "/consolidacao/*", "/relatorios/*"})
@@ -37,15 +39,24 @@ public class FilterAutenticacao extends HttpFilter implements Filter {
 		try {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
-			
+
+			String urlPortalLogin = "";
+	        InetAddress ia = InetAddress.getLocalHost();
+	        String node = ia.getHostName();
+	        if(node.equals("PIBASTIANDEV"))urlPortalLogin = "http://localhost:8080/pjLoginUnificado/ServletLogin";
+	        else urlPortalLogin = "http://10.154.20.134:8080/loginunificado/ServletLogin";
+
 			String usuarioLogado = (String) session.getAttribute("usuario");
 			String urlParaAutent = req.getServletPath(); // URL que esta sendo acessada.
-			
+			urlPortalLogin = urlPortalLogin + "?urlAplic=" + urlParaAutent + "&aplic=1"; // 1 ==> Defini a Aplicacao como Portal de Contrato
 			// Validar se esta logado, se nao redireciona para a tela de login
 			if( usuarioLogado == null && !urlParaAutent.equalsIgnoreCase("/principal/ServletLogin") ) {
-				RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url="+urlParaAutent);
+//				RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url="+urlParaAutent);
+//				redireciona.forward(request, response);
 				request.setAttribute("msg", "Por favor, realizar o login!");
-				redireciona.forward(request, response);
+				
+ 				HttpServletResponse resp = (HttpServletResponse) response;	
+ 				resp.sendRedirect(urlPortalLogin);
 				return ;// para a execucao e redireciona para o login.
 			}else {
 	    		chain.doFilter(request, response);

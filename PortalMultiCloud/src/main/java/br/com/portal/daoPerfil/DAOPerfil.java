@@ -195,10 +195,10 @@ public class DAOPerfil {
 				+ "   , SECAO             AS SEC          "
 				+ "   , PERFIL            AS PER          "
 				+ "   , PAGINA_SECAO      AS PSE          "
-				+ " WHERE IPS.ID_PERFIL = ?               "
-				+ "   AND SEC.ID_SECAO = IPS.ID_SECAO     "
-				+ "   AND PER.ID_PERFIL = IPS.ID_PERFIL   "
-				+ "  AND PSE.ID_PAG_SECAO    = IPS.ID_PAG ";
+				+ " WHERE IPS.ID_PERFIL   = ?             "
+				+ "   AND SEC.ID_SECAO    = IPS.ID_SECAO  "
+				+ "   AND PER.ID_PERFIL   = IPS.ID_PERFIL "
+				+ "  AND PSE.ID_PAG_SECAO = IPS.ID_PAG    ";
 		
 		List<ModalListaPerfilItem> listaPerfilIrens = new ArrayList<ModalListaPerfilItem>();
 		DAOUtil daoUtil = new DAOUtil();

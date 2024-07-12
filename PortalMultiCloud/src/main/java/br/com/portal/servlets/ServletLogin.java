@@ -1,19 +1,21 @@
 package br.com.portal.servlets;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
+import br.com.portal.model.loginunificado.Users;
+import br.com.portal.dao.DAOLoginRepository;
+import br.com.portal.model.ModelLogin;
+import br.com.portal.modelPerfil.ModelPerfilLogado;
+import br.com.portal.servise.UserService;
+import br.com.portal.util.Md5Criptografia;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
-
-import br.com.portal.dao.DAOLoginRepository;
-import br.com.portal.model.ModelLogin;
-import br.com.portal.modelPerfil.ModelPerfilLogado;
-import br.com.portal.modelPerfil.ModelSecao;
-import br.com.portal.util.Md5Criptografia;
 
 // import br.com.portal.util.EnviarEmail;
 
@@ -22,25 +24,91 @@ public class ServletLogin extends ServletGeniricUtil {
 	private static final long serialVersionUID = 1L;
     private DAOLoginRepository daoLoginRepository = new DAOLoginRepository();  
 
-    public ServletLogin() {
-    }
+    public ServletLogin() { }
     
     /**/
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			String acao = request.getParameter("acao");
+			String acao    = request.getParameter("acao");
+	        InetAddress ia = InetAddress.getLocalHost();
+	        String node    = ia.getHostName();
 			
-			if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("MontaSecaoInicial") ) {	
+	        if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("logout")) {
+				String urlLonginUnificado = "";
+		        if(node.equals("PIBASTIANDEV")) urlLonginUnificado = "http://localhost:8080/pjLoginUnificado/index.jsp";
+		        else urlLonginUnificado       = "http://10.154.20.134:8080/loginunificado/index.jsp";
+		        
+ 				HttpServletResponse resp = (HttpServletResponse) response;	
+ 				resp.sendRedirect(urlLonginUnificado);
+				return ;// para a execucao e redireciona para o login.
+			}else 
+			  if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("MontaSecaoInicial") ) {
+				String url            = request.getParameter("url"  );
+				String login          = request.getParameter("login");
+				String admin          = request.getParameter("admin");
+				String loginUnificado = request.getParameter("loginUnificado");
 
+				String urlAPI = "";
+		        if(node.equals("PIBASTIANDEV")) urlAPI = "http://localhost:8091/loginUnificado/";
+		        else urlAPI = "http://10.154.20.134:8091/loginUnificado/";
 
-			
-			
-			
+				String urlBuscaLogin = urlAPI + "buscarByLogin/" + login;
+				Users user = UserService.buscaUserLogin( urlBuscaLogin); 
+				
+				if( user != null ) {
+					
+					List<ModelPerfilLogado> perfilUserLogados = daoLoginRepository.getPerfilUserLogadoPorLogin( login );
+					request.getSession().setAttribute( "usuario"          , user.getLogin()                             );
+					request.getSession().setAttribute( "nomeUsuario"      , user.getPessoa().getNome_pessoa()           );
+					request.getSession().setAttribute( "fotoUsuario"      , user.getPessoa().getFotouser()              );
+					request.getSession().setAttribute( "useradmin"        , admin                                       );
+					request.getSession().setAttribute( "perfilUserLogados", perfilUserLogados                           );
+					request.getSession().setAttribute( "loginUnificado"   , loginUnificado != null ? loginUnificado : 0 );
+					
+					String nomeDatabase = daoLoginRepository.getNomeDataBase();
+
+					String last = nomeDatabase.substring(nomeDatabase.length()-4, nomeDatabase.length()-1);
+					if(last.equals("PRD")) nomeDatabase = "";
+					
+					request.getSession().setAttribute( "nomeDatabase", nomeDatabase);
+					
+
+				    if(url == null || url.equalsIgnoreCase("null")) {
+					   url = "principal/PagPrincipal.jsp";
+				    }
+					
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher(url);
+					requestDispatcher.forward(request, response);
+				}else {
+					request.setAttribute("msg", "Login ou Senha incorretamentos!");
+					String urlLonginUnificado = "";
+			        if(node.equals("PIBASTIANDEV")) urlLonginUnificado = "http://localhost:8080/pjLoginUnificado/index.jsp";
+			        else urlLonginUnificado       = "http://10.154.20.134:8080/loginunificado/index.jsp";
+			        
+	 				HttpServletResponse resp = (HttpServletResponse) response;	
+	 				resp.sendRedirect(urlLonginUnificado);
+					return ;// para a execucao e redireciona para o login.
+/*
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
+					requestDispatcher.forward(request, response);
+*/					
+				}
 			}else {
-		    	 RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");
-				 request.setAttribute("msg", "Erro ao efetuar Login! Favor tentar novamente");
-			     requestDispatcher.forward(request, response);
+				request.setAttribute("msg", "Login ou Senha incorretamentos!");
+				String urlLonginUnificado = "";
+		        if(node.equals("PIBASTIANDEV")) urlLonginUnificado = "http://localhost:8080/pjLoginUnificado/index.jsp";
+		        else urlLonginUnificado       = "http://10.154.20.134:8080/loginunificado/index.jsp";
+		        
+ 				HttpServletResponse resp = (HttpServletResponse) response;	
+ 				resp.sendRedirect(urlLonginUnificado);
+				return ;// para a execucao e redireciona para o login.
+/*				
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
+				request.setAttribute("msg", "Informe Login e Senha corretamente!");
+				requestDispatcher.forward(request, response);
+*/				
 			}
+				
 		}catch(Exception e){
 			e.printStackTrace();
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");

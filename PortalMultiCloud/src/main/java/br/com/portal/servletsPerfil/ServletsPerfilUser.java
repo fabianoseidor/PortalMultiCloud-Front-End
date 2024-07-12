@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -27,9 +29,14 @@ public class ServletsPerfilUser extends HttpServlet {
 		try {
 			String acao = request.getParameter("acao");
 			if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("ListaUser") ) {
-				String nome = request.getParameter("nome");
-				
-				List<ModelPerfilUser> listUsuarios = daoPerfilUser.getListaUsuario(nome);
+				String nome            = request.getParameter("nome");
+				HttpServletRequest req = (HttpServletRequest) request;
+				HttpSession session    = req.getSession();
+				String loginUnificado  =  (String) session.getAttribute("loginUnificado");
+				int loginUnificadoInt  = 0;
+				if(loginUnificado != null ) loginUnificadoInt = Integer.valueOf( loginUnificado );
+								
+				List<ModelPerfilUser> listUsuarios = daoPerfilUser.getListaUsuario(nome, loginUnificadoInt );
 				Gson gson = new Gson();
 				String lista = "";
 				if( listUsuarios.size() > 0 ) {
@@ -70,6 +77,13 @@ public class ServletsPerfilUser extends HttpServlet {
 			String user_cadastro = request.getParameter( "user_cadastro" );
 			String login         = request.getParameter( "login"         );
 			String idPerfil      = request.getParameter( "Selectperfil"  );
+
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpSession session    = req.getSession();
+			String loginUnificado  =  (String) session.getAttribute("loginUnificado");
+			int loginUnificadoInt  = 0;
+			if(loginUnificado != null ) loginUnificadoInt = Integer.valueOf( loginUnificado );
+			
 			
 			modelPerfilUser.setId_colaboradores ( idUsuario     != null && !idUsuario.isEmpty()     ? Long.parseLong( idUsuario.trim() ) : null );
 			modelPerfilUser.setId_perfil        ( idPerfil      != null && !idPerfil.isEmpty()      ? Long.parseLong( idPerfil.trim() )  : null );
@@ -78,7 +92,7 @@ public class ServletsPerfilUser extends HttpServlet {
 //			modelPerfilUser.setUseradmin        ( user_cadastro != null && !user_cadastro.isEmpty() ? user_cadastro.trim()               : null );
 			modelPerfilUser.setLogin_cadastro   ( user_cadastro != null && !user_cadastro.isEmpty() ? user_cadastro.trim()               : null );
 			
-			modelPerfilUser = daoPerfilUser.gravaAtualizaPerfil( modelPerfilUser );
+			modelPerfilUser = daoPerfilUser.gravaAtualizaPerfil( modelPerfilUser, loginUnificadoInt );
 
 		    request.setAttribute( "msg"            , msg             );
 			request.setAttribute( "modelPerfilUser", modelPerfilUser );
