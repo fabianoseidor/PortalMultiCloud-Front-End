@@ -42,6 +42,77 @@ public class DAOStatusContrato {
 		return modelStatusContratos;
 	}
 
+	public List<ModelStatusContrato> listaStatusContratoManutencao(){
+		
+		String sql = "SELECT * FROM STATUS_CONTRATO WHERE ID_STATUS_CONTRATO IN ( 1, 4, 5 ) ORDER BY ID_STATUS_CONTRATO";
+		List<ModelStatusContrato> modelStatusContratos = new ArrayList<ModelStatusContrato>();
+		DAOUtil daoUtil = new DAOUtil();
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ResultSet set = ps.executeQuery();
+			
+			while(set.next()) {
+				ModelStatusContrato modelStatusContrato = new ModelStatusContrato();
+				modelStatusContrato.setId_status_contrato( set.getLong("ID_STATUS_CONTRATO")                                    );
+				modelStatusContrato.setStatus_contrato   ( set.getString("STATUS_CONTRATO")                                     );
+				modelStatusContrato.setObservacao        ( set.getString("OBSERVACAO")                                          );
+				modelStatusContrato.setDt_criacao        ( daoUtil.FormataDataStringTelaDataTime( set.getString("DT_CRIACAO") ) );
+				modelStatusContratos.add(modelStatusContrato);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return modelStatusContratos;
+	}
+
+	public List<ModelStatusContrato> listaStatusContratoDescomissionamento(){
+		
+		String sql = "SELECT * FROM STATUS_CONTRATO WHERE ID_STATUS_CONTRATO IN ( 2, 3 ) ORDER BY ID_STATUS_CONTRATO";
+		List<ModelStatusContrato> modelStatusContratos = new ArrayList<ModelStatusContrato>();
+		DAOUtil daoUtil = new DAOUtil();
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ResultSet set = ps.executeQuery();
+			
+			while(set.next()) {
+				ModelStatusContrato modelStatusContrato = new ModelStatusContrato();
+				modelStatusContrato.setId_status_contrato( set.getLong("ID_STATUS_CONTRATO")                                    );
+				modelStatusContrato.setStatus_contrato   ( set.getString("STATUS_CONTRATO")                                     );
+				modelStatusContrato.setObservacao        ( set.getString("OBSERVACAO")                                          );
+				modelStatusContrato.setDt_criacao        ( daoUtil.FormataDataStringTelaDataTime( set.getString("DT_CRIACAO") ) );
+				modelStatusContratos.add(modelStatusContrato);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return modelStatusContratos;
+	}
+	
+	
+	
+	public List<ModelStatusContrato> listaStatusContratoCadastro(){
+		
+		String sql = "SELECT * FROM STATUS_CONTRATO WHERE ID_STATUS_CONTRATO IN( 1, 4 ) ORDER BY ID_STATUS_CONTRATO";
+		List<ModelStatusContrato> modelStatusContratos = new ArrayList<ModelStatusContrato>();
+		DAOUtil daoUtil = new DAOUtil();
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ResultSet set = ps.executeQuery();
+			
+			while(set.next()) {
+				ModelStatusContrato modelStatusContrato = new ModelStatusContrato();
+				modelStatusContrato.setId_status_contrato( set.getLong("ID_STATUS_CONTRATO")                                    );
+				modelStatusContrato.setStatus_contrato   ( set.getString("STATUS_CONTRATO")                                     );
+				modelStatusContrato.setObservacao        ( set.getString("OBSERVACAO")                                          );
+				modelStatusContrato.setDt_criacao        ( daoUtil.FormataDataStringTelaDataTime( set.getString("DT_CRIACAO") ) );
+				modelStatusContratos.add(modelStatusContrato);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return modelStatusContratos;
+	}
+
 	public ModelStatusContrato gravarAtualizaRegistros( ModelStatusContrato objeto ) throws Exception {
 		
 		if( objeto.isNovo() ){
@@ -106,7 +177,7 @@ public class DAOStatusContrato {
 	}
 
 	public void deletarRegistro( String id ) throws SQLException {
-		String sql = "DELETE FROM STATUS_CONTRATO WHERE ID_STATUS_CONTRATO = ? AND ID_STATUS_CONTRATO NOT IN (1, 2, 3, 4)";
+		String sql = "DELETE FROM STATUS_CONTRATO WHERE ID_STATUS_CONTRATO = ? AND ID_STATUS_CONTRATO NOT IN (1, 2, 3, 4, 5)";
 		PreparedStatement prepareSql = connection.prepareStatement(sql);
 		prepareSql.setLong( 1, Long.parseLong( id ) );
 

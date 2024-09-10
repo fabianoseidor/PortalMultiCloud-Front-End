@@ -1,3 +1,72 @@
+
+function atualizaVlrContratoBase(){
+	let vlrContrato = document.getElementById("valor_total").value; 
+	vlrContrato = vlrContrato.replace(".", "").replace(",", ".");
+	let vlr = parseFloat( vlrContrato );
+	const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+	document.getElementById("vlrContratoBase").value = formatado; 
+}
+
+
+async function formatDataStr( data ) {
+    
+	var dia = data.substr(0,2);
+	var mes = data.substr(3,2);
+	var ano = data.substr(6,4);
+	var dtFort = ano + "-" + mes + "-" + dia;
+	return dtFort;
+
+}
+
+async function calcular(){
+	var dt1 = await formatDataStr( document.getElementById("dt_inicio").value ); 
+	var dt2 = await formatDataStr( document.getElementById("dt_final" ).value );
+	var idSetup      = document.getElementById("idSetup"  ).value; 
+	
+	if( ( dt1 != null && dt1 != '' && dt1.trim() != '' ) && 
+	    ( dt2 != null && dt2 != '' && dt2.trim() != '' ) ){
+
+		  var data1 = new Date(dt1); 
+		  var data2 = new Date(new Date(dt2));
+		  var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
+		  let vlrContrato = document.getElementById("valor_total").value; 
+		  vlrConvet =  parseFloat( vlrContrato.replace(".", "").replace(",", ".") );
+		  let vlrParcela = vlrConvet / total;
+		  document.getElementById("qtyMesesContrato").value = total;			
+		  document.getElementById("vlrParcelas"     ).value = vlrParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+		  if(idSetup === "1" ){
+			 
+			if( total > 35 ){
+				var vlr = vlrConvet / total;
+				const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+				document.getElementById("idValorSetup").value = formatado;
+				document.getElementById("qtyParcSetup").value = "1";
+			}else if( total < 36 ){
+				var vlr = vlrConvet * 0.027;
+				const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+				document.getElementById("idValorSetup").value = formatado;
+				document.getElementById("qtyParcSetup").value = "1";				
+			}
+		  }else if(idSetup === "0" ){
+			
+			var data1 = new Date(dt1); 
+			var data2 = new Date(new Date(dt2));
+			var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
+			document.getElementById("qtyMesesContrato").value = total;
+			
+			let vlrContrato = document.getElementById("valor_total").value; 
+			vlrContrato = vlrContrato.replace(".", "").replace(",", ".");
+
+			let vlrConvet = parseFloat( vlrContrato )
+			var vlr = (vlrConvet / total) * 0.02;
+			const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+			document.getElementById("idValorSetup").value = formatado;
+			document.getElementById("qtyParcSetup").value = total;
+		  }
+	}
+}
+
 // In your Javascript (external .js resource or <script> tag)
 $(document).ready(function() {
     $('#pep').select2( {
@@ -198,6 +267,7 @@ $("#valor_Cotacao"   ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", t
 $("#vlrProduto"      ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
 $("#vlrUnit"         ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
 $("#vltTotal"        ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
+$("#idValorSetup"    ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
 
   /******************************************************************/
   /*                                                                */
@@ -251,7 +321,7 @@ $(document).ready( function(){
         if( index === 1 ){
 			legendaPasso = index + ' ( Informações do Contrato )';
 		}else if( index === 2 ){
-			legendaPasso = index + ' ( Informações da Vigência )';
+			legendaPasso = index + ' ( Informações da Vigência e Comissão )';
 		}else if( index === 3 ){
 			legendaPasso = index + ' ( Informações do Recurso )';
 		}else if( index === 4 ){
@@ -342,6 +412,22 @@ $(document).ready( function(){
 		inputValorConvertido.disabled = false;
 		inputValorCotacao.disabled = false;
 	}	
+  }
+  
+  /******************************************************************/
+  /*                                                                */
+  /*                                                                */
+  /******************************************************************/ 
+  function habilitaSetup() {
+
+  	var idSetup      = document.getElementById("idSetup"  ).value;
+  	var idValorSetup = document.querySelector("#idValorSetup");
+  		
+  	if(idSetup === "0"){
+  		$("#idValorSetup").val('R$ 0,00');
+  		idValorSetup.disabled = true;
+  	}else idValorSetup.disabled = false;
+  		
   }
 
   /******************************************************************/
@@ -513,7 +599,7 @@ function setnuvemRecurso(){
 /*                                                                */
 /*                                                                */
 /******************************************************************/
- function calculaDataFinalVigencia() {
+ async function calculaDataFinalVigencia() {
 	 
 	 var idTempoContrato = selectTempoContrato.options[selectTempoContrato.selectedIndex].value;
 	 var dtInicio        = document.getElementById("dt_inicio"   ).value;
@@ -523,12 +609,16 @@ function setnuvemRecurso(){
 	 $.ajax({ 			
   			method : "get",
   			url : urlAction,
+			async: true,
   			data : 'acao=CalculaVigencia&idTempoContrato=' + idTempoContrato + '&dtInicio=' + dtInicio + '&dtFinal=' + dtFinal,
   			success: function(lista){
   				var json = JSON.parse(lista);
   				$("#dt_criacao_vigencia").val(json.dt_criacao);
   				$("#dt_inicio").val(json.dt_inicio);
   				$("#dt_final").val(json.dt_final);
+				
+				idSetup.disabled = false;
+				calcular();
 
    			}
   	 }).fail(function( xhr ){

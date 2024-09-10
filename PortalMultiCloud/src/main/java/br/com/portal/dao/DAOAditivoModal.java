@@ -55,15 +55,17 @@ public class DAOAditivoModal {
 		
 		if( objeto.isNovo() ){
 			if( objeto.getId_rascunho() != null ) {
-                sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO   , "
-				    + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO, "
-				    + "                        ID_HUB_SPOT      , ID_RASCUNHO      , MOTIVO_RASCUNHO                        )"
-				    + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                       ";
+                sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO     , DT_CRIACAO       , ID_CONTRATO        , "
+				    + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA  , ID_MOEDA         , LOGIN_CADASTRO     , "
+			        + "                        ID_HUB_SPOT      , SETUP         , VALOR_SETUP    , QTY_PARCELA_SETUP, VALOR_PARCELA_SETUP, "
+			        + "                        QTY_MESE_SETUP   , ID_RASCUNHO   , MOTIVO_RASCUNHO                                        ) "
+				    + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                      ";
 			}else {
-                sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO   , "
-				    + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO, "
-				    + "                        ID_HUB_SPOT  )                                                                "
-				    + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                             ";
+                sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO       , ID_CONTRATO        , "
+				    + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA         , LOGIN_CADASTRO     , "
+				    + "                        ID_HUB_SPOT      , SETUP         , VALOR_SETUP  , QTY_PARCELA_SETUP, VALOR_PARCELA_SETUP, "
+				    + "			               QTY_MESE_SETUP                                                                          ) "
+				    + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                          ";
 				
 			}
 			
@@ -80,9 +82,16 @@ public class DAOAditivoModal {
 			prepareSql.setLong     ( 9 , objeto.getId_moeda()                                   ); // ID_MOEDA
 			prepareSql.setString   ( 10, objeto.getLogin_cadastro()                             ); // LOGIN_CADASTRO
 			prepareSql.setString   ( 11, objeto.getHubspot_aditivo()                            ); // ID_HUB_SPOT
+			
+			prepareSql.setBoolean  ( 12, objeto.getComissao_adit()                              ); // SETUP
+			prepareSql.setString   ( 13, objeto.getValor_setup_adit()                           ); // VALOR_SETUP
+			prepareSql.setInt      ( 14, objeto.getQty_parcela_setup_adit()                     ); // QTY_PARCELA_SETUP
+			prepareSql.setString   ( 15, objeto.getValor_parcela_setup_adit()                   ); // VALOR_PARCELA_SETUP
+			prepareSql.setInt      ( 16, objeto.getQty_mese_setup_adit()                        ); // QTY_MESE_SETUP
+			
 			if( objeto.getId_rascunho() != null ) {
-			    prepareSql.setLong     ( 12, objeto.getId_rascunho()                                ); // ID_RASCUNHO
-			    prepareSql.setString   ( 13, objeto.getMotivoRascunho()                             ); // MOTIVO_RASCUNHO
+			    prepareSql.setLong     ( 17, objeto.getId_rascunho()                            ); // ID_RASCUNHO
+			    prepareSql.setString   ( 18, objeto.getMotivoRascunho()                         ); // MOTIVO_RASCUNHO
 			}
 			prepareSql.execute();
 			connection.commit();
@@ -316,15 +325,17 @@ public class DAOAditivoModal {
 		String sql = "";
 		if( objeto.isNovo() ){
 			if( objeto.getId_rascunho() != null ) {
-			       sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO   ,   "
-					   + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO,   "
-					   + "                        ID_HUB_SPOT      ,ID_RASCUNHO    , MOTIVO_RASCUNHO                            ) "
-					   + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                         ";
+			       sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO     , DT_CRIACAO       , ID_CONTRATO        , "
+					   + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA  , ID_MOEDA         , LOGIN_CADASTRO     , "
+				       + "                        ID_HUB_SPOT      , SETUP         , VALOR_SETUP    , QTY_PARCELA_SETUP, VALOR_PARCELA_SETUP, "
+				       + "                        QTY_MESE_SETUP   , ID_RASCUNHO   , MOTIVO_RASCUNHO                                        ) "
+					   + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                      ";
 			}else {
-			       sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO   ,   "
-					   + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO,   "
-					   + "                        ID_HUB_SPOT )                                                                   "
-					   + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                               ";
+			       sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO       , ID_CONTRATO        , "
+					   + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA         , LOGIN_CADASTRO     , "
+					   + "                        ID_HUB_SPOT      , SETUP         , VALOR_SETUP  , QTY_PARCELA_SETUP, VALOR_PARCELA_SETUP, "
+					   + "			              QTY_MESE_SETUP                                                                          ) "
+					   + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                          ";
 			}
 			
 			PreparedStatement prepareSql = connection.prepareStatement(sql);
@@ -340,9 +351,16 @@ public class DAOAditivoModal {
 			prepareSql.setLong     ( 9 , objeto.getId_moeda()                                   ); // ID_MOEDA
 			prepareSql.setString   ( 10, objeto.getLogin_cadastro()                             ); // LOGIN_CADASTRO
 			prepareSql.setString   ( 11, objeto.getHubspot_aditivo()                            ); // ID_HUB_SPOT
+
+			prepareSql.setBoolean  ( 12, objeto.getComissao_adit()                              ); // SETUP
+			prepareSql.setString   ( 13, objeto.getValor_setup_adit()                           ); // VALOR_SETUP
+			prepareSql.setInt      ( 14, objeto.getQty_parcela_setup_adit()                     ); // QTY_PARCELA_SETUP
+			prepareSql.setString   ( 15, objeto.getValor_parcela_setup_adit()                   ); // VALOR_PARCELA_SETUP
+			prepareSql.setInt      ( 16, objeto.getQty_mese_setup_adit()                        ); // QTY_MESE_SETUP
+
 			if( objeto.getId_rascunho() != null ) {
-			    prepareSql.setLong     ( 12, objeto.getId_rascunho()                                ); // ID_RASCUNHO
-			    prepareSql.setString   ( 13, objeto.getMotivoRascunho()                             ); // MOTIVO_RASCUNHO
+			    prepareSql.setLong     ( 17, objeto.getId_rascunho()                                ); // ID_RASCUNHO
+			    prepareSql.setString   ( 18, objeto.getMotivoRascunho()                             ); // MOTIVO_RASCUNHO
 			}
 
 			prepareSql.execute();
@@ -435,15 +453,17 @@ public class DAOAditivoModal {
 		String sql = "";
 		if( objeto.isNovo() ){
 			if( objeto.getId_rascunho() != null ) {
-			    sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO   , "
-			        + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO, "
-			        + "                        ID_HUB_SPOT      , ID_RASCUNHO   , MOTIVO_RASCUNHO)                           "
-				    + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                       ";
+			    sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO     , DT_CRIACAO       , ID_CONTRATO        , "
+			        + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA  , ID_MOEDA         , LOGIN_CADASTRO     , "
+			        + "                        ID_HUB_SPOT      , SETUP         , VALOR_SETUP    , QTY_PARCELA_SETUP, VALOR_PARCELA_SETUP, "
+			        + "                        QTY_MESE_SETUP   , ID_RASCUNHO   , MOTIVO_RASCUNHO                                        ) "
+				    + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                      ";
 			}else {
-                sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO   , "
-				    + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO, "
-				    + "                        ID_HUB_SPOT                                                                  )"
-				    + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                             ";
+                sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO               , "
+				    + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO            , "
+				    + "                        ID_HUB_SPOT      , SETUP         , VALOR_SETUP  , QTY_PARCELA_SETUP, VALOR_PARCELA_SETUP, "
+				    + "			               QTY_MESE_SETUP                                                                          ) "
+				    + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                          ";
 				
 			}
 
@@ -461,9 +481,15 @@ public class DAOAditivoModal {
 			prepareSql.setString   ( 10, objeto.getLogin_cadastro()                             ); // LOGIN_CADASTRO
 			prepareSql.setString   ( 11, objeto.getHubspot_aditivo()                            ); // LOGIN_CADASTRO
 			
+			prepareSql.setBoolean  ( 12, objeto.getComissao_adit()                              ); // SETUP
+			prepareSql.setString   ( 13, objeto.getValor_setup_adit()                           ); // VALOR_SETUP
+			prepareSql.setInt      ( 14, objeto.getQty_parcela_setup_adit()                     ); // QTY_PARCELA_SETUP
+			prepareSql.setString   ( 15, objeto.getValor_parcela_setup_adit()                   ); // VALOR_PARCELA_SETUP
+			prepareSql.setInt      ( 16, objeto.getQty_mese_setup_adit()                        ); // QTY_MESE_SETUP
+
 			if( objeto.getId_rascunho() != null ) {
-			    prepareSql.setLong     ( 12, objeto.getId_rascunho()                            ); // ID_RASCUNHO
-			    prepareSql.setString   ( 13, objeto.getMotivoRascunho()                         ); // MOTIVO_RASCUNHO
+			    prepareSql.setLong     ( 17, objeto.getId_rascunho()                            ); // ID_RASCUNHO
+			    prepareSql.setString   ( 18, objeto.getMotivoRascunho()                         ); // MOTIVO_RASCUNHO
 			}
 			
 			prepareSql.execute();
@@ -806,7 +832,12 @@ public class DAOAditivoModal {
 				+ "   , VALOR_CONVERTIDO                                                      "
 				+ "   , CUSTO_TOTAL                                                           "
 				+ "   , COTACAO_MOEDA                                                         "
-
+				
+				+ "   , SETUP                                                                 "
+				+ "   , VALOR_SETUP                                                           "
+				+ "   , QTY_PARCELA_SETUP                                                     "
+				+ "   , VALOR_PARCELA_SETUP                                                   "
+				+ "   , QTY_MESE_SETUP                                                        "
 				
 				+ "   , ID_TIPO_ADITIVO_CONTRATADO                                            "
 				+ "   , NOME_TIPO_ADITIVO_CONTRATADO                                          "
@@ -836,7 +867,12 @@ public class DAOAditivoModal {
 				+ "            , ADT.VALOR_CONVERTIDO                                         "
 				+ "            , ADT.CUSTO_TOTAL                                              "
 				+ "            , ADT.COTACAO_MOEDA                                            "
-
+				
+				+ "            , ADT.SETUP                                                    "
+				+ "            , ADT.VALOR_SETUP                                              "
+				+ "            , ADT.QTY_PARCELA_SETUP                                        "
+				+ "            , ADT.VALOR_PARCELA_SETUP                                      "
+				+ "            , ADT.QTY_MESE_SETUP                                           "
 				
 				+ "			   , SAD.ID_TIPO_ADITIVO        AS ID_TIPO_ADITIVO_CONTRATADO     "
 				+ "			   , TAD.DESC_TIPO_DITIVO       AS NOME_TIPO_ADITIVO_CONTRATADO   "
@@ -877,6 +913,11 @@ public class DAOAditivoModal {
 				+ "            , ADT.CUSTO_TOTAL                                              "
 				+ "            , ADT.COTACAO_MOEDA                                            "
 				
+				+ "            , ADT.SETUP                                                    "
+				+ "            , ADT.VALOR_SETUP                                              "
+				+ "            , ADT.QTY_PARCELA_SETUP                                        "
+				+ "            , ADT.VALOR_PARCELA_SETUP                                      "
+				+ "            , ADT.QTY_MESE_SETUP                                           "
 				
 				+ "			   , APR.ID_TIPO_ADITIVO        AS ID_TIPO_ADITIVO_CONTRATADO     "
 				+ "			   , TAD.DESC_TIPO_DITIVO       AS NOME_TIPO_ADITIVO_CONTRATADO   "
@@ -995,6 +1036,23 @@ public class DAOAditivoModal {
 				   vlrRecuperado = null;
 				} else vlrRecuperado = null;
 				
+				modelListAditivoProduto.setComissao_adit                  ( set.getBoolean("SETUP")                                                          );
+				vlrRecuperado = set.getString("VALOR_SETUP");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   modelListAditivoProduto.setValor_setup_adit            ( dinheiro.format(valorReal)                                                       );
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
+
+				modelListAditivoProduto.setQty_mese_setup_adit    ( set.getInt("QTY_MESE_SETUP"   ) );
+				modelListAditivoProduto.setQty_parcela_setup_adit ( set.getInt("QTY_PARCELA_SETUP") );
+
+				vlrRecuperado = set.getString("VALOR_PARCELA_SETUP");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   modelListAditivoProduto.setValor_parcela_setup_adit(dinheiro.format(valorReal));
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
 
 				modelListAditivoProdutos.add(modelListAditivoProduto);
 			}
@@ -1035,6 +1093,16 @@ public class DAOAditivoModal {
 				+ "   , ADT.ID_HUB_SPOT                                            "
 				+ "   , ADT.ID_RASCUNHO                                            "
 				+ "   , ADT.MOTIVO_RASCUNHO                                        "
+    
+				+ "   , ADT.SETUP                                                  "
+				+ "   , ADT.VALOR_SETUP                                            "
+				+ "   , ADT.QTY_PARCELA_SETUP                                      "
+				
+				+ "   , ADT.VALOR_PARCELA_SETUP                                    "
+				+ "   , ADT.QTY_MESE_SETUP                                         "
+				+ "   , ADT.QTY_PARCELA_SETUP                                      "
+				+ "   , ADT.VALOR_PARCELA_SETUP                                    "
+				+ "   , ADT.QTY_MESE_SETUP                                         "
 				
 				+ "   , ADT.ID_MOEDA                                               "
 				+ "   , ADT.VALOR_CONVERTIDO                                       "
@@ -1053,15 +1121,26 @@ public class DAOAditivoModal {
 				+ "   , APR.DT_CADASTRO            AS DATA_PRODUTO_CONTRATADO      "
 				+ "   , APR.ID_TIPO_PROTUDO        AS ID_TIPO_PROTUDO_CONTRATADO   "
 				+ "   , TPR.DESC_TIPO_PRODUTO      AS DESC_TIPO_PRODUTO_CONTRATADO "
+				
+				+ "   , VAD.ID_VIGENCIA                                            "
+				+ "   , VAD.ID_TEMPO_CONTRATO                                      "
+				+ "   , VAD.DT_INICIO                                              "
+				+ "   , VAD.DT_FINAL                                               "
+				+ "   , VAD.DT_CRIACAO AS DT_CRIACAO_VIGENCIA                      "
+				+ "   , VAD.DT_DESATIVACAO                                         "
+				+ "   , VAD.OBSERVACAO AS OBS_VIGENCIA                             "
+				
 				+ "  FROM ADITIVADO                AS ADT                          "
 				+ "   LEFT JOIN ADITIVADO_PRODUTO  AS APR                          "
-				+ "      ON APR.ID_ADITIVADO = ADT.ID_ADITIVADO                    "
+				+ "      ON APR.ID_ADITIVADO       = ADT.ID_ADITIVADO              "
 				+ "   LEFT JOIN TIPO_ADITIVO       AS TAD                          "
-				+ "      ON TAD.ID_TIPO_ADITIVO = APR.ID_TIPO_ADITIVO              "
+				+ "      ON TAD.ID_TIPO_ADITIVO    = APR.ID_TIPO_ADITIVO           "
 				+ "   LEFT JOIN PRODUTO            AS PRO                          "
-				+ "      ON PRO.ID_PRODUTO = APR.ID_PRODUTO                        "
+				+ "      ON PRO.ID_PRODUTO         = APR.ID_PRODUTO                "
 				+ "   LEFT JOIN TIPO_PRODUTO       AS TPR                          "
-				+ "      ON TPR.ID_TIPO_PRODUTO = APR.ID_TIPO_PROTUDO              "
+				+ "      ON TPR.ID_TIPO_PRODUTO    = APR.ID_TIPO_PROTUDO           "
+				+ "   LEFT JOIN VIGENCIA_ADITIVO   AS VAD                          "
+				+ "         ON VAD.ID_ADITIVADO    = ADT.ID_ADITIVADO              "
 				+ "WHERE ADT.ID_ADITIVADO    = ?                                   "
 				+ "  AND APR.ID_PRODUTO      = ?                                   "
 				+ "  AND APR.ID_TIPO_ADITIVO = ?                                   ";
@@ -1114,9 +1193,16 @@ public class DAOAditivoModal {
 				
 				ListAditivoProduto.setData_produto_contratado     ( daoUtil.FormataDataStringTelaDataTime( set.getString("DATA_PRODUTO_CONTRATADO")) );
 				
-				ListAditivoProduto.setId_tipo_protudo_contratado  ( set.getLong  ("ID_TIPO_PROTUDO_CONTRATADO")                                      );
+				ListAditivoProduto.setId_tipo_protudo_contratado  ( set.getLong  ("ID_TIPO_PROTUDO_CONTRATADO"  )                                    );
 				ListAditivoProduto.setDesc_tipo_produto_contratado( set.getString("DESC_TIPO_PRODUTO_CONTRATADO")                                    );
 				ListAditivoProduto.setId_moeda                    ( set.getLong  ("ID_MOEDA")                                                        );
+
+				ListAditivoProduto.setId_vigencia                 ( set.getLong  ("ID_VIGENCIA"                 )                                    );
+				ListAditivoProduto.setId_tempo_contrato           ( set.getLong  ("ID_TEMPO_CONTRATO"           )                                    );
+				ListAditivoProduto.setDt_inicio                   ( daoUtil.FormataDataStringTelaData( set.getString("DT_INICIO"))                   );
+				ListAditivoProduto.setDt_final                    ( daoUtil.FormataDataStringTelaData( set.getString("DT_FINAL"))                    );
+				ListAditivoProduto.setDt_criacao_vigencia         ( daoUtil.FormataDataStringTelaDataTime( set.getString("DT_CRIACAO_VIGENCIA"))     );
+				ListAditivoProduto.setObservacao_vigencia         ( set.getString ("OBS_VIGENCIA"               )                                      );
 
 				vlrRecuperado = set.getString("VALOR_CONVERTIDO");
 				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
@@ -1138,6 +1224,25 @@ public class DAOAditivoModal {
 				   ListAditivoProduto.setCotacao_moeda               ( dinheiro.format(valorReal)                                                       );
 				   vlrRecuperado = null;
 				} else vlrRecuperado = null;
+				
+				ListAditivoProduto.setComissao_adit                  ( set.getBoolean("SETUP")                                                          );
+				vlrRecuperado = set.getString("VALOR_SETUP");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   ListAditivoProduto.setValor_setup_adit            ( dinheiro.format(valorReal)                                                       );
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
+
+				ListAditivoProduto.setQty_mese_setup_adit    ( set.getInt("QTY_MESE_SETUP"   ) );
+				ListAditivoProduto.setQty_parcela_setup_adit ( set.getInt("QTY_PARCELA_SETUP") );
+
+				vlrRecuperado = set.getString("VALOR_PARCELA_SETUP");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   ListAditivoProduto.setValor_parcela_setup_adit(dinheiro.format(valorReal));
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1159,6 +1264,12 @@ public class DAOAditivoModal {
 				   + "			   , ADT.ID_RASCUNHO                                              "
 				   + "			   , ADT.MOTIVO_RASCUNHO                                          "
 				   
+				   + "			   , ADT.SETUP                                                    "
+				   + "			   , ADT.VALOR_SETUP                                              "
+				   + "			   , ADT.QTY_PARCELA_SETUP                                        "
+				   + "			   , ADT.VALOR_PARCELA_SETUP                                      "
+				   + "			   , ADT.QTY_MESE_SETUP                                           "
+				   
 				   + "             , ADT.ID_MOEDA                                                 "
 				   + "             , ADT.VALOR_CONVERTIDO                                         "
 				   + "             , ADT.CUSTO_TOTAL                                              "
@@ -1175,13 +1286,24 @@ public class DAOAditivoModal {
 				   + "			   , SAD.DT_CRIACAO             AS DATA_PRODUTO_CONTRATADO        "
 				   + "			   , NULL                       AS ID_TIPO_PROTUDO_CONTRATADO     "
 				   + "			   , NULL                       AS DESC_TIPO_PRODUTO_CONTRATADO   "
-				   + "			  FROM       ADITIVADO          AS ADT                            "
-				   + "			  INNER JOIN SERVICO_ADITIVADO  AS SAD                            "
-				   + "			         ON SAD.ID_ADITIVADO        = ADT.ID_ADITIVADO            "
-				   + "			  LEFT JOIN TIPO_ADITIVO       AS TAD                             "
-				   + "		           ON TAD.ID_TIPO_ADITIVO       = SAD.ID_TIPO_ADITIVO         "
-				   + "			 INNER JOIN SERVICO_CONTRATADO AS SCO                             "
+				   
+				   + "             , VAD.ID_VIGENCIA                                              "
+				   + "             , VAD.ID_TEMPO_CONTRATO                                        "
+				   + "             , VAD.DT_INICIO                                                "
+				   + "             , VAD.DT_FINAL                                                 "
+				   + "             , VAD.DT_CRIACAO AS DT_CRIACAO_VIGENCIA                        "
+				   + "             , VAD.DT_DESATIVACAO                                           "
+				   + "             , VAD.OBSERVACAO AS OBS_VIGENCIA                               "
+
+				   + "			  FROM       ADITIVADO                  AS ADT                    "
+				   + "			  INNER JOIN SERVICO_ADITIVADO          AS SAD                    "
+				   + "			         ON SAD.ID_ADITIVADO          = ADT.ID_ADITIVADO          "
+				   + "			  LEFT JOIN TIPO_ADITIVO                AS TAD                    "
+				   + "		             ON TAD.ID_TIPO_ADITIVO       = SAD.ID_TIPO_ADITIVO       "
+				   + "			 INNER JOIN SERVICO_CONTRATADO          AS SCO                    "
 				   + "			         ON SCO.ID_SERVICO_CONTRATADO = SAD.ID_SERVICO_CONTRATADO "
+				   + "           LEFT JOIN VIGENCIA_ADITIVO             AS VAD                    "
+				   + "                   ON VAD.ID_ADITIVADO          = ADT.ID_ADITIVADO          "
 				   + "			 WHERE ADT.ID_ADITIVADO          = ?                              "
 				   + "			   AND SAD.ID_SERVICO_CONTRATADO = ?                              "
 				   + "			   AND SAD.ID_TIPO_ADITIVO       = ?                              ";
@@ -1222,16 +1344,28 @@ public class DAOAditivoModal {
 				ListAditivoProduto.setId_produto_contratado       ( set.getLong  ("ID_PRODUTO_CONTRATADO")                                           );
 				ListAditivoProduto.setNome_prod_contratado        ( set.getString("NOME_PROD_CONTRATADO")                                            );
 				
-				valorReal      = Double.valueOf( set.getString("VLR_PROD_CAD_CONTRATADO") );
-				ListAditivoProduto.setVlr_prod_cad_contratado     ( dinheiro.format(valorReal)                                                       );
+				vlrRecuperado = set.getString("VLR_PROD_CAD_CONTRATADO");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+					valorReal = Double.valueOf( set.getString("VLR_PROD_CAD_CONTRATADO")  );
+					ListAditivoProduto.setVlr_prod_cad_contratado ( dinheiro.format(valorReal) );
+					vlrRecuperado = null;
+				} else vlrRecuperado = null;
 				
 				ListAditivoProduto.setQty_produto_contratado      ( set.getString("QTY_PRODUTO_CONTRATADO")                                          );
 				
-				valorReal      = Double.valueOf( set.getString("VALOR_UNITARIO_CONTRATADO") );
-				ListAditivoProduto.setValor_unitario_contratado   ( dinheiro.format(valorReal)                                                       );
+				vlrRecuperado = set.getString("VALOR_UNITARIO_CONTRATADO");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+					valorReal      = Double.valueOf( set.getString ( "VALOR_UNITARIO_CONTRATADO") );
+					ListAditivoProduto.setValor_unitario_contratado( dinheiro.format(valorReal)   );
+					vlrRecuperado = null;
+				} else vlrRecuperado = null;
 				
-				valorReal      = Double.valueOf( set.getString("VLR_PRODUTO_CONTRATADO") );
-				ListAditivoProduto.setVlr_produto_contratado      ( dinheiro.format(valorReal)                                                       );
+				vlrRecuperado = set.getString("VLR_PRODUTO_CONTRATADO");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+					valorReal      = Double.valueOf( set.getString("VLR_PRODUTO_CONTRATADO") );
+					ListAditivoProduto.setVlr_produto_contratado   ( dinheiro.format(valorReal) );
+					vlrRecuperado = null;
+				} else vlrRecuperado = null;
 				
 				ListAditivoProduto.setData_produto_contratado     ( daoUtil.FormataDataStringTelaDataTime( set.getString("DATA_PRODUTO_CONTRATADO")) );
 				
@@ -1260,6 +1394,23 @@ public class DAOAditivoModal {
 				   vlrRecuperado = null;
 				} else vlrRecuperado = null;
 
+				ListAditivoProduto.setComissao_adit                  ( set.getBoolean("SETUP")                                                          );
+				vlrRecuperado = set.getString("VALOR_SETUP");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   ListAditivoProduto.setValor_setup_adit            ( dinheiro.format(valorReal)                                                       );
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
+
+				ListAditivoProduto.setQty_mese_setup_adit    ( set.getInt("QTY_MESE_SETUP"   ) );
+				ListAditivoProduto.setQty_parcela_setup_adit ( set.getInt("QTY_PARCELA_SETUP") );
+
+				vlrRecuperado = set.getString("VALOR_PARCELA_SETUP");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   ListAditivoProduto.setValor_parcela_setup_adit(dinheiro.format(valorReal));
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

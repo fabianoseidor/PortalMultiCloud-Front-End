@@ -196,7 +196,7 @@ public class DAOLoginRepository {
 				+ "    [LOGINUNIFICADO_PRD].[dbo].[users]           as us "
 				+ "  , [LOGINUNIFICADO_PRD].[dbo].[user_aplicativo] as ua "
 				+ "  , [LOGINUNIFICADO_PRD].[dbo].[pessoa]          as pe "
-				+ "    , PERFIL            AS PER                         "
+				+ "  , PERFIL            AS PER                           "
 				+ "  , ITEM_PERFIL_SECAO AS IPC                           "
 				+ "  , PAGINA_SECAO      AS PSE                           "
 				+ "  , SECAO             AS SEC                           "

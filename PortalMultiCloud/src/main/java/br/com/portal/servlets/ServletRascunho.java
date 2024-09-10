@@ -40,7 +40,7 @@ public class ServletRascunho extends HttpServlet {
 		   		Boolean renovacao = ( Integer.valueOf(textoSplit[0].trim()) == 0 ? false : true );
 		   		if( renovacao ) {
 		   			DAOContratoRepository daoContratoRepository = new DAOContratoRepository();	
-		   		    Long renovacaoContratoOrigem = ( textoSplit[1] != null && !textoSplit[1].trim().isEmpty()      ? Long.parseLong(textoSplit[1].trim())    : null );
+		   		    Long renovacaoContratoOrigem = ( textoSplit[1] != null && !textoSplit[1].trim().isEmpty() ? Long.parseLong(textoSplit[1].trim()) : null );
 					HttpServletRequest req = (HttpServletRequest) request;
 				    HttpSession session    = req.getSession();
 	                String userDesativacao = (String) session.getAttribute("usuario");
@@ -48,7 +48,7 @@ public class ServletRascunho extends HttpServlet {
 					ModelDesativacaoContrato DesativacaoContrato = new ModelDesativacaoContrato();
 					DesativacaoContrato.setUser_desativacao( userDesativacao );
 					DesativacaoContrato.setId_contrato     ( renovacaoContratoOrigem      );
-					String retorno = daoContratoRepository.CancelaContrato( DesativacaoContrato );
+					String retorno = daoContratoRepository.CancelaContrato( DesativacaoContrato, 1 );
 					if( retorno == null )
 					retorno = "O Contrato: " + idContrato + " e todo(s) os produtos e recusso(s) a ele vinculados(caso exista), foram cancelados com sucesso";
 		   		}

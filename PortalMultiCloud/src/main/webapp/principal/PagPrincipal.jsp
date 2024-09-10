@@ -11,6 +11,7 @@
 <html lang="en">
 
 <jsp:include page="head.jsp"></jsp:include>
+
     <style>
 
 	.wrimagecard{	
@@ -246,6 +247,24 @@
 												           </div>
 												       </div>
 												    </div>
+
+
+
+												    <div class="col-md-4" style="max-width: 15rem;">
+												       <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+												           <div class="card-block">
+										                         <div class="text-c-purple text-right">
+				                                                     <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+				                                                 </div>
+                                                                    <a href="<%= request.getContextPath() %>/principal/descomissionamento.jsp" class="waves-effect waves-dark">
+												                    <h6><i class="fa fa-edit fa-3x text-primary"></i></h6>
+												                    <h6 class="card-title text-dark">Descomissionamento</h6>
+                                                                 </a>
+												           </div>
+												       </div>
+												    </div>
+
+
 								        <%      } else{ %>
 	                                             <div class="col-md-4" style="max-width: 15rem;">
 										             <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
@@ -295,97 +314,128 @@
 								    </div>
 
 								    <!-- ########################### -->
-									<!--           Usuários          -->
+									<!--           Dashboard         -->
 									<!-- ########################### -->
 									<br><br>
-								    <p class="h5"><strong>Usuários</strong></p>
+								    <p class="h5"><strong>Dashboard Portal Multcloud</strong></p>
 								    <div class="row my-12 text-primary">
-                                         <% if( perfilUserLogados != null ) {
-                                                Optional<ModelPerfilLogado> perfilLogado = perfilUserLogados.stream().filter( x -> "Configuração".equals(x.getNome_secao()) ).findFirst();
-                                                if( perfilLogado.isPresent() ) { 
-                                                    perfilLogado = perfilUserLogados.stream().filter( x -> "usuario".equals(x.getDesc_pagina() ) ).findFirst();
-                                        %>	        <!-- Menu Configuração Usuario -->
-											        <div class="col-md-4" style="max-width: 15rem;">
-											            <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
-											                <div class="card-block">
-											                     <div class="text-c-purple text-right">
-										<%                          if( perfilLogado.isPresent() ) {  %>
-				                                                        <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
-				                        <%                          } else { %>
-				                                                        <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
-				                        <%                          }        %>                             
-				                                                 </div>
-										<%                       if( perfilLogado.isPresent() ) {  %>
-                                                                    <a href="<%= request.getContextPath() %>/principal/usuario.jsp" class="waves-effect waves-dark">
-				                        <%                       } else { %>
-				                                                    <a href="#" style="pointer-events: none;" > 
-				                        <%                       }        %>                             
-											                        <h6><i class="fa fa-user-plus fa-3x text-primary"></i></h6>
-											                        <h6 class="card-title text-dark">Cad. Usuários</h6>
-											                    </a>
-											                </div>
-											            </div>
-											        </div>
-					                    <%          perfilLogado = perfilUserLogados.stream().filter( x -> "trocaSenha".equals(x.getDesc_pagina() ) ).findFirst();  %>
-					                                <!-- Menu Configuração Troca Senha -->
-											         <div class="col-md-4" style="max-width: 15rem;">
-											            <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
-											                <div class="card-block">
-											                     <div class="text-c-purple text-right">
-										<%                           if( perfilLogado.isPresent() ) {  %>
-				                                                         <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
-				                        <%                           } else { %>
-				                                                         <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
-				                        <%                           }        %>                             
-				                                                 </div>
-										<%                       if( perfilLogado.isPresent() ) {  %>
-                                                                    <a href="<%= request.getContextPath() %>/principal/trocaSenha.jsp" class="waves-effect waves-dark">
-				                        <%                       } else { %>
-				                                                    <a href="#" style="pointer-events: none;" > 
-				                        <%                       }        %>                             
-											                        <h6><i class="fa fa-lock fa-3x text-primary"></i></h6>
-											                        <h6 class="card-title text-dark">Troca de Senha</h6>
-											                    </a>
-											                </div>
-											            </div>
-											        </div>
-					                    <%          perfilLogado = perfilUserLogados.stream().filter( x -> "manutencaoUsuario".equals(x.getDesc_pagina() ) ).findFirst();  %>
-					                                <!-- Menu Configuração Troca Senha -->											
-											        <div class="col-md-4"style="max-width: 15rem;">
-											           <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
-											               <div class="card-block">
-											                    <div class="text-c-purple text-right">
-										<%                          if( perfilLogado.isPresent() ) {  %>
-				                                                        <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
-				                        <%                          } else { %>
-				                                                        <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
-				                        <%                          }        %>                             
-				                                                </div>
-										<%                      if( perfilLogado.isPresent() ) {  %>
-                                                                   <a href="<%= request.getContextPath() %>/ServletManutencaoUsuarioController?acao=listarUser" class="waves-effect waves-dark">
-				                        <%                       } else { %>
-				                                                   <a href="#" style="pointer-events: none;" > 
-				                        <%                       }        %>                             
-											                       <h6><i class="fa fa-gear fa-3x text-primary"></i></h6>
-											                       <h6 class="card-title text-dark">Manuteção User</h6>
-											                     </a>
-											                </div>
-											           </div>
-											       </div>
-								        <%      } else{ %>  
-										           <div class="col-md-4" style="max-width: 15rem;">
-										             <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
-										                <div class="card-block">
-												           <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Você não tem acesso a esta área!">
+                                        <% if( perfilUserLogados != null ) {
+                                               Optional<ModelPerfilLogado> perfilLogado = perfilUserLogados.stream().filter( x -> "Dashboard Multcloud".equals(x.getNome_secao()) ).findFirst();
+                                               if( perfilLogado.isPresent() ) { 
+                                                   perfilLogado = perfilUserLogados.stream().filter( x -> "dashFaturamentoProjetado".equals(x.getDesc_pagina() ) ).findFirst();
+                                        %>         <!-- Dashboard Portal Multcloud -->
+												   <div class="col-md-4" style="max-width: 15rem;">
+												      <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+												         <div class="card-block">
+										                    <div class="text-c-purple text-right">
+										<%                  if( perfilLogado.isPresent() ) {  %>
+                                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+                                        <%                  } else { %>
+                                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
+                                        <%                  }        %>                             
+                                                            </div>
+										<%                  if( perfilLogado.isPresent() ) {  %>
+                                                                <a href="<%= request.getContextPath() %>/dashboard/dashFaturamentoProjetado.jsp" class="waves-effect waves-dark"> 
+                                        <%                  } else { %>
+                                                                <a href="#" style="pointer-events: none;" > 
+                                        <%                  }        %>                             
+						                                       <h6><i class="fa fa-bank fa-3x text-primary"></i></h6>
+						                                       <h6 class="card-title text-dark">Faturamento Projetado</h6>
+                                                            </a>
+												         </div>
+												      </div>
+												   </div>
+                                        <%         perfilLogado = perfilUserLogados.stream().filter( x -> "RelClientesInfo".equals(x.getDesc_pagina() ) ).findFirst();  %>
+                                                   <!-- Menu Manutenção de Cadastro Contrato -->
+												   <div class="col-md-4" style="max-width: 15rem;">
+												      <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+												         <div class="card-block">
+										                    <div class="text-c-purple text-right">
+										<%                  if( perfilLogado.isPresent() ) {  %>
+                                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+                                        <%                  } else { %>
+                                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
+                                        <%                  }        %>                             
+                                                            </div>
+										<%                  if( perfilLogado.isPresent() ) {  %>
+                                                                <a href="<%= request.getContextPath() %>/dashboard/RelClientesInfo.jsp" class="waves-effect waves-dark">
+                                        <%                  } else { %>
+                                                                <a href="#" style="pointer-events: none;" > 
+                                        <%                  }        %>                             
+												               <h6><i class="fa fa-pencil-square-o fa-3x text-primary"></i></h6>
+												               <h6 class="card-title text-dark">Rel. Contratos</h6>
+                                                            </a>
+												         </div>
+												      </div>
+												    </div>
+
+								        <%     } else{ %>
+	                                               <div class="col-md-4" style="max-width: 15rem;">
+										              <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+										                 <div class="card-block">
+												            <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Você não tem acesso a esta área!">
 				                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
-				                                           </div>
-												           <a href="#" style="pointer-events: none;" > 
-												                <h6><i class="fa fa-user-plus fa-3x text-primary" ></i></h6>
-												                <h6 class="card-title text-dark">Cad. Usuários</h6>
-												           </a>
-										                </div>								                
-										             </div>
+				                                            </div>
+												            <a href="#" style="pointer-events: none;" > 
+						                                       <h6><i class="fa fa-bank fa-3x text-primary"></i></h6>
+						                                       <h6 class="card-title text-dark">Faturamento Projetado</h6>
+												            </a>
+										                 </div>								                
+										              </div>
 			                                       </div>
+			                                       
+											       <div class="col-md-4" style="max-width: 15rem;">
+											          <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+											             <div class="card-block">
+											                <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Você não tem acesso a esta área!">
+					                                            <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
+					                                       </div>
+					                                       <a href="#" style="pointer-events: none;" >
+												              <h6><i class="fa fa-pencil-square-o fa-3x text-primary"></i></h6>
+												              <h6 class="card-title text-dark">Rel. Contratos</h6>
+											               </a> 
+											             </div>
+											          </div>
+											       </div>						
+                                        <%     } 
+                                            }
+                                        %>
+								    </div>
+                                    
+								    <!-- ########################### -->
+									<!--           Dashboard         -->
+									<!-- ########################### -->
+									<br><br>
+								    <p class="h5"><strong>Dashboard Portal Multcloud - ( Infra )</strong></p>
+								    <div class="row my-12 text-primary">
+                                        <% if( perfilUserLogados != null ) {
+                                               Optional<ModelPerfilLogado> perfilLogado = perfilUserLogados.stream().filter( x -> "Dashboard Infra".equals(x.getNome_secao()) ).findFirst();
+                                               if( perfilLogado.isPresent() ) { 
+                                                  perfilLogado = perfilUserLogados.stream().filter( x -> "dashFaturamentoProjetadoInfra".equals(x.getDesc_pagina() ) ).findFirst();
+                                        %>     <!-- Menu Manutenção de cliente -->
+												   <div class="col-md-4" style="max-width: 15rem;">
+												      <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+												         <div class="card-block">
+										                    <div class="text-c-purple text-right">
+										<%                  if( perfilLogado.isPresent() ) {  %>
+                                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+                                        <%                  } else { %>
+                                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
+                                       <%                   }        %>                             
+                                                            </div>
+									   <%                   if( perfilLogado.isPresent() ) {  %>
+                                                                <a href="<%= request.getContextPath() %>/dashboard/dashFaturamentoProjetadoInfra.jsp" class="waves-effect waves-dark"> 
+                                       <%                   } else { %>
+                                                                <a href="#" style="pointer-events: none;" > 
+                                       <%                   }        %>                             
+						                                       <h6><i class="fa fa-bank fa-3x text-primary"></i></h6>
+												               <h6 class="card-title text-dark">Info. Contrato</h6>
+                                                            </a>
+												         </div>
+												      </div>
+												   </div>
+
+								        <%      } else{ %>
 			                                       
 											       <div class="col-md-4" style="max-width: 15rem;">
 											         <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
@@ -394,31 +444,18 @@
 					                                            <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
 					                                       </div>
 					                                       <a href="#" style="pointer-events: none;" >
-											                  <h6><i class="fa fa-lock fa-3x text-primary"></i></h6>
-											                  <h6 class="card-title text-dark">Troca de Senha</h6>
+												                    <h6><i class="fa fa-bank fa-3x text-primary"></i></h6>
+												                    <h6 class="card-title text-dark">Info. Contrato</h6>
 											               </a> 
 											            </div>
 											         </div>
 											       </div>								
-
-											       <div class="col-md-4" style="max-width: 15rem;">
-											         <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
-											            <div class="card-block">
-											                <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Você não tem acesso a esta área!">
-					                                            <i class="fa fa-lock f-1" style="font-size: 22px; color: black;"></i>
-					                                       </div>
-					                                       <a href="#" style="pointer-events: none;" >
-											                  <h6><i class="fa fa-gear fa-3x text-primary"></i></h6>
-											                  <h6 class="card-title text-dark">Manuteção User</h6>
-											               </a> 
-											            </div>
-											         </div>
-											       </div>								
-									        
-	                                    <%      }  
-                                            }
-                                        %>
-                                    </div>
+						
+                          <%      } 
+                                }
+                             
+                            %>
+								    </div>
 
 								    <!-- ########################### -->
 									<!--     Configuração Perfil     -->
@@ -732,25 +769,20 @@
 									<br><br>
 								    <p class="h5"><strong>Relatórios</strong></p>
 								    <div class="row my-12 text-primary">
- 											        <div class="col-md-12" style="max-width: 15rem;">
-											            <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
-											                <div class="card-block">
-					                                           <div class="text-c-purple text-right">
-				                                                <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
-
-		                                                       </div>
-					                                               <a href="<%= request.getContextPath() %>/relatorios/relClientesPorPeiodoEntrada.jsp" class="waves-effect waves-dark">
-											                      <h6><i class="fa fa-pencil-square-o fa-3x text-primary"></i></h6>
-											                      <h6 class="card-title text-dark">Rel. Clientes Entramtes</h6>
-											                    </a>											                
-											                </div>
-											            </div>
-											        </div>
-								                    
-								                    
+								       <div class="col-md-12" style="max-width: 15rem;">
+							             <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+							                <div class="card-block">
+	                                           <div class="text-c-purple text-right">
+                                                 <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+                                               </div>
+	                                           <a href="<%= request.getContextPath() %>/relatorios/relClientesPorPeiodoEntrada.jsp" class="waves-effect waves-dark">
+							                      <h6><i class="fa fa-pencil-square-o fa-3x text-primary"></i></h6>
+							                      <h6 class="card-title text-dark">Rel. Clientes Entrantes</h6>
+							                   </a>											                
+							                </div>
+							             </div>
+							           </div>
                                     </div>
-                                    
-
                                 </div>
                             </div>
                         </div>

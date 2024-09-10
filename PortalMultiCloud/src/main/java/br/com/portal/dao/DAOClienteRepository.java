@@ -186,7 +186,7 @@ public class DAOClienteRepository {
 					   + " WHERE (UPPER( RTRIM(CLI.RAZAO_SOCIAL) ) LIKE UPPER('%"  + dadoCliente + "%') "
 					   + "     OR UPPER( RTRIM(CLI.ALIAS       ) ) LIKE UPPER('%"  + dadoCliente + "%') "
 					   + "     OR RTRIM(CLI.CNPJ                 ) LIKE '%"        + dadoCliente + "%') "
-					   + " AND CLI.ID_STATUS_EMP IN( 1, 4 )                                             ";
+					   + " AND CLI.ID_STATUS_EMP IN( 1, 4, 5 )                                          ";
 			
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
@@ -224,58 +224,6 @@ public class DAOClienteRepository {
 			
 			return Clientes;
     }
-	
-	
-	public List<ModelCliente> buscarListaClientePorPep(String Pep) throws SQLException {
-
-	    List<ModelCliente> Clientes = new ArrayList<ModelCliente>();
-		String sql = "SELECT CON.PEP,  CLI.*                                    "
-				   + "  FROM                                                    "
-				   + "     CONTRATO AS CON                                      "
-				   + "   , CLIENTE  AS CLI                                      "
-				   + "  WHERE  UPPER( CON.PEP ) LIKE UPPER('%" + Pep + "%')         "
-				   + "  AND CLI.ID_CLIENTE = CON.ID_CLIENTE                     ";
-		
-		
-		PreparedStatement statement = connection.prepareStatement(sql);
-		ResultSet resultado = statement.executeQuery();
-
-		while (resultado.next()) {
-			ModelCliente cliente = new ModelCliente();
-			
-			cliente.setId_cliente         ( resultado.getLong           ("id_cliente")                                 );
-			cliente.setId_porte_emp       ( resultado.getLong         ("id_porte_emp")                                 );
-			cliente.setId_status_emp      ( resultado.getLong        ("id_status_emp")                                 );
-			cliente.setRazao_social       ( resultado.getString       ("razao_social")                                 );
-			cliente.setNome_fantasia      ( resultado.getString      ("nome_fantasia")                                 );
-			cliente.setSite               ( resultado.getString               ("site")                                 );
-			cliente.setCep                ( resultado.getString                ("cep")                                 );
-			cliente.setEndereco           ( resultado.getString           ("endereco")                                 );
-			cliente.setBairro             ( resultado.getString             ("bairro")                                 );
-			cliente.setNumero             ( resultado.getString             ("numero")                                 );
-			cliente.setComplemento        ( resultado.getString        ("complemento")                                 );
-			cliente.setCidade             ( resultado.getString             ("cidade")                                 );
-			cliente.setEstado             ( resultado.getString             ("estado")                                 );
-			cliente.setPais               ( resultado.getString               ("pais")                                 );
-			cliente.setCnpj               ( resultado.getString               ("cnpj")                                 );
-			cliente.setInscricao_estadual ( resultado.getString ("inscricao_estadual")                                 );
-			cliente.setInscricao_municipal( resultado.getString("inscricao_municipal")                                 );
-			cliente.setNicho_mercado      ( resultado.getString      ("nicho_mercado")                                 );
-			cliente.setDt_criacao         ( daoUtil.FormataDataStringTelaDataTime( resultado.getString("dt_criacao") ) );
-			cliente.setObservacao         ( resultado.getString("observacao")                                          );
-			cliente.setStatus_emp         ( daoStatusCliente.getNomeStatus(cliente.getId_status_emp())                 );
-			cliente.setLogin_cadastro     ( resultado.getString("login_cadastro")                                      );
-			cliente.setAlias              ( resultado.getString("alias")                                               );
-			cliente.setPep_pesquisado     ( resultado.getString("PEP")                                                 );
-			Clientes.add(cliente);
-			
-		}
-		
-		return Clientes;
-}
-	
-	
-	
 
 	public List<ModelCliente> buscarListaClienteAlias( String nomeAlias ) throws SQLException {
 
@@ -368,12 +316,12 @@ public class DAOClienteRepository {
 	    List<ModelCliente> Clientes = new ArrayList<ModelCliente>();
 	    Integer totalPag = getTotalPag( offsetEnd );
 		
-		String sql = "SELECT * FROM CLIENTE AS CLI                                       "
-				   + "WHERE  CLI.ID_CLIENTE   IN  (SELECT CON.ID_CLIENTE              "
-				   + "                                  FROM CONTRATO AS CON             "
-				   + "                                 WHERE CON.ID_STATUS_CONTRATO IN( 1,4)) "
-				   + " ORDER BY ID_CLIENTE OFFSET                                        " 
-		           + offsetBegin + " ROWS FETCH NEXT "+ offsetEnd +" ROWS ONLY           ";
+		String sql = "SELECT * FROM CLIENTE AS CLI                                               "
+				   + "WHERE  CLI.ID_CLIENTE   IN  (SELECT CON.ID_CLIENTE                         "
+				   + "                                  FROM CONTRATO AS CON                     "
+				   + "                                 WHERE CON.ID_STATUS_CONTRATO IN( 1,4, 5)) "
+				   + " ORDER BY ID_CLIENTE OFFSET                                                "
+		           + offsetBegin + " ROWS FETCH NEXT "+ offsetEnd +" ROWS ONLY                   ";
 		
 		PreparedStatement statement = connection.prepareStatement(sql);
 		ResultSet resultado = statement.executeQuery();

@@ -108,6 +108,8 @@ public class DAORascunho {
 
 		return listaRascunhos;		
 	}
+	
+	
 	public void deletarRegistro( String id ) throws SQLException {
 		String sql = "DELETE FROM SITE WHERE ID_SITE = ?";
 		PreparedStatement prepareSql = connection.prepareStatement(sql);
@@ -316,7 +318,7 @@ public class DAORascunho {
 	}
 	
 	public String getInfoRenovacao( Long idContrato ) throws SQLException {
-		String sql = "SELECT  RENOVACAO, RENOVACAO_CONTRATO_ORIGEM, RENOVACAO_CONTRATO_NOVO, ID_STATUS_CONTRATO FROM CONTRATO WHERE ID_CONTRATO = ?" ;
+		String sql = "SELECT RENOVACAO, RENOVACAO_CONTRATO_ORIGEM, RENOVACAO_CONTRATO_NOVO, ID_STATUS_CONTRATO FROM CONTRATO WHERE ID_CONTRATO = ?" ;
 		
 		PreparedStatement statemet = connection.prepareStatement(sql);
 		statemet.setLong( 1, idContrato );

@@ -172,18 +172,6 @@
 																    <input style="color: #000000" type="text" name="pequisaContrato" id="pequisaContrato" class="form-control" placeholder="Digite o ID do Contrato a ser pesquisado" >
 																</div>
 															</div>
-<!-- 															
-															<div class="form-row">
-																
-																<div class="form-group form-default form-static-label col-md-6 mb-6">
-                                                                     <button type="button" class="btn btn-outline-primary btn-lg btn-block" onclick="pesquisaContradoID(  );">Pesquisa por ID</button>
-																</div>
-
-																<div class="input-group form-default form-static-label col-md-6 mb-6">
-                                                                     <button type="button" class="btn btn-outline-success btn-lg btn-block" data-toggle="modal" data-target="#modalPesqContratoPEP">Pesquisa por PEP</button>
-																</div>
-															</div>
- -->
 																
 														    <hr>  
 															<br>
@@ -234,7 +222,37 @@
 																	<span class="font-weight-bold font-italic" style="color: #708090">Cotação</span>
 																	<input style="color: #000000" type="text" name="valor_Cotacao" id="valor_Cotacao" disabled="disabled" onblur="cauculoConversao();" class="form-control" placeholder="Valor do contrato" value="${modelContrato.cotacao_moeda}">
 																</div>
+
 															</div>
+															
+														    <div class="form-row">
+														    
+																<div class="form-group form-default form-static-label col-md-2 mb-3">
+																    <span class="font-weight-bold font-italic" style="color: #708090">Comissão</span>
+																    <input style="color: #000000; text-align: left;" type="text" name="comissao" id="comissao" readonly class="form-control" placeholder="Comissão" value="${modelContrato.comissao}">
+																</div>
+																															
+															    <div class="form-group form-default form-static-label col-md-2 mb-4">
+																    <span class="font-weight-bold font-italic" style="color: #708090">Quantidades Meses Contrato</span>
+																    <input style="color: #000000" type="text" name="qtyMesesContrato" id="qtyMesesContrato" readonly class="form-control" placeholder="Quantidades Meses Contrato" value="${modelContrato.qty_mese_setup}">
+															    </div>
+															    
+															    <div class="form-group form-default form-static-label col-md-3 mb-4">
+																    <span class="font-weight-bold font-italic" style="color: #708090">Valor Parcelas</span>
+																    <input style="color: #000000" type="text" name="vlrParcelas" id="vlrParcelas" readonly class="form-control" placeholder="Valor Parcelas" value="${modelContrato.valor_parcela_setup}">
+															    </div>
+															    
+															    <div class="form-group form-default form-static-label col-md-2 mb-4">
+																    <span class="font-weight-bold font-italic" style="color: #708090">Quantidade Parcelas Setup</span>
+																    <input style="color: #000000" type="text" name="qtyParcSetup" id="qtyParcSetup" readonly class="form-control" placeholder="Quantidade Parcelas Comissão" value="${modelContrato.qty_parcela_setup}">
+															    </div>
+																
+															    <div class="form-group form-default form-static-label col-md-3 mb-4">
+																    <span class="font-weight-bold font-italic" style="color: #708090">Valor Setup</span>
+																    <input style="color: #000000" type="text" name="idValorSetup" id="idValorSetup" readonly onchange="calcular();" class="form-control" placeholder="Valor Comissão" value="${modelContrato.valor_setup}">
+															    </div>																															
+
+														    </div>
 														    
 														    <hr>  
 															<br>
@@ -295,7 +313,7 @@
 																    <span class="font-weight-bold font-italic" style="color: #708090">Status Contrato</span>
 																	<select style="color: #000000" name="id_status_contrato" id="id_status_contrato" onchange="habilitaStatusMotivoRascunho(); validaStatusPepProvisorio();" class="form-control" required="required">
 																		<option value="" disabled selected>Selecione Status Contrato</option>
-																		    <tagsContrato:listaStatusContrato/>
+																		    <tagsContrato:listaStatusContratoManutecao/>
 																	</select> <!-- <label class="float-label">Status Contrato</label> -->
 																</div>
 																
@@ -682,7 +700,6 @@
 												<div class="card">
 													<div class="card-block">
 
-														
 														<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
 														  
 															<li class="nav-item"> <a class="nav-link active" id="recurso-tab"         data-toggle="tab" href="#recursoContrato"      role="tab" aria-controls="recursoContrato"      aria-selected="true" >Recurso Contrato</a></li>
@@ -1106,8 +1123,6 @@
 				</div>
 			</div>
 
-
-
 			<div class="row">
 				<div class="col-sm-12">
 					<!-- Basic Form Inputs card start -->
@@ -1174,79 +1189,6 @@
 	</div>
 
 <!-- 
-******************************************************************************************************
-*
-*                                  Modal Buscar Cliente        
-*
-******************************************************************************************************
--->
-	<div class="modal t-modal primary" id="modalPesqContratoPEP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-lg" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLabel">Pesquisar Contrato pelo PEP</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-
-			<div class="row">
-				<div class="col-sm-12">
-					<!-- Basic Form Inputs card start -->
-					<div class="card">
-						<div class="card-block">
-
-							<div class="input-group mb-3">
-								<input type="text" id="buscaContratoPEP" class="form-control" placeholder="Digite parte ou o PEP completo!" aria-label="PEP" aria-describedby="basic-addon2">
-								<div class="input-group-append">
-									<button class="btn btn-success" type="button" onclick="buscarContratoPEP();">Buscar</button>
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="col-sm-12">
-					<!-- Basic Form Inputs card start -->
-					<div class="card">
-						<div class="card-block">
-
-							<div style="height: 300px; overflow: scroll;">
-								<table class="table table-striped table-hover table-sm table-bordered table-responsive-sm" id="tabelaResutadoPEP">
-									<thead>
-										<tr>
-											<th scope="col">#           </th>
-											<th scope="col">ID Cliente  </th>
-											<th scope="col">Nome Cliente</th>
-											<th scope="col">PEP         </th>											
-											<th scope="col">Selecionar  </th>
-										</tr>
-									</thead>
-									<tbody>
-
-									</tbody>
-								</table>
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</div>
-
-		  </div>
-	      <samp id="totalResutadosPEP"></samp>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-
-<!-- 
 
    Modal que ira mostrar um contrato assinado e anexo em PDF.
  -->
@@ -1274,6 +1216,45 @@
 	</div>
 </div>
 
+<!-- 
+
+   Modal Descomissionamento / Distrato
+ -->
+   <div class="modal t-modal primary" id=ModalDescomissionamento tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog modal-dialog-centered modal-lg"  style="max-width: 50% !important;" role="document">
+		<div class="modal-content">
+			<!-- Modal Header -->
+	        <div class="modal-header">
+	          <h5 class="modal-title" id="TituloModalCentralizado">Descomissionamento / Distrato</h5>
+	          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+	            <span aria-hidden="true">&times;</span>
+	          </button>
+	        </div>
+			<!-- Modal body -->
+			<div class="modal-body">
+			
+			<div class="row">
+			   <div class="col-sm-12">
+				  <div class="card">
+					 <div class="card-block">
+                          <span class="font-weight-bold font-italic" style="color: #708090">Motivo Descomissionamento / Distrato</span>
+                          <textarea style="color: #000000" class="form-control" id="txDescomissionamentoDistrato" name="txDescomissionamentoDistrato" placeholder="Motivo Descomissionamento / Distrato" rows="15" ></textarea>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+			</div>
+			<!-- Modal footer -->
+			<div class="modal-footer">
+			    <button type="button" class="btn btn-outline-success" onclick="submitDescomissionamentoDistrato();">Atualizar</button>
+				<button type="button" class="btn btn-outline-success" data-dismiss="modal">Fechar</button>
+			</div>
+		
+		</div>
+	</div>
+</div>
+
     <jsp:include page="javascriptfile.jsp"></jsp:include>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
     <script src="<%= request.getContextPath() %>/assets/js/select2/select2.min.js"></script>
@@ -1285,8 +1266,7 @@
 
 
  <script type="text/javascript">
- 
- 
+
 //In your Javascript (external .js resource or <script> tag)
  $(document).ready(function() {
      $('#pep').select2( {
@@ -1299,12 +1279,10 @@
  });
 
  function validaStatusPepProvisorio(){
-//    let idStatus  = select.options[id_status_contrato.selectedIndex ].value;
     var idStatus  = id_status_contrato.options[id_status_contrato.selectedIndex ].value;
     let status      = $('#id_status_contrato').find(":selected").text( )       ;
     if( ((status !== 'Rascunho') && parseInt(idStatus) !== 4) || status.trim() === ''  ){
  	   // PEP PROVISÓRIO
-// 	   $("#pep option[value='PEP PROVISÓRIO']").remove();
         const select = document.querySelector('#pep')
         for (let i = 0; i < select.options.length; i++) {
              const value = select.options[i].value;
@@ -1316,6 +1294,7 @@
         }	   
     }else{
  	  $('#pep').append('<option>PEP PROVISÓRIO</option>');
+ 	  //$('#pep').get(0).selectedIndex = 'PEP PROVISÓRIO';
     }	
  }
 
@@ -1331,8 +1310,8 @@
  		url : urlAction,
  		data : 'acao=montaSelectPEP',
  		success: function(lista){
- //			var option = '<option disabled selected></option>';
-            var option = '';
+ 			var option = '<option disabled selected> </option>';
+// var option = '';
  			var selected = '';
  			var json = JSON.parse(lista);  
  			for(var p = 0; p < json.length; p++){
@@ -1653,8 +1632,8 @@
   $("#valor_total"     ).maskMoney({ showSymbol:true, symbol:""   , decimal:",", thousands:"." });
   $("#valor_convertido").maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
   $("#valor_Cotacao"   ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
-  
-  
+  $("#idValorSetupCon" ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
+    
   /******************************************************************/
   /*                                                                */
   /*                                                                */
@@ -1739,52 +1718,7 @@
   		});		 
 	 }
  }
- 
- /******************************************************************/
- /*                                                                */
- /*                                                                */
- /******************************************************************/
-  function buscarContratoPEP() {
-	 var buscaContratoPEP = document.getElementById("buscaContratoPEP").value;
-
- 	 if( buscaContratoPEP != null && buscaContratoPEP != '' && buscaContratoPEP.trim() != '' ){
- 		 var urlAction = document.getElementById("formContrato").action;
-		 
-    		$.ajax({
-   			
-   			method : "get",
-   			   url : urlAction,
-   			  data : "ContratoPEP=" + buscaContratoPEP + '&acao=buscarContratoPorPEP',
-   			success: function(response){
-   				 			
-   				var json = JSON.parse(response);
-   				var html = '';
-   				$('#tabelaResutadoPEP > tbody > tr').remove();
-   				
-   				for(var p = 0; p < json.length; p++){
-   					html += '<tr> '
-   					     + '   <td>' + (p+1)                  + '</td> '
-   					     + '   <td>' + json[p].id_cliente     + '</td> ' 
-   					     + '   <td>' + json[p].razao_social   + '</td> '
-   					     + '   <td>' + json[p].pep_pesquisado + '</td> ' 
-   					     + '   <td><button onclick="verClienteSelecionado('+json[p].id_cliente+',' + '\'' + json[p].razao_social+ '\''+');" type="button" class="btn btn-info">Selecionar</button></td>'
-   					     + ' </tr>';
-   						$("#tabelaResutadoPEP tbody").html(html).show(); 
-   				}
-   				document.getElementById("totalResutadosPEP").textContent = 'Resutado: ' + json.length + ' Contratos(s) encontrado(s)';
-   			}
-   		}).fail(function( xhr, status, errorThrown ){
-   			// alert('Erro ao buscar Cliente: ' + xhr.responseText);
- 			var iconi           = "error";
- 			var tituloPrincipal = "Erro ao buscar Cliente";
- 			var textoPrincipal  = xhr.responseText;  
- 			var nomeModal       = 'modalPesqContratoPEP'; 
- 			MensagemConfimacaoModal( iconi, tituloPrincipal, xhr.responseText, nomeModal );	
-   			
-   		});		
- 	 }
-  }
- 
+  
 /******************************************************************/
 /*                                                                */
 /*                                                                */
@@ -1796,8 +1730,6 @@
 		
 	}, 1000);
 }
-
-
  
  /******************************************************************/
  /*                                                                */
@@ -1956,7 +1888,7 @@ $( function() {
 		    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
 		    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
 		    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-		    nextText: 'PrÃ³ximo',
+		    nextText: 'Próximo',
 		    prevText: 'Anterior'
 		});
 } );    
@@ -1973,7 +1905,7 @@ $( function() {
 		    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
 		    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
 		    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-		    nextText: 'PrÃ³ximo',
+		    nextText: 'Próximo',
 		    prevText: 'Anterior'
 		});
 } );
@@ -2045,7 +1977,7 @@ function mostraMensagemTela( titulo, texto ) {
 	
 }	
 
-function MensagemConfimacaoModal( iconi, tituloPrincipal, textoPrincipal, nomeModal ) {
+async function MensagemConfimacaoModal( iconi, tituloPrincipal, textoPrincipal, nomeModal ) {
 // icon
 //  	"warning"
 //  	"error"
@@ -2095,94 +2027,6 @@ function AlerataMensagensModal( tituloPrincipal, textoPrincipal,  nomeModal ) {
 		});	  
 	
 }
-/******************************************************************/
-/*                                                                */
-/*  Funcao para realizar as validacoes antes do Submit.           */
-/*                                                                */
-/******************************************************************/
-$( "#formContrato" ).submit(function( event ) {
- 	 var urlAction        = document.getElementById("formContrato"      ).action;
- 	 var idStatusContrato = document.getElementById("id_status_contrato").value;
- 	 var idContrato       = document.getElementById("id_contrato"       ).value;
-
- 	 if( idContrato != null && idContrato != '' && idContrato.trim() != '' ){
-			 $.ajax({
-		 			method : "get",
-		 			url : urlAction,
-		 			data : "acao=cancelaContrato&idContrato=" + idContrato + '&idStatusContrato='+ idStatusContrato,
-		 			success: function(lista){
-		 				var json = JSON.parse(lista);
-		 				
-		 				if( json[0] !== 'STATUSNAOALTERADO' ){
-		 					
-		 					  Swal.fire({
-		 						      icon             : "info" ,
-									  title            : json[0],
-									  text             : json[1],
-									  showDenyButton   : true,
-							//		  showCancelButton : true,
-									  confirmButtonText: "Sim",
-									  denyButtonText   : "Cancelar"
-									}).then((result) => {
-									  if (result.isConfirmed) {
-									     //return true;
-									     efetivaCancelamentoContratoAfins( idContrato );
-									  } else if (result.isDenied) {
-									    return false;
-									  }
-									});	  
-		 				}else{		 					
-		 					document.getElementById("formContrato").submit();	  
-		 				}
-		 			}
-		 	 }).fail(function( xhr, status, errorThrown ){
-		 			//alert('Erro Cancela Contrato: ' + idContrato + ' - ERRO: ' + xhr.responseText);
-	 				var iconi           = "error";
-	 				var tituloPrincipal = "Erro Cancelar Contrato";
-	 				var textoPrincipal  = 'Erro ao Cancela o Contrato: ' + idContrato + ' - ERRO: ' + xhr.responseText;
-	 				MensagemConfimacao( iconi, tituloPrincipal, textoPrincipal );  
-		 	 }); 
-   }else 
-	   document.getElementById("formContrato").submit();
- 	
-	  event.preventDefault();
-});
-
-/******************************************************************/
-/*                                                                */
-/*                                                                */
-/******************************************************************/
-function efetivaCancelamentoContratoAfins( idContrato ){
- 	 var urlAction  = document.getElementById("formContrato").action;
- 	 var idStatusContrato = document.getElementById("id_status_contrato").value;
-	 $.ajax({
- 			method : "get",
- 			url : urlAction,
- 			data : "acao=efetivaCancelamentoContratoAfins" + '&idContrato=' + idContrato + '&idStatusContrato=' + idStatusContrato,
- 			success: function(lista){
- 				var json = JSON.parse(lista);
- 				var iconi = "success";
- 				let tituloPrincipal = "Cancelamento de Contrato";
- 				let textoPrincipal = json;
- 				if( json === 'STATUS4' ){
- 					tituloPrincipal = "Atualização de Contrato";
- 					textoPrincipal  = "Contrato atualizado com sucesso!";
- 				}
- 				
- 				var nomeModal = "";
- 				MensagemConfimacao( iconi, tituloPrincipal, textoPrincipal );
-  	}
- 	}).fail(function( xhr, status, errorThrown ){
- 			// alert('Erro pesqusa Contrato por ID: ' + xhr.responseText);
-			var iconi           = "error";
- 			var tituloPrincipal = "ERRO";
- 			var textoPrincipal  = "Erro: Efetiva Cancelamento Contrato Afins: " + xhr.responseText;
- 			MensagemConfimacao( iconi, tituloPrincipal, textoPrincipal );  
-
- 	}); 
-
- }
-
  
  const input = document.getElementById('pequisaContrato');
 
@@ -2269,6 +2113,178 @@ function efetivaCancelamentoContratoAfins( idContrato ){
 	}	
   }
 
+ /******************************************************************/
+ /*                                                                */
+ /*  Funcao para realizar as validacoes antes do Submit.           */
+ /*                                                                */
+ /******************************************************************/
+/* 
+ $( "#formContrato" ).submit(function( event ) {
+  	 var urlAction        = document.getElementById("formContrato"      ).action;
+  	 var idStatusContrato = document.getElementById("id_status_contrato").value;
+  	 var idContrato       = document.getElementById("id_contrato"       ).value;
+
+  	 if( idContrato != null && idContrato != '' && idContrato.trim() != '' ){
+ 			 $.ajax({
+ 		 			method : "get",
+ 		 			url : urlAction,
+ 		 			data : "acao=cancelaContrato&idContrato=" + idContrato + '&idStatusContrato='+ idStatusContrato,
+ 		 			success: function(lista){
+ 		 				var json = JSON.parse(lista);
+ 		 				
+ 		 				if( json[0] !== 'STATUSNAOALTERADO' ){
+ 		 					
+ 		 					  Swal.fire({
+ 		 						      icon             : "info" ,
+ 									  title            : json[0],
+ 									  text             : json[1],
+ 									  showDenyButton   : true,
+ 							//		  showCancelButton : true,
+ 									  confirmButtonText: "Sim",
+ 									  denyButtonText   : "Cancelar"
+ 									}).then((result) => {
+ 									  if (result.isConfirmed) {
+ 									     //return true;
+ 									     efetivaCancelamentoContratoAfins( idContrato );
+ 									  } else if (result.isDenied) {
+ 									    return false;
+ 									  }
+ 									});	  
+ 		 				}else{		 					
+ 		 					document.getElementById("formContrato").submit();	  
+ 		 				}
+ 		 			}
+ 		 	 }).fail(function( xhr, status, errorThrown ){
+ 		 			//alert('Erro Cancela Contrato: ' + idContrato + ' - ERRO: ' + xhr.responseText);
+ 	 				var iconi           = "error";
+ 	 				var tituloPrincipal = "Erro Cancelar Contrato";
+ 	 				var textoPrincipal  = 'Erro ao Cancela o Contrato: ' + idContrato + ' - ERRO: ' + xhr.responseText;
+ 	 				MensagemConfimacao( iconi, tituloPrincipal, textoPrincipal );  
+ 		 	 }); 
+    }else 
+ 	   document.getElementById("formContrato").submit();
+  	
+ 	  event.preventDefault();
+ });
+*/
+
+
+/******************************************************************/
+/*                                                                */
+/*  Funcao para realizar as validacoes antes do Submit.           */
+/*                                                                */
+/******************************************************************/
+$( "#formContrato" ).submit(function( event ) {
+ 	 var urlAction        = document.getElementById("formContrato"      ).action;
+ 	 var idStatusContrato = document.getElementById("id_status_contrato").value;
+ 	 var idContrato       = document.getElementById("id_contrato"       ).value;
+
+ 	 if( idContrato != null && idContrato != '' && idContrato.trim() != '' ){
+ 		if( parseInt(idStatusContrato) === 5 ) $('#ModalDescomissionamento').modal('show'); 
+ 		else document.getElementById("formContrato").submit();
+ 	 }else 
+	   document.getElementById("formContrato").submit();
+ 	
+	  event.preventDefault();
+});
+
+async function validaDescMotivoDestrato(){
+	 let txDescomissionamentoDistrato     = document.getElementById( 'txDescomissionamentoDistrato' ).value;
+	 if( txDescomissionamentoDistrato.trim() === '') return "Favor descrever motivo d0 Descomissionamento / Distrato!";
+	 return 'OK';    	
+}
+
+async function submitDescomissionamentoDistrato() {
+	try {
+		 var urlAction           = document.getElementById( "formContrato"                 ).action;
+	 	 var idStatusContrato    = document.getElementById( "id_status_contrato"           ).value;
+	 	 var idContrato          = document.getElementById( "id_contrato"                  ).value;
+	 	 var mDescomissionamento = document.getElementById( "txDescomissionamentoDistrato" ).value;
+	 	 var idCliente           = document.getElementById( "id_cliente"                   ).value;
+	 	 
+	 	 var dados = "?acao=atualizaStatusContratoDescomissionamento&idContrato=" + idContrato + '&idStatusContrato=' + idStatusContrato + '&mDescomissionamento=' + mDescomissionamento + '&idCliente=' + idCliente;
+	 	 
+	 	 const validacao = await validaDescMotivoDestrato();
+	 	 if( validacao !== 'OK'  ) throw validacao;
+	 	 
+	 	 if( parseInt(idStatusContrato) === 5 ){
+	 	     const data = await fetch(urlAction + dados, { method: 'GET', 		                                    
+	 		                                              headers: { 'Content-Type': 'application/json'}
+	 		                                             }).then(response => response.text())
+				        	                               .then(body => { return body; })
+	 	                                                   .catch(function(err){
+	 	                               			                     var iconi           = "error";
+	 	                             			                     var tituloPrincipal = "ERRO";
+	 	                             			                     var textoPrincipal  = "Erro: " + xhr.responseText;
+	 	                             			                     MensagemConfimacaoModal( iconi, tituloPrincipal, textoPrincipal, "ModalDescomissionamento" );
+	 	                                                   });
+	 	     if(data === 'Sucesso' ){
+
+				 Swal.fire({
+					   title: "Processo de Descomissionamento",
+					   text : "Status atualizado com Sucesso!",
+					   icon : "success",
+					   target: document.getElementById("ModalDescomissionamento"),
+					   showCancelButton: false,
+					   confirmButtonColor: "#3085d6",
+					   cancelButtonColor: "#d33",
+					   confirmButtonText: "OK"
+					 }).then((result) => {
+					   if (result.isConfirmed) {
+						   document.getElementById("formContrato").submit();
+					   }
+					 });				 
+
+//	 	    	await MensagemConfimacaoModal( "success", "Processo de Descomissionamento", "Status atualizado com Sucesso!", "ModalDescomissionamento" );	
+//	            document.getElementById("formContrato").submit();
+	 	     }
+	 	 }else document.getElementById("formContrato").submit();
+    } catch (error) {
+   	   MensagemConfimacaoModal( "warning", "Processo de Descomissionamento",  error, "ModalDescomissionamento" );
+    }
+ 	 
+}
+
+ /******************************************************************/
+ /*                                                                */
+ /*                                                                */
+ /******************************************************************/
+ function efetivaCancelamentoContratoAfins( idContrato ){
+  	 var urlAction  = document.getElementById("formContrato").action;
+  	 var idStatusContrato = document.getElementById("id_status_contrato").value;
+ 	 $.ajax({
+  			method : "get",
+  			url : urlAction,
+  			data : "acao=efetivaCancelamentoContratoAfins" + '&idContrato=' + idContrato + '&idStatusContrato=' + idStatusContrato,
+  			success: function(lista){
+  				var json = JSON.parse(lista);
+  				var iconi = "success";
+  				let tituloPrincipal = "Cancelamento de Contrato";
+  				let textoPrincipal = json;
+  				if( json === 'STATUS4' ){
+  					tituloPrincipal = "Atualização de Contrato";
+  					textoPrincipal  = "Contrato atualizado com sucesso!";
+  				}
+  				
+  				var nomeModal = "";
+  				MensagemConfimacao( iconi, tituloPrincipal, textoPrincipal );
+   	}
+  	}).fail(function( xhr, status, errorThrown ){
+  			// alert('Erro pesqusa Contrato por ID: ' + xhr.responseText);
+ 			var iconi           = "error";
+  			var tituloPrincipal = "ERRO";
+  			var textoPrincipal  = "Erro: Efetiva Cancelamento Contrato Afins: " + xhr.responseText;
+  			MensagemConfimacao( iconi, tituloPrincipal, textoPrincipal );  
+
+  	}); 
+
+  }
+
+ 
+ 
+ 
+ 
+ 
 </script>
 
 </body>

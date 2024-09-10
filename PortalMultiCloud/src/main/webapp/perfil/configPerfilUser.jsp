@@ -129,7 +129,7 @@
 																<!-- Data Cadastro -->
 																<div class="form-group form-default form-static-label col-md-4 mb-6">
 																    <span  class="text-info font-weight-bold font-italic">Perfil Cad</span>
-																	<input class="form-control text-info font-italic" type="text" name="perfil"    id="perfil"    readonly="readonly" value="${modelPerfilUser.nome_perfil}">
+																	<input class="form-control text-info font-italic" type="text" name="perfil" id="perfil"    readonly="readonly" value="${modelPerfilUser.nome_perfil}">
 																</div>
 																<!-- Login Cadastro --> 
 			                                                    <div class="form-group form-default form-static-label col-md-4 mb-6">
@@ -143,7 +143,6 @@
 															<br>
 																														
 															<div class="form-row">
-															   
 															   <div class="row mb-3 col-md-12">
 															       <label for="userperfil" class="col-md-2 col-form-label">Usuário</label>
 															       <div class="col-sm-10">

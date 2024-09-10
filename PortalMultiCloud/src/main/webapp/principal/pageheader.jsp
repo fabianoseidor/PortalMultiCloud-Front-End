@@ -16,8 +16,10 @@
                            <i class="fa fa-home"></i>
                        </li>
                        <li class="breadcrumb-item">
-                    
+                       <!-- 
                        <a href="<%= request.getContextPath() %>/principal/principal.jsp">Portal MultiCloud</a>
+                        -->
+                       <a href="<%= request.getContextPath() %>/principal/PagPrincipal.jsp">Portal MultiCloud</a>
                           
                        </li>
                    </ul>

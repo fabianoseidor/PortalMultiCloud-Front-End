@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = {"/principal/*","/perfil/*","/manutencao/*","/cadastro/*", "/consolidacao/*", "/relatorios/*"})
+@WebFilter(urlPatterns = {"/principal/*","/perfil/*","/manutencao/*","/cadastro/*", "/consolidacao/*", "/relatorios/*", "/dashboard/*"})
 public class FilterAutenticacao extends HttpFilter implements Filter {
        
 	private static final long serialVersionUID = 1L;

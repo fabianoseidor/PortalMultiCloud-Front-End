@@ -57,6 +57,12 @@ public class ModelAditivoModal {
     private String cotacao_moeda;
     private Long   id_moeda;    
 
+	// Informacoes da comissicao de venda sobre o contrato equivalente a equipe de vendas
+	private Boolean comissao_adit;
+	private String  valor_setup_adit;
+	private String  valor_parcela_setup_adit;
+	private int     qty_parcela_setup_adit;
+	private int     qty_mese_setup_adit;
 
 	public ModelAditivoModal() {}	
 	
@@ -71,6 +77,46 @@ public class ModelAditivoModal {
     	return this.id_aditivado == null;
     }
  
+	public Boolean getComissao_adit() {
+		return comissao_adit;
+	}
+
+	public void setComissao_adit(Boolean comissao_adit) {
+		this.comissao_adit = comissao_adit;
+	}
+
+	public String getValor_setup_adit() {
+		return valor_setup_adit;
+	}
+
+	public void setValor_setup_adit(String valor_setup_adit) {
+		this.valor_setup_adit = valor_setup_adit;
+	}
+
+	public String getValor_parcela_setup_adit() {
+		return valor_parcela_setup_adit;
+	}
+
+	public void setValor_parcela_setup_adit(String valor_parcela_setup_adit) {
+		this.valor_parcela_setup_adit = valor_parcela_setup_adit;
+	}
+
+	public int getQty_parcela_setup_adit() {
+		return qty_parcela_setup_adit;
+	}
+
+	public void setQty_parcela_setup_adit(int qty_parcela_setup_adit) {
+		this.qty_parcela_setup_adit = qty_parcela_setup_adit;
+	}
+
+	public int getQty_mese_setup_adit() {
+		return qty_mese_setup_adit;
+	}
+
+	public void setQty_mese_setup_adit(int qty_mese_setup_adit) {
+		this.qty_mese_setup_adit = qty_mese_setup_adit;
+	}
+
 	public Long getId_rascunho() {
 		return id_rascunho;
 	}

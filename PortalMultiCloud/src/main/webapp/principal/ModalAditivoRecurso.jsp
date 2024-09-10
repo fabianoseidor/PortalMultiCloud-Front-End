@@ -1,6 +1,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="ISO-8859-1"%>
-<%@taglib tagdir="/WEB-INF/tags" prefix="tagsContrato"%>        
+<%@taglib tagdir="/WEB-INF/tags" prefix="tagsContrato"%> 
+       
     <!-- Modal Add Produto -->
    <div class="modal t-modal primary" id="ModalAditivoRecurso" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true" data-backdrop="static">
 	  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -51,6 +52,7 @@
 					<form class="form-material">
 						<div class="card">
 							<div class="card-block">
+							    <h5 class="card-title">Info. Aditivo</h5><hr>
 							    <div class="form-row">
 		                            <!-- Campo Tipo Aditivo -->
 									<div class="form-group form-default form-static-label col-md-3 mb-6">
@@ -112,7 +114,7 @@
 										<input type="text" name="valor_CotacaoMAR" id="valor_CotacaoMAR" disabled="disabled" onblur="cauculoConversaoMAR();" class="form-control" placeholder="Valor do contrato" value="${modelListAditivoProduto.cotacao_moeda}">
 									</div>
 								</div>
-
+								
 							</div>
 						</div>
 					</form>
@@ -355,9 +357,10 @@
 							<!-- Basic Form Inputs card start -->
 							<div class="card">
 								<div class="card-block">	
+								    <h5 class="card-title">Recurso</h5><hr>
 									<div class="form-row">
 										<div class="form-group form-default form-static-label col-md-6 mb-6">
-											<label class="float-label">ID Aditivo</label>
+											<label class="float-label">ID Recurso</label>
 											<input type="text" name="idRecursoMAR" id="idRecursoMAR" class="form-control" readonly="readonly" value="">
 										</div>
 										<!-- Data Cadastro -->
@@ -374,8 +377,7 @@
 					<form class="form-material">
 						<!-- Basic Form Inputs card start -->
 						<div class="card">
-							<div class="card-block">
-	
+							<div class="card-block">	                                
 	                           <!-- Inicio da implementacao -->
 									<div class="form-row">
 										<!-- Campo Status -->
@@ -565,38 +567,123 @@
 				    <br>
 				</div>
 			</div>
+
 			<!-- ********************************************************************************************* -->
 			<!--                                                                                               -->
             <!-- A Data Vigencia, sempre ira ser visivel com os valores da data atual(Abetro para alteracao) e -->
             <!-- data final, de acordo com a data final do contrato.                                           -->			
 			<!--                                                                                               -->
 			<!-- ********************************************************************************************* -->
-			<div class="row" id="DivVigenciaAditivoMR" >
-				<div class="col-sm-12">
-					<!-- Basic Form Inputs card start -->
-					<div class="card">
-						<div class="card-block">
-							<div class="form-row">
-								<!-- Campo Data Início --> 
-								<div class="form-group form-default form-static-label col-md-6 mb-6">
-									<span class="font-weight-bold font-italic" style="color: #708090">Data Início</span>
-									<input style="color: #B0C4DE" type="text" name="dtInicioMAR" id="dtInicioMAR" class="form-control" required="required" placeholder="Data início do Aditivo" value=""> 
-									
-								</div>
-					
-								<!-- Campo Data Final -->
-								<div class="form-group form-default form-static-label col-md-6 mb-6">
-									<span class="font-weight-bold font-italic" style="color: #708090">Data Final</span>
-									<input style="color: #B0C4DE" type="text" name="dtFinalMAR" id="dtFinalMAR" required="required" class="form-control" readonly="readonly" placeholder="Data final do Aditivo" value="">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 			
+            <div class="row" id="DivVigenciaAditivoMR" >
+               <form class="form-material">
+                  <div class="col-sm-12">
+                     <div class="card">
+                        <div class="card-block">
+                           <h5 class="card-title">Vigência Aditivo</h5><hr>
+                           <div class="form-row">
+                              <div class="form-group form-default form-static-label col-md-6 mb-6">
+                                  <label class="font-weight-bold font-italic" >ID Vigência</label>
+                                 <input type="text" name="id_vigenciaMAR" id="id_vigenciaMAR" class="form-control" readonly="readonly" disabled="disabled">	
+                              </div>
+                              <div class="form-group form-default form-static-label col-md-6 mb-6">
+                                 <label class="font-weight-bold font-italic" >Data Cadastro</label>
+                                 <input type="text" name="dt_criacao_vigenciaMAR" id="dt_criacao_vigenciaMAR" class="form-control" readonly="readonly" disabled="disabled">	
+                              </div>
+                           </div>
+                        
+                           <div class="form-row">
+                              <div class="form-group form-default form-static-label col-md-4 mb-3">
+                                 <label class="font-weight-bold font-italic" >Tempo Contrato</label>
+                                 <select style="color: #000000" name="selectTempoContratoMAR" id="selectTempoContratoMAR" onchange="calculaDataFinalVigenciaMAR(); habilitaSetupMAR();" class="form-control">
+                                    <option value="" disabled selected>Selecione Tempo Contrato</option>
+                                    <tagsContrato:listaTempoContratoAditivo/>
+                                 </select>
+                              </div>
+                              <!-- Campo Data Início --> 
+                              <div class="form-group form-default form-static-label col-md-4 mb-6">
+                                 <label class="font-weight-bold font-italic" >Data Início</label>
+                                 <input type="text" name="dtInicioMAR" id="dtInicioMAR" class="form-control" onchange="calculaDataFinalVigenciaMAR();">	
+                              </div>
+                              <div class="form-group form-default form-static-label col-md-4 mb-6">
+                                 <label class="font-weight-bold font-italic" >Data Final</label>
+                                 <input type="text" name="dtFinalMAR" id="dtFinalMAR" class="form-control" >	
+                              </div>
+                           </div>
+                        
+                           <div class="form-group form-default form-static-label mb-6">
+                              <label class="font-weight-bold font-italic" >Observaçãoo Vigência</label>
+                              <textarea style="color: #000000" class="form-control" id="observacaoVigenciaMAR" name="observacaoVigenciaMAR" placeholder="Observação" rows="10" ></textarea>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </form>
+            </div>
+
+            <hr>
+            <br>
+
+			<!-- ********************************************************************************************* -->
+			<!--                                                                                               -->
+            <!-- A Data Vigencia, sempre ira ser visivel com os valores da data atual(Abetro para alteracao) e -->
+            <!-- data final, de acordo com a data final do contrato.                                           -->			
+			<!--                                                                                               -->
+			<!-- ********************************************************************************************* -->
+			
+            <div class="row" id="DivComissaoAditivoMR" >
+               <form class="form-material">
+                  <div class="col-sm-12">
+                     <div class="card">
+                        <div class="card-block">
+                           <h5 class="card-title">Comissão</h5><hr>
+                           
+                           <div class="form-row">  
+
+					        <div class="form-group form-default form-static-label col-md-6 mb-3">
+							    <span class="font-weight-bold font-italic" style="color: #708090">Comissão</span>
+								<select style="color: #000000" name="comissaoMAR" id="comissaoMAR" class="form-control" disabled="disabled" required="required" onchange="calcularMAR()">
+								  <option value="" disabled selected>[-Selecione-]</option>
+								  <option value=1>Sim</option>
+								  <option value=0>Não</option>
+								</select> 
+							</div>
+															
+                           <div class="form-group form-default form-static-label col-md-6 mb-4">
+                                 <span class="font-weight-bold font-italic" style="color: #708090">Quantidades Meses Contrato</span>
+                                 <input style="color: #000000" type="text" name="qtyMesesContratoMAR" id="qtyMesesContratoMAR" readonly class="form-control" placeholder="Quantidades Meses Contrato">
+                              </div>
+                           </div>
+
+                           <div class="form-row">  
+                              <div class="form-group form-default form-static-label col-md-4 mb-4">
+                                 <span class="font-weight-bold font-italic" style="color: #708090">Valor Parcelas</span>
+                                 <input style="color: #000000" type="text" name="vlrParcelasMAR" id="vlrParcelasMAR" readonly class="form-control" placeholder="Valor Parcelas">
+                              </div>
+
+                              <div class="form-group form-default form-static-label col-md-4 mb-4">
+                                 <span class="font-weight-bold font-italic" style="color: #708090">Quantidade Parcelas Setup</span>
+                                 <input style="color: #000000" type="text" name="qtyParcSetupMAR" id="qtyParcSetupMAR" readonly class="form-control" placeholder="Quantidade Parcelas Comissão">
+                              </div>
+
+                              <div class="form-group form-default form-static-label col-md-4 mb-4">
+                                 <span class="font-weight-bold font-italic" style="color: #708090">Valor Setup</span>
+                                 <input style="color: #000000" type="text" name="idValorSetupMAR" id="idValorSetupMAR" readonly class="form-control" placeholder="Valor Comissão" >
+                              </div>																															
+
+                           </div>
+
+
+                        </div>
+                     </div>
+                  </div>
+               </form>
+            </div>
+            <hr>
+            <br>
+            
 	      </div>
-	      
+
 	      <h4 class="h4stilo" style="text-align: center; color:#00008B; font-style: italic;font-weight: bold;text-decoration: underline;">Lista de Aditivo por Contrato</h4>
 
 	      <div class="modal-body">
@@ -671,15 +758,156 @@
  
  <script type="text/javascript">
 
- var dataNascimento = $("#periodoUtilizacaoMAR").val();
+	async function formatDataStr( data ) {
+	    
+		var dia = data.substr(0,2);
+		var mes = data.substr(3,2);
+		var ano = data.substr(6,4);
+		var dtFort = ano + "-" + mes + "-" + dia;
+		return dtFort;
+	
+	}
 
- if (dataNascimento != null && dataNascimento != '') {
+	async function calcularMAR(){
+		var dt1     = await formatDataStr( document.getElementById("dtInicioMAR").value ); 
+		var dt2     = await formatDataStr( document.getElementById("dtFinalMAR" ).value );
+		var idSetup = document.getElementById("comissaoMAR"  ).value; 
 
- 	var dateFormat = new Date(dataNascimento);
- 	
- 	$("#periodoUtilizacaoMAR").val(dateFormat.toLocaleDateString('pt-BR',{timeZone: 'UTC'}));
+		let vlrContrato = document.getElementById("vlrTotalMAR").value;
 
+		if( ( vlrContrato === null || vlrContrato === '' || vlrContrato.trim() === '' ) ){
+			  var iconi           = "warning";
+ 			  var tituloPrincipal = "Valor Total Aditivo";
+ 			  var textoPrincipal  = "Para realizar o cálculo da comissão precisa preencher o valor total do Aditivo!";
+ 			  var nomeModal       = 'ModalAditivoRecurso';
+		      MensagemConfimacaoModal( iconi, tituloPrincipal, textoPrincipal, nomeModal );
+		      document.getElementById("vlrTotalMAR").focus();
+		      $('#comissaoMAR'     ).get(0).selectedIndex = 0;	
+		} else{		
+			if( ( dt1 != null && dt1 != '' && dt1.trim() != '' ) && 
+			    ( dt2 != null && dt2 != '' && dt2.trim() != '' ) ){
+		
+				  var data1 = new Date(dt1); 
+				  var data2 = new Date(new Date(dt2));
+				  var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
+				   
+				  vlrConvet =  parseFloat( vlrContrato.replace(".", "").replace(".", "").replace(",", ".") );
+				  let vlrParcela = vlrConvet / total;
+				  document.getElementById("qtyMesesContratoMAR").value = total;			
+				  document.getElementById("vlrParcelasMAR"     ).value = vlrParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+		
+				  if(idSetup === "1" ){
+					 
+					if( total > 35 ){
+						var vlr = vlrConvet / total;
+						const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						document.getElementById("idValorSetupMAR").value = formatado;
+						document.getElementById("qtyParcSetupMAR").value = "1";
+					}else if( total < 36 ){
+						var vlr = vlrConvet * 0.027;
+						const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						document.getElementById("idValorSetupMAR").value = formatado;
+						document.getElementById("qtyParcSetupMAR").value = "1";				
+					}
+				  }else if(idSetup === "0" ){
+					
+					var data1 = new Date(dt1); 
+					var data2 = new Date(new Date(dt2));
+					var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
+					document.getElementById("qtyMesesContratoMAR").value = total;
+					
+					vlrContrato = vlrContrato.replace(".", "").replace(",", ".");
+		
+					let vlrConvet = parseFloat( vlrContrato )
+					var vlr = (vlrConvet / total) * 0.02;
+					const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+					document.getElementById("idValorSetupMAR").value = formatado;
+					document.getElementById("qtyParcSetupMAR").value = total;
+				  }
+			}
+		}
+	}
+	
+  /******************************************************************/
+  /*                                                                */
+  /*                                                                */
+  /******************************************************************/ 
+  function habilitaSetupMAR() {
+
+  	var comMAR      = document.getElementById("comissaoMAR"  ).value;
+  	var idValorSetup = document.querySelector("#idValorSetup");
+  		
+  	if(comMAR === "0"){
+  		$("#idValorSetupMAR"    ).val('R$ 0,00');
+  		$("#qtyMesesContratoMAR").val('0'      );
+  		$("#vlrParcelasMAR"     ).val('R$ 0,00');
+  		$("#qtyParcSetupMAR"    ).val('0'      );
+  		idValorSetupMAR.disabled = true;
+  	}else{
+       idValorSetup.disabled = false;
+       comissaoMAR.disabled = false;
+  	}
+  		
+  }
+ 
+ /******************************************************************/
+ /*                                                                */
+ /*                                                                */
+ /******************************************************************/
+  function calculaDataFinalVigenciaMAR() {
+ 	 
+ 	 var idTempoContratoMAR = selectTempoContratoMAR.options[selectTempoContratoMAR.selectedIndex].value;
+ 	 var dtInicioMAR        = document.getElementById("dtInicioMAR"   ).value;
+ 	 var dtFinalMAR         = document.getElementById("dtFinalMAR"    ).value;
+ 	 var urlAction          = document.getElementById("formContrato"  ).action;
+  
+ 	 $.ajax({ 			
+   			method : "get",
+   			url : urlAction,
+   			data : 'acao=CalculaVigencia&idTempoContrato=' + idTempoContratoMAR + '&dtInicio=' + dtInicioMAR + '&dtFinal=' + dtFinalMAR,
+   			success: function(lista){
+   				var json = JSON.parse(lista);
+   				$("#dt_criacao_vigenciaMAR").val( json.dt_criacao );
+   				$("#dtInicioMAR"           ).val( json.dt_inicio  );
+   				$("#dtFinalMAR"            ).val( json.dt_final   );
+
+    			}
+   	 }).fail(function( xhr, status, errorThrown ){
+  // 			alert('Erro carregar select Produto: ' + xhr.responseText);
+ 			var iconi           = "error";
+  			var tituloPrincipal = "ERRO";
+  			var textoPrincipal  = "Erro: Calcula Vigencia: " + xhr.responseText;
+  			var nomeModal       = 'ModalAditivoRecurso';
+			MensagemConfimacaoModal( iconi, tituloPrincipal, textoPrincipal, nomeModal )
+   	 }); 
  }
+
+ $( function() {
+	  
+	  $("#dtInicioMAR").datepicker({
+		    dateFormat: 'dd/mm/yy',
+		    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+		    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+		    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+		    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+		    nextText: 'Próximo',
+		    prevText: 'Anterior'
+		});
+ } );
+ $( function() {
+	  
+	  $("#dtFinalMAR").datepicker({
+		    dateFormat: 'dd/mm/yy',
+		    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+		    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+		    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+		    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+		    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+		    nextText: 'Próximo',
+		    prevText: 'Anterior'
+		});
+ } );
 
 
  $( function() {
@@ -711,11 +939,12 @@
 	/*                                                                */
 	/******************************************************************/
     $('#ModalAditivoRecurso').on('show.bs.modal', function(e){
-		var dtFinal = document.getElementById( "dt_final" ).value; // 6
-
+/* Alterado, pois Eugenio em 06/09/2024 informou que a vidgencia do Aditivo, poderah ser difente do contrto.
+    	var dtFinal = document.getElementById( "dt_final" ).value; // 6
 		const horas = new Date();
 		$("#dtInicioMAR").val( horas.toLocaleDateString('pt-BR') );
 		$("#dtFinalMAR" ).val( dtFinal                           );
+*/		
 		montaTelaInicialAditivoRecurso( );
 		listaAditivosRecursoInicial();
 	});
@@ -940,6 +1169,8 @@ function selecionaCpuRamVlrFamilia( idFamiliaFlSelect ) {
 			$("#temReceitaMAR"              ).val( '' );
 			$("#nomeAprovadorMAR"           ).val( '' );
 			$("#periodoUtilizacaoMAR"       ).val( '' );			
+			$("#idValorSetupMAR"            ).val( '' );
+			$('#idTipoAditivoMAR'           ).get(0).selectedIndex = 0;
 			
 			// Limpeza para inserir novo item
 			if( tipoLimpeza !== 1 ){
@@ -955,13 +1186,34 @@ function selecionaCpuRamVlrFamilia( idFamiliaFlSelect ) {
 				
 				$("#id_rascunhoMAR"             ).val( '' );
 				$("#motivoRascunhoMAR"          ).val( '' );
+				
+				
 			}
             if( tipoLimpeza === 2 ){
 				$("#idAditivoMAR"               ).val( '' );
 				$("#dtCriacaoMAR"               ).val( '' );
 				$("#loginCadastroMAR"           ).val( '' );	
 				$("#vlrTotalMAR"                ).val( '' );
-				$("#idTipoAditivoMAR"           ).val( '' );					
+				
+				$("#id_vigenciaMAR"             ).val( '' );
+				$("#dt_criacao_vigenciaMAR"     ).val( '' );
+				$("#observacaoVigenciaMAR"      ).val( '' );	
+				$("#dtInicioMAR"                ).val( '' );
+				$("#dtFinalMAR"                 ).val( '' );
+				$('#selectTempoContratoMAR'     ).get(0).selectedIndex = 0;	
+				$("#qtyMesesContratoMAR"        ).val( '' );
+				$("#vlrParcelasMAR"             ).val( '' );	
+				$("#qtyParcSetupMAR"            ).val( '' );
+				$("#idValorSetupMAR"            ).val( '' );
+				$('#comissaoMAR'                ).get(0).selectedIndex = 0;	
+				
+				$("#idValorSetupModalAditivo"    ).val( '' );
+				$("#qtyMesesContratoModalAditivo").val( '' );	
+				$("#vlrParcelasModalAditivo"     ).val( '' );
+				$("#qtyParcSetupModalAditivo"    ).val( '' );
+				$('#comissaoModalAditivo'        ).get(0).selectedIndex = 0;
+				
+				
 				montaTelaInicialAditivoRecurso( );
 			}
 			
@@ -1041,14 +1293,16 @@ function selecionaCpuRamVlrFamilia( idFamiliaFlSelect ) {
 	    document.getElementById('valorMAR'                   ).disabled = habilitar;                              
 	    document.getElementById('ObservacoesRecursoMAR'      ).disabled = habilitar;                                
 	    document.getElementById('observacaoAditivoMAR'       ).disabled = habilitar;                               
-	    document.getElementById('dtInicioMAR'                ).disabled = habilitar;                                   
-	    document.getElementById('dtFinalMAR'                 ).disabled = habilitar;                                                                                                               
 	    document.getElementById('btAddAditivoModal'          ).disabled = habilitar;                                   
 	    document.getElementById('btNovoRecursoModal'         ).disabled = habilitar;  
 	    document.getElementById('id_rascunhoMAR'             ).disabled = habilitar;                                   
-	    document.getElementById('motivoRascunhoMAR'          ).disabled = habilitar;  
-	    
+	    document.getElementById('motivoRascunhoMAR'          ).disabled = habilitar; 
 
+	    document.getElementById('selectTempoContratoMAR'     ).disabled = habilitar;                                   
+	    document.getElementById('dtInicioMAR'                ).disabled = habilitar;                                                                                                               
+	    document.getElementById('dtFinalMAR'                 ).disabled = habilitar;                                   
+	    document.getElementById('observacaoVigenciaMAR'      ).disabled = habilitar;                                                                                                               
+	    
 	 }
 
 	/******************************************************************/
@@ -1098,20 +1352,32 @@ function selecionaCpuRamVlrFamilia( idFamiliaFlSelect ) {
 	  			$("#periodoUtilizacaoMAR"       ).val( json.periodo_utilizacao_bolha    ); // 26
 	  			$("#idNuvemMAR"                 ).val( json.id_nuvem                    ); // 27
 	  			$("#idSiteMAR"                  ).val( json.id_site                     ); // 28
-	  			$("#observacaoAditivoMAR"       ).val( json.observacao_vigencia         ); // 29
-	  			$("#dtInicioMAR"                ).val( json.dt_inicio                   ); // 30
-	  			$("#dtFinalMAR"                 ).val( json.dt_final                    ); // 31
-	  			$("#loginCadastroMAR"           ).val( json.login_cadastro              ); // 32	  			
-	  			$("#eipVcenterModalRecursoMAR"  ).val( json.eip_Vcenter                 ); // 33
-	  			$("#hostVcenterModalRecursoMAR" ).val( json.host_Vcenter                ); // 34
-	  			$("#id_moedaMAR"                ).val( json.id_moeda                    ); // 35	  			
-	  			$("#idRecursoMAR"               ).val( json.id_recurso                  ); // 36
-				$("#dtCriacaoRecursoMAR"        ).val( json.dt_criacao_recurso          ); // 37
-				$("#idHubSpotAditivoMAR"        ).val( json.hubspot_aditivo             ); // 38
-				$("#id_rascunhoMAR"             ).val( json.id_rascunho                 ); // 39
-				$("#motivoRascunhoMAR"          ).val( json.motivoRascunho              ); // 40
-				
+	  			$("#observacaoAditivoMAR"       ).val( json.observacao_vigencia         ); // 29	  			
+	  			$("#id_vigenciaMAR"             ).val( json.id_vigencia                 ); // 30
+	  			$("#dt_criacao_vigenciaMAR"     ).val( json.dt_criacao_vigencia         ); // 31
+	  			$("#selectTempoContratoMAR"     ).val( json.id_tempo_contrato           ); // 32
+	  			$("#observacaoVigenciaMAR"      ).val( json.observacao_vigencia         ); // 33
+	  			$("#dtInicioMAR"                ).val( json.dt_inicio                   ); // 34
+	  			$("#dtFinalMAR"                 ).val( json.dt_final                    ); // 35
+	  			$("#loginCadastroMAR"           ).val( json.login_cadastro              ); // 36	  			
+	  			$("#eipVcenterModalRecursoMAR"  ).val( json.eip_Vcenter                 ); // 37
+	  			$("#hostVcenterModalRecursoMAR" ).val( json.host_Vcenter                ); // 38
+	  			$("#id_moedaMAR"                ).val( json.id_moeda                    ); // 39	  			
+	  			$("#idRecursoMAR"               ).val( json.id_recurso                  ); // 40
+				$("#dtCriacaoRecursoMAR"        ).val( json.dt_criacao_recurso          ); // 41
+				$("#idHubSpotAditivoMAR"        ).val( json.hubspot_aditivo             ); // 42
+				$("#id_rascunhoMAR"             ).val( json.id_rascunho                 ); // 43
+				$("#motivoRascunhoMAR"          ).val( json.motivoRascunho              ); // 44 
 
+				if( json.qty_mese_setup_adit > 0  ){
+					$("#qtyMesesContratoMAR"        ).val( json.qty_mese_setup_adit         ); // 45
+					$("#vlrParcelasMAR"             ).val( json.valor_parcela_setup_adit    ); // 46
+					$("#qtyParcSetupMAR"            ).val( json.qty_parcela_setup_adit      ); // 47
+					$("#idValorSetupMAR"            ).val( json.valor_setup_adit            ); // 48
+	
+					if( json.comissao_adit === true ) $('#comissaoMAR').get(0).selectedIndex = 1; // 49
+					else $('#comissaoMAR').get(0).selectedIndex = 2;
+				}
 	  			if( json.id_backup === 1 )
 	  			    validaRetencaoBackup ( 'idRetencaoBackupMAR', 'lbRetencaoBackupMAR', 'idBackupMAR' ); 
 	  			
@@ -1227,6 +1493,13 @@ function selecionaCpuRamVlrFamilia( idFamiliaFlSelect ) {
 		 var v_idHubSpotAditivoMAR       = document.getElementById("idHubSpotAditivoMAR"        ).value; //  47
 		 var id_rascunhoMAR              = document.getElementById("id_rascunhoMAR"             ).value; //  48
 		 var motivoRascunhoMAR           = document.getElementById("motivoRascunhoMAR"          ).value; //  49
+		 var selectTempoContratoMAR      = document.getElementById("selectTempoContratoMAR"     ).value; //  49
+		 var observacaoVigenciaMAR       = document.getElementById("observacaoVigenciaMAR"      ).value; //  49
+		 var comissaoMAR                 = document.getElementById("comissaoMAR"                ).value; //  50 
+		 var idValorSetupMAR             = document.getElementById("idValorSetupMAR"            ).value; //  51
+		 var qtyMesesContratoMAR         = document.getElementById("qtyMesesContratoMAR"        ).value; //  52 
+		 var vlrParcelasMAR              = document.getElementById("vlrParcelasMAR"             ).value; //  53
+		 var qtyParcSetupMAR             = document.getElementById("qtyParcSetupMAR"            ).value; //  54 
 
 		 var dados = 'acao=AddAditivoRecursoModal'   +
 		             '&idAditivoMAR='       	     + idAditivoMAR		           + //  1
@@ -1277,7 +1550,14 @@ function selecionaCpuRamVlrFamilia( idFamiliaFlSelect ) {
 		             '&idRecursoMAR='                + idRecursoMAR                + // 46
 		             '&idHubSpotAditivoMAR='         + v_idHubSpotAditivoMAR       + // 47
 		             '&id_rascunhoMAR='              + id_rascunhoMAR              + // 48
-		             '&motivoRascunhoMAR='           + motivoRascunhoMAR           ; // 49
+		             '&motivoRascunhoMAR='           + motivoRascunhoMAR           + // 49		             
+		             '&comissaoMAR='                 + comissaoMAR                 + // 50
+		             '&idValorSetupMAR='             + idValorSetupMAR             + // 51
+		             '&qtyMesesContratoMAR='         + qtyMesesContratoMAR         + // 52
+		             '&vlrParcelasMAR='              + vlrParcelasMAR              + // 53
+		             '&qtyParcSetupMAR='             + qtyParcSetupMAR             + // 54		             
+		             '&selectTempoContratoMAR='      + selectTempoContratoMAR      + // 55
+		             '&observacaoVigenciaMAR='       + observacaoVigenciaMAR       ; // 56
 
 		    var editCampo = 0;
 
@@ -1780,7 +2060,15 @@ function selecionaCpuRamVlrFamilia( idFamiliaFlSelect ) {
 				        document.getElementById("idSuporteMAR").focus();
 				        return false
 				 }
-
+				 
+				 
+				 if($('#comissaoMAR').get(0).selectedIndex === 0){
+				        // alert('Por favor, informe se haverá Suporte.!');
+				        MensagemConfimacaoModal( iconi, tituloPrincipal, 'Por favor, informe a Comissão!', nomeModal );
+				        document.getElementById("comissaoMAR").focus();
+				        return false
+				 }
+				 
 				break;
 			case 9: // Incremento de Servidores	
 				 if(document.getElementById("vlrTotalUGR").value == ""){

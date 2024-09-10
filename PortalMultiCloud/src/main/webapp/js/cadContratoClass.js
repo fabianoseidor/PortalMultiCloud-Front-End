@@ -552,7 +552,11 @@ class Contrato{
 		// textarea                                    
 		contrato.observacao             = document.getElementById("observacao").value;
 		contrato.isRenovacao            = document.getElementById("renovacaoContratoControle").value;
-		contrato.id_contrato            = document.getElementById("id_contrato").value; 
+		contrato.id_contrato            = document.getElementById("id_contrato").value; 		
+		contrato.comissao               = '';	
+		contrato.valor_setup            = '';
+		contrato.qty_parcela_setup      = '';		
+		contrato.valor_parcela_setup    = '';
 		
 		return contrato;
 	}
@@ -577,7 +581,14 @@ class Contrato{
 		vigencia.tempoContrato       = $('#selectTempoContrato').find(":selected").text( ) ; 
 		vigencia.dt_inicio           = document.getElementById("dt_inicio"          ).value;
 		vigencia.dt_final            = document.getElementById("dt_final"           ).value;
-		vigencia.observacaoVigencia  = document.getElementById("observacaoVigencia" ).value;	
+		vigencia.observacaoVigencia  = document.getElementById("observacaoVigencia" ).value;
+		
+		this.dadosContrato.comissao            = document.getElementById("idSetup"     ).value;	
+		this.dadosContrato.valor_setup         = document.getElementById("idValorSetup").value;
+		this.dadosContrato.qty_parcela_setup   = document.getElementById("qtyParcSetup").value;		
+		this.dadosContrato.valor_parcela_setup = document.getElementById("vlrParcelas" ).value;
+		this.dadosContrato.qty_mes_setup       = document.getElementById("qtyParcSetup").value;
+			
 		return vigencia;
 	}
 	
@@ -631,6 +642,10 @@ class Contrato{
         let td_idHubSpotShow         = tr.insertCell();
         let td_qtyUsuarioShow        = tr.insertCell();
         let td_observacaoShow        = tr.insertCell();
+		let td_idSetupShow           = tr.insertCell();
+		let td_idValorSetupShow      = tr.insertCell();
+		let td_qtyParcelaSetupShow   = tr.insertCell();
+		let td_valorParcelaSetupShow = tr.insertCell();
 
         td_idClienteShow.innerText         = ( this.dadosContrato.id_cliente  !== undefined ? this.dadosContrato.id_cliente  : '' );
         td_nomeClienteShow.innerText       = ( this.dadosContrato.nomeCliente !== undefined ? this.dadosContrato.nomeCliente : '' );         
@@ -672,7 +687,14 @@ class Contrato{
         td_idHubSpotShow.innerText         = ( this.dadosContrato.id_hub_spot            !== undefined ? this.dadosContrato.id_hub_spot            : '' );
         td_qtyUsuarioShow.innerText        = ( this.dadosContrato.qty_usuario_contratada !== undefined ? this.dadosContrato.qty_usuario_contratada : '' );
         td_observacaoShow.innerText        = ( this.dadosContrato.observacao             !== undefined ? this.dadosContrato.observacao             : '' );
-        
+ 
+		td_idSetupShow.innerText           = ( this.dadosContrato.comissao               !== undefined && this.dadosContrato.comissao !== "[-Selecione-]" ? this.dadosContrato.comissao === "0" ? "Não" : "Sim" : '' );
+		td_idValorSetupShow.innerText      = ( this.dadosContrato.valor_setup            !== undefined ? this.dadosContrato.valor_setup            : '' );
+		td_qtyParcelaSetupShow.innerText   = ( this.dadosContrato.qty_parcela_setup      !== undefined ? this.dadosContrato.qty_parcela_setup      : '' );
+		td_valorParcelaSetupShow.innerText = ( this.dadosContrato.valor_parcela_setup    !== undefined ? this.dadosContrato.valor_parcela_setup    : '' );
+		
+		
+		td_qtyParcelaSetupShow.classList.add('center');
         td_idClienteShow.classList.add('center');
         td_cicloUpdadateShow.classList.add('center');
         

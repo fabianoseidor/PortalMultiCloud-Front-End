@@ -17,10 +17,10 @@
       <meta name="author" content="Fabiano Silveira do Amaral" />
       <!-- Favicon icon -->
       <link rel="icon" href="<%= request.getContextPath() %>/assets/images/SeidorIco.ico" type="image/x-icon">
-    <!-- Google font-->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
-    <!-- waves.css -->
-    <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/pages/waves/css/waves.min.css" type="text/css" media="all">
+      <!-- Google font-->
+      <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+      <!-- waves.css -->
+      <link rel="stylesheet" href="<%= request.getContextPath() %>/assets/pages/waves/css/waves.min.css" type="text/css" media="all">
       <!-- Required Fremwork -->
       <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/assets/css/bootstrap/css/bootstrap.min.css">
       <!-- waves.css -->
@@ -42,6 +42,6 @@
       
 
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
+            
       
   </head>

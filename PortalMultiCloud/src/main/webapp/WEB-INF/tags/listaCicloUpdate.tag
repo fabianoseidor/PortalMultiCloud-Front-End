@@ -12,8 +12,8 @@
    Long idCicloUpdateRecuperado = 0L;
    
    if( modelContrato != null ) {
-	   if( modelContrato.getId_fase_contrato() != null )
-	       idCicloUpdateRecuperado = modelContrato.getId_fase_contrato();
+	   if( modelContrato.getId_ciclo_update() != null )
+	       idCicloUpdateRecuperado = modelContrato.getId_ciclo_update();
    }
 
    for (ModelCicloUpdate cicloUpdate : modelCicloUpdates) {

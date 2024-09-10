@@ -31,6 +31,7 @@ import br.com.portal.dao.DAORecursoContratoAditivoRel;
 import br.com.portal.dao.DAORecusoContrato;
 import br.com.portal.dao.DAOSite;
 import br.com.portal.dao.DAOUtil;
+import br.com.portal.model.ModalDescomissionamento;
 import br.com.portal.model.ModelAditivoModal;
 import br.com.portal.model.ModelAitivoRecursoModal;
 import br.com.portal.model.ModelCliente;
@@ -138,10 +139,10 @@ public class ServletContratoController extends HttpServlet {
 						datafinal = util.getDtFinal("M", dataInicial, tempoContrato.getTempo_meses() );
 					else datafinal = util.getDtFinal("S", dataInicial, tempoContrato.getTempo_semana() );
 					
-					vigenciaContrato.setId_tempo_contrato( Long.parseLong(idTempoContrato) );
-			   		vigenciaContrato.setDt_criacao( LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) );
-			   		vigenciaContrato.setDt_inicio( dataInicial.format( DateTimeFormatter.ofPattern("dd/MM/yyyy") ) );
-			   		vigenciaContrato.setDt_final(datafinal.format( DateTimeFormatter.ofPattern("dd/MM/yyyy") )  );
+					vigenciaContrato.setId_tempo_contrato( Long.parseLong(idTempoContrato)                                                );
+			   		vigenciaContrato.setDt_criacao       ( LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) );
+			   		vigenciaContrato.setDt_inicio        ( dataInicial.format( DateTimeFormatter.ofPattern("dd/MM/yyyy") )                );
+			   		vigenciaContrato.setDt_final         (datafinal.format( DateTimeFormatter.ofPattern("dd/MM/yyyy") )                   );
 			   		
 				    Gson gson = new Gson();
 				    String lista = gson.toJson(vigenciaContrato);
@@ -298,24 +299,7 @@ public class ServletContratoController extends HttpServlet {
 					request.setAttribute("msg", e.getMessage());
 					requestDispatcher.forward(request, response);
 		       }
-		    } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarContratoPorPEP") ) {
-				
-				String pep = request.getParameter("ContratoPEP");
-				List<ModelCliente> dadosJsonUser = daoClienteRepository.buscarListaClientePorPep(pep);
-				
-				ObjectMapper objectMapper = new ObjectMapper();
-				
-		        try {
-		          String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(dadosJsonUser);
-		          //System.out.println(json);
-		          response.getWriter().write(json);
-		        } catch(Exception e) {
-					e.printStackTrace();
-					RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");
-					request.setAttribute("msg", e.getMessage());
-					requestDispatcher.forward(request, response);
-		       }
-		    }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarCadContratoCliente") ) {
+		    } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarCadContratoCliente") ) {
 				String                 idContratoCliente      = request.getParameter("idContratoCliente");
 				ModelContrato          modelContrato          = new ModelContrato();
 				DAOAditivoModalRecurso daoAditivoModalRecurso = new DAOAditivoModalRecurso();
@@ -589,42 +573,66 @@ public class ServletContratoController extends HttpServlet {
 				if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("AddAditivoModal") ) {
 					try {
 						// informaoes para todos!
-						String dtInicio      = request.getParameter( "dtInicio"      ); // dt_inicio
-			            String dtFinal       = request.getParameter( "dtFinal"       ); // dt_final
-			            String idTipoAditivo = request.getParameter( "idTipoAditivo" ); // id_tipo_aditivo
-			            String idStatus      = request.getParameter( "idStatus"      ); // id_status_aditivo
-			            String idAditivo     = request.getParameter( "idAditivo"     ); // id_aditivado
-			            String dtCriacao     = request.getParameter( "dtCriacao"     ); // Dt_cadastro
-			            String observacao    = request.getParameter( "observacao"    ); // observacao
-			            String vlrTotal      = request.getParameter( "vlrTotal"      ); // vlr_total_adit
+						String dtInicio         = request.getParameter( "dtInicio"            ); // dt_inicio
+			            String dtFinal          = request.getParameter( "dtFinal"             ); // dt_final
+			            String idTipoAditivo    = request.getParameter( "idTipoAditivo"       ); // id_tipo_aditivo
+			            String idStatus         = request.getParameter( "idStatus"            ); // id_status_aditivo
+			            String idAditivo        = request.getParameter( "idAditivo"           ); // id_aditivado
+			            String dtCriacao        = request.getParameter( "dtCriacao"           ); // Dt_cadastro
+			            String observacao       = request.getParameter( "observacao"          ); // observacao
+			            String vlrTotal         = request.getParameter( "vlrTotal"            ); // vlr_total_adit
 						// Incremento de Serviços
-			            String servicoCont   = request.getParameter( "servicoCont"   ); // servico_aditivado
-			            String qtyServico    = request.getParameter( "qtyServico"    ); // qty_serv_contratado
-			            String vlrUnitServ   = request.getParameter( "vlrUnitServ"   ); // valor_serv_contratado
-			            String descServCont  = request.getParameter( "descServCont"  ); // desc_serv_contratado
+			            String servicoCont      = request.getParameter( "servicoCont"         ); // servico_aditivado
+			            String qtyServico       = request.getParameter( "qtyServico"          ); // qty_serv_contratado
+			            String vlrUnitServ      = request.getParameter( "vlrUnitServ"         ); // valor_serv_contratado
+			            String descServCont     = request.getParameter( "descServCont"        ); // desc_serv_contratado
 						// Contratação do DR
-			            String produtoDR     = request.getParameter( "produtoDR"     ); // qty_Produto
-			            String tpDR          = request.getParameter( "tpDR"          ); // qty_Produto
-			            String qtyDR         = request.getParameter( "qtyDR"         ); // qty_Produto
-			            String vlrUnitDR     = request.getParameter( "vlrUnitDR"     ); // qty_Produto
+			            String produtoDR        = request.getParameter( "produtoDR"           ); // qty_Produto
+			            String tpDR             = request.getParameter( "tpDR"                ); // qty_Produto
+			            String qtyDR            = request.getParameter( "qtyDR"               ); // qty_Produto
+			            String vlrUnitDR        = request.getParameter( "vlrUnitDR"           ); // qty_Produto
 			            // Incremento de Usuário
-			            String qtyUser       = request.getParameter( "qtyUser"       ); // qty_Produto
-			            String vlrUnitUser   = request.getParameter( "vlrUnitUser"   ); // qty_Produto
-			            String produtoUser   = request.getParameter( "produtoUser"   ); // qty_Produto
+			            String qtyUser          = request.getParameter( "qtyUser"             ); // qty_Produto
+			            String vlrUnitUser      = request.getParameter( "vlrUnitUser"         ); // qty_Produto
+			            String produtoUser      = request.getParameter( "produtoUser"         ); // qty_Produto
 			 			// Contratação de VPN
-			            String produtoVPN    = request.getParameter( "produtoVPN"    ); // qty_Produto
-			            String tpVPN         = request.getParameter( "tpVPN"         ); // qty_Produto
-			            String qtyVPN        = request.getParameter( "qtyVPN"        ); // qty_Produto
-			            String vlrUnitVPN    = request.getParameter( "vlrUnitVPN"    ); // qty_Produto
+			            String produtoVPN       = request.getParameter( "produtoVPN"          ); // qty_Produto
+			            String tpVPN            = request.getParameter( "tpVPN"               ); // qty_Produto
+			            String qtyVPN           = request.getParameter( "qtyVPN"              ); // qty_Produto
+			            String vlrUnitVPN       = request.getParameter( "vlrUnitVPN"          ); // qty_Produto
 			            // Formulario principal
-			            String idContrato    = request.getParameter( "idContrato"    ); // id_contrato
+			            String idContrato       = request.getParameter( "idContrato"          ); // id_contrato
 			            // Informacao do tipo de Moeda Contratada para o Atidivo.
-			            String idMoedaMA     = request.getParameter( "idMoedaMA"     ); // id_contrato
-			            String vlrConvertMA  = request.getParameter( "vlrConvertMA"  ); // id_contrato
-			            String vlrCotacaoMA  = request.getParameter( "vlrCotacaoMA"  ); // id_contrato
-			            String idHubSpotAdi  = request.getParameter( "idHubSpotAdi"  ); // id_contrato
-			            String idRascunho    = request.getParameter( "idRascunho"    ); // id_rascunho
-			            String mRascunho     = request.getParameter( "mRascunho"     ); // motivoRascunho
+			            String idMoedaMA        = request.getParameter( "idMoedaMA"           ); // id_contrato
+			            String vlrConvertMA     = request.getParameter( "vlrConvertMA"        ); // id_contrato
+			            String vlrCotacaoMA     = request.getParameter( "vlrCotacaoMA"        ); // id_contrato
+			            String idHubSpotAdi     = request.getParameter( "idHubSpotAdi"        ); // id_contrato
+			            String idRascunho       = request.getParameter( "idRascunho"          ); // id_rascunho
+			            String mRascunho        = request.getParameter( "mRascunho"           ); // motivoRascunho
+			            String TempoContratoMA  = request.getParameter( "TempoContratoMA"     ); // id_rascunho
+			            String obsVigenciaMA    = request.getParameter( "observacaoVigenciaMA"); // motivoRascunho
+			            
+			            String comissaoMA         = request.getParameter( "comissaoMA"         ); // id_rascunho
+			            String idValorSetupMA     = request.getParameter( "idValorSetupMA"     ); // motivoRascunho
+			            String qtyMesesContratoMA = request.getParameter( "qtyMesesContratoMA" ); // id_rascunho
+			            String vlrParcelasMA      = request.getParameter( "vlrParcelasMA"      ); // motivoRascunho
+			            String qtyParcSetupMA     = request.getParameter( "qtyParcSetupMA"     ); // id_rascunho
+
+						if(vlrParcelasMA != null && !vlrParcelasMA.isEmpty()) {
+							vlrParcelasMA = Normalizer.normalize(vlrParcelasMA, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+						    if(vlrParcelasMA.indexOf(" ") >= 0 )
+						    	vlrParcelasMA = vlrParcelasMA.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+							else
+								vlrParcelasMA = vlrParcelasMA.replaceAll("\\.", "").replaceAll("\\,", ".");
+						}
+
+						if(idValorSetupMA != null && !idValorSetupMA.isEmpty()) {
+							idValorSetupMA = Normalizer.normalize(idValorSetupMA, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+						    if(idValorSetupMA.indexOf(" ") >= 0 )
+						    	idValorSetupMA = idValorSetupMA.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+							else
+								idValorSetupMA = idValorSetupMA.replaceAll("\\.", "").replaceAll("\\,", ".");
+						}
 
 						if(vlrTotal != null && !vlrTotal.isEmpty()) {
 							vlrTotal = Normalizer.normalize(vlrTotal, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
@@ -682,30 +690,38 @@ public class ServletContratoController extends HttpServlet {
 							return ;// para a execucao e redireciona para o login.
 						}					    
 
-					    modelAditivoModal.setId_aditivado     ( idAditivo     != null && !idAditivo.isEmpty()     ? Long.parseLong( idAditivo.trim() )     : null );
-					    modelAditivoModal.setDt_cadastro      ( dtCriacao     != null && !dtCriacao.isEmpty()     ? dtCriacao.trim()                       : null );
-					    modelAditivoModal.setDt_inicio        ( dtInicio      != null && !dtInicio.isEmpty()      ? dtInicio.trim()                        : null );
-					    modelAditivoModal.setDt_final         ( dtFinal       != null && !dtFinal.isEmpty()       ? dtFinal.trim()                         : null );
-					    modelAditivoModal.setId_tipo_aditivo  ( idTipoAditivo != null && !idTipoAditivo.isEmpty() ? Long.parseLong( idTipoAditivo.trim() ) : null );
-					    modelAditivoModal.setId_status_aditivo( idStatus      != null && !idStatus.isEmpty()      ? Long.parseLong( idStatus.trim() )      : null );
-					    modelAditivoModal.setObservacao       ( observacao    != null && !observacao.isEmpty()    ? observacao.trim()                      : null );
-					    modelAditivoModal.setVlr_total_adit   ( vlrTotal      != null && !vlrTotal.isEmpty()      ? vlrTotal.trim()                        : null );
-					    modelAditivoModal.setId_contrato      ( idContrato    != null && !idContrato.isEmpty()    ? Long.parseLong( idContrato.trim() )    : null );
-					    modelAditivoModal.setHubspot_aditivo  ( idHubSpotAdi  != null && !idHubSpotAdi.isEmpty()  ?  idHubSpotAdi.trim()                   : null );
-					    modelAditivoModal.setId_rascunho      ( idRascunho    != null && !idRascunho.isEmpty()    ? Long.parseLong( idRascunho.trim() )    : null );
-					    modelAditivoModal.setMotivoRascunho   ( mRascunho     != null && !mRascunho.isEmpty()     ? mRascunho.trim()                       : null );
+					    modelAditivoModal.setId_aditivado         ( idAditivo       != null && !idAditivo.isEmpty()       ? Long.parseLong( idAditivo.trim() )     : null  );
+					    modelAditivoModal.setDt_cadastro          ( dtCriacao       != null && !dtCriacao.isEmpty()       ? dtCriacao.trim()                       : null  );
+					    modelAditivoModal.setDt_inicio            ( dtInicio        != null && !dtInicio.isEmpty()        ? dtInicio.trim()                        : null  );
+					    modelAditivoModal.setDt_final             ( dtFinal         != null && !dtFinal.isEmpty()         ? dtFinal.trim()                         : null  );
+					    modelAditivoModal.setId_tipo_aditivo      ( idTipoAditivo   != null && !idTipoAditivo.isEmpty()   ? Long.parseLong( idTipoAditivo.trim() ) : null  );
+					    modelAditivoModal.setId_status_aditivo    ( idStatus        != null && !idStatus.isEmpty()        ? Long.parseLong( idStatus.trim() )      : null  );
+					    modelAditivoModal.setObservacao           ( observacao      != null && !observacao.isEmpty()      ? observacao.trim()                      : null  );
+					    modelAditivoModal.setVlr_total_adit       ( vlrTotal        != null && !vlrTotal.isEmpty()        ? vlrTotal.trim()                        : null  );
+					    modelAditivoModal.setId_contrato          ( idContrato      != null && !idContrato.isEmpty()      ? Long.parseLong( idContrato.trim() )    : null  );
+					    modelAditivoModal.setHubspot_aditivo      ( idHubSpotAdi    != null && !idHubSpotAdi.isEmpty()    ?  idHubSpotAdi.trim()                   : null  );
+					    modelAditivoModal.setId_rascunho          ( idRascunho      != null && !idRascunho.isEmpty()      ? Long.parseLong( idRascunho.trim() )    : null  );
+					    modelAditivoModal.setMotivoRascunho       ( mRascunho       != null && !mRascunho.isEmpty()       ? mRascunho.trim()                       : null  );
+					    // Referencia a Comissao
+					    modelAditivoModal.setComissao_adit           ( Integer.parseInt(comissaoMA)== 1                            ? true                                         : false);
+					    modelAditivoModal.setValor_setup_adit        ( idValorSetupMA     != null && !idValorSetupMA.isEmpty()     ? idValorSetupMA.trim()                        : null );
+					    modelAditivoModal.setQty_mese_setup_adit     ( qtyMesesContratoMA != null && !qtyMesesContratoMA.isEmpty() ? Integer.valueOf( qtyMesesContratoMA.trim() ) : 0    );
+					    modelAditivoModal.setValor_parcela_setup_adit( vlrParcelasMA      != null && !vlrParcelasMA.isEmpty()      ? vlrParcelasMA.trim()                         : null );
+					    modelAditivoModal.setQty_parcela_setup_adit  ( qtyParcSetupMA     != null && !qtyParcSetupMA.isEmpty()     ? Integer.valueOf( qtyParcSetupMA.trim() )     : 0    );
 					    
 					    // Referencia a servico_aditivado
-					    modelAditivoModal.setId_servico_contratado( servicoCont   != null && !servicoCont.isEmpty()   ? Long.parseLong( servicoCont.trim() ) : 0L );
-					    modelAditivoModal.setQty_serv_contratado  ( qtyServico    != null && !qtyServico.isEmpty()    ? qtyServico.trim()                    : null );
-					    modelAditivoModal.setValor_serv_contratado( vlrTotal      != null && !vlrTotal.isEmpty()      ? vlrTotal.trim()                      : null );
-					    modelAditivoModal.setValor_unit_serv_cont ( vlrUnitServ   != null && !vlrUnitServ.isEmpty()   ? vlrUnitServ.trim()                   : null);
-					    modelAditivoModal.setDesc_serv_contratado ( descServCont  != null && !descServCont.isEmpty()  ? descServCont.trim()                  : null );
-					    modelAditivoModal.setValor_convertido     ( vlrConvertMA  != null && !vlrConvertMA.isEmpty()  ? vlrConvertMA.trim()                  : null );
-					    modelAditivoModal.setCotacao_moeda        ( vlrCotacaoMA  != null && !vlrCotacaoMA.isEmpty()  ? vlrCotacaoMA.trim()                  : null );
-					    modelAditivoModal.setId_moeda             ( idMoedaMA     != null && !idMoedaMA.isEmpty()     ? Long.parseLong( idMoedaMA.trim() )   : 0L );
-					    modelAditivoModal.setLogin_cadastro       ( usuarioLogado != null && !usuarioLogado.isEmpty() ? usuarioLogado.trim()                 : null );			    
-					    modelAditivoModal.setId_tempo_contrato (1L);
+					    modelAditivoModal.setId_servico_contratado( servicoCont     != null && !servicoCont.isEmpty()     ? Long.parseLong( servicoCont.trim() )   : 0L    );
+					    modelAditivoModal.setQty_serv_contratado  ( qtyServico      != null && !qtyServico.isEmpty()      ? qtyServico.trim()                      : null  );
+					    modelAditivoModal.setValor_serv_contratado( vlrTotal        != null && !vlrTotal.isEmpty()        ? vlrTotal.trim()                        : null  );
+					    modelAditivoModal.setValor_unit_serv_cont ( vlrUnitServ     != null && !vlrUnitServ.isEmpty()     ? vlrUnitServ.trim()                     : null  );
+					    modelAditivoModal.setDesc_serv_contratado ( descServCont    != null && !descServCont.isEmpty()    ? descServCont.trim()                    : null  );
+					    modelAditivoModal.setValor_convertido     ( vlrConvertMA    != null && !vlrConvertMA.isEmpty()    ? vlrConvertMA.trim()                    : null  );
+					    modelAditivoModal.setCotacao_moeda        ( vlrCotacaoMA    != null && !vlrCotacaoMA.isEmpty()    ? vlrCotacaoMA.trim()                    : null  );
+					    modelAditivoModal.setId_moeda             ( idMoedaMA       != null && !idMoedaMA.isEmpty()       ? Long.parseLong( idMoedaMA.trim() )     : 0L    );
+					    modelAditivoModal.setLogin_cadastro       ( usuarioLogado   != null && !usuarioLogado.isEmpty()   ? usuarioLogado.trim()                   : null  );			    
+					    modelAditivoModal.setId_tempo_contrato    ( TempoContratoMA != null && !TempoContratoMA.isEmpty() ? Long.parseLong(TempoContratoMA.trim()) : 1L    );
+					    modelAditivoModal.setObservacao_vigencia  ( obsVigenciaMA   != null && !obsVigenciaMA.isEmpty()   ? obsVigenciaMA.trim()                   : null  );
+					    
 					    Double vlrCustoTotal = 0.0;					    
 					    switch ( modelAditivoModal.getId_tipo_aditivo().intValue() ){
 							case 3: // Contratação de VPN
@@ -935,8 +951,30 @@ public class ServletContratoController extends HttpServlet {
 						String idHubSpotAditivoMAR         = request.getParameter("idHubSpotAditivoMAR"        ); // 47
 						String id_rascunhoMAR              = request.getParameter("id_rascunhoMAR"             ); // 48
 						String motivoRascunhoMAR           = request.getParameter("motivoRascunhoMAR"          ); // 49
+						String comissaoMAR                 = request.getParameter("comissaoMAR"                ); // 50
+						String idValorSetupMAR             = request.getParameter("idValorSetupMAR"            ); // 51
+						String qtyMesesContratoMAR         = request.getParameter("qtyMesesContratoMAR"        ); // 51
+						String vlrParcelasMAR              = request.getParameter("vlrParcelasMAR"             ); // 51
+						String qtyParcSetupMAR             = request.getParameter("qtyParcSetupMAR"            ); // 51
+						String id_tempo_contrato           = request.getParameter("selectTempoContratoMAR"     ); // 52
+						String observacaoVigenciaMAR       = request.getParameter("observacaoVigenciaMAR"      ); // 53
 						
-						
+						if(vlrParcelasMAR != null && !vlrParcelasMAR.isEmpty()) {
+							vlrParcelasMAR = Normalizer.normalize(vlrParcelasMAR, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+						    if(vlrParcelasMAR.indexOf(" ") >= 0 )
+						       vlrParcelasMAR = vlrParcelasMAR.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+							else
+							   vlrParcelasMAR = vlrParcelasMAR.replaceAll("\\.", "").replaceAll("\\,", ".");
+						}
+
+						if(idValorSetupMAR != null && !idValorSetupMAR.isEmpty()) {
+							idValorSetupMAR = Normalizer.normalize(idValorSetupMAR, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+						    if(idValorSetupMAR.indexOf(" ") >= 0 )
+						    	idValorSetupMAR = idValorSetupMAR.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+							else
+								idValorSetupMAR = idValorSetupMAR.replaceAll("\\.", "").replaceAll("\\,", ".");
+						}
+
 						if(valorMAR != null && !valorMAR.isEmpty()) {
 							valorMAR = Normalizer.normalize(valorMAR, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
 						    if(valorMAR.indexOf(" ") >= 0 )
@@ -1021,13 +1059,20 @@ public class ServletContratoController extends HttpServlet {
 					    modelAitivoRecursoModal.setAprovador_adit_sem_receita ( nomeAprovadorMAR            != null && !nomeAprovadorMAR.isEmpty()            ? nomeAprovadorMAR.trim()                       : null );
 					    modelAitivoRecursoModal.setAdti_sem_receita           ( temReceitaMAR               != null && !temReceitaMAR.isEmpty()               ? Integer.valueOf( temReceitaMAR.trim() )       : 0    );
 					    modelAitivoRecursoModal.setPeriodo_utilizacao_bolha   ( periodoUtilizacaoMAR        != null && !periodoUtilizacaoMAR.isEmpty()        ? periodoUtilizacaoMAR.trim()                   : null );
-					    modelAitivoRecursoModal.setId_tempo_contrato          ( 1L );
+					    modelAitivoRecursoModal.setId_tempo_contrato          ( id_tempo_contrato           != null && !id_tempo_contrato.isEmpty()           ? Long.parseLong(id_tempo_contrato.trim())      : null );
+					    modelAitivoRecursoModal.setObservacao_vigencia        ( observacaoVigenciaMAR       != null && !observacaoVigenciaMAR.isEmpty()       ? observacaoVigenciaMAR.trim()                  : null );
+
 					    modelAitivoRecursoModal.setDt_inicio                  ( dtInicioMAR                 != null && !dtInicioMAR.isEmpty()                 ? dtInicioMAR.trim()                            : null );
 					    modelAitivoRecursoModal.setDt_final                   ( dtFinalMAR                  != null && !dtFinalMAR.isEmpty()                  ? dtFinalMAR.trim()                             : null );
 					    modelAitivoRecursoModal.setHubspot_aditivo            ( idHubSpotAditivoMAR         != null && !idHubSpotAditivoMAR.isEmpty()         ? idHubSpotAditivoMAR.trim()                    : null );
 					    modelAitivoRecursoModal.setId_rascunho                ( id_rascunhoMAR              != null && !id_rascunhoMAR.isEmpty()              ? Long.parseLong( id_rascunhoMAR.trim() )       : null );
 					    modelAitivoRecursoModal.setMotivoRascunho             ( motivoRascunhoMAR           != null && !motivoRascunhoMAR.isEmpty()           ? motivoRascunhoMAR.trim()                      : null );
-					    					    
+					    modelAitivoRecursoModal.setComissao_adit              ( Integer.parseInt(comissaoMAR)== 1                                             ? true                                          : false);
+					    modelAitivoRecursoModal.setValor_setup_adit           ( idValorSetupMAR             != null && !idValorSetupMAR.isEmpty()             ? idValorSetupMAR.trim()                        : null );
+					    modelAitivoRecursoModal.setQty_mese_setup_adit        ( qtyMesesContratoMAR         != null && !qtyMesesContratoMAR.isEmpty()         ? Integer.valueOf( qtyMesesContratoMAR.trim() ) : 0    );
+					    modelAitivoRecursoModal.setValor_parcela_setup_adit   ( vlrParcelasMAR              != null && !vlrParcelasMAR.isEmpty()              ? vlrParcelasMAR.trim()                         : null );
+					    modelAitivoRecursoModal.setQty_parcela_setup_adit     ( qtyParcSetupMAR             != null && !qtyParcSetupMAR.isEmpty()             ? Integer.valueOf( qtyParcSetupMAR.trim() )     : 0    );
+
 						// Informacao do tipo de Moeda Contratada para o Atidivo.
 						modelAitivoRecursoModal.setValor_convertido           ( valor_convertidoMAR         != null && !valor_convertidoMAR.isEmpty()         ? valor_convertidoMAR.trim()                    : null );
 						modelAitivoRecursoModal.setCusto_total                ( valorMAR                    != null && !valorMAR.isEmpty()                    ? valorMAR.trim()                               : null );
@@ -1111,10 +1156,7 @@ public class ServletContratoController extends HttpServlet {
 					response.getWriter().write(lista);
 					
 				}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarEditarAditivoRecurso") ) {
-/*
-					String idAditivo  = request.getParameter("idAditivo" );
-					String idContrato = request.getParameter("idContrato");
-*/	
+
 					String idRecurso  = request.getParameter("idRecurso" );
 					DAOAditivoModalRecurso daoAditivoModalRecurso = new DAOAditivoModalRecurso();
 					
@@ -1185,7 +1227,7 @@ public class ServletContratoController extends HttpServlet {
 				    	 if( textoSplit[0].trim().equals("1") && idStatusContrato.trim().equals("2") ) {
 				    		 String retornoRec = daoContratoRepository.getQtyRecurso( Long.parseLong( idContrato ) );
 				    		 String retornoRecSplit [] = retornoRec.split(";");
-				    		 tituloPrincipal = "Deseja alterar o status do contrato para 'Inativo'?"; 
+				    		 tituloPrincipal = "Deseja alterar o status do contrato para 'Descomissionamento'?"; 
 				    		 
 				    		 if( Integer.valueOf(retornoRecSplit[0]) > 0 )
 				    		     textoPrincipal += "O contrato possui " + retornoRecSplit[0] + " recuros associado a ele";
@@ -1203,7 +1245,7 @@ public class ServletContratoController extends HttpServlet {
 				    		 String retornoRec = daoContratoRepository.getQtyRecurso( Long.parseLong( idContrato ) );
 				    		 String retornoRecSplit [] = retornoRec.split(";");
 				    		 
-				    		 tituloPrincipal = "Deseja alterar o status do contrato para 'Desativado'?"; 
+				    		 tituloPrincipal = "Deseja alterar o status do contrato para 'Distrato'?"; 
 				    		 
 				    		 if( Integer.valueOf(retornoRecSplit[0]) > 0 )
 				    		     textoPrincipal += "O contrato possui " + retornoRecSplit[0] + " recuros associado a ele";
@@ -1241,7 +1283,7 @@ public class ServletContratoController extends HttpServlet {
 				   	 String textoSplit [] = retornoInfoRenovacao.split(";");
                      
 				   	 Boolean renovacao = ( Integer.valueOf(textoSplit[0].trim()) == 0 ? false : true );
-				   	 Long statusAtual  = ( textoSplit[3]      != null && !textoSplit[3].isEmpty()     ? Long.parseLong(textoSplit[3].trim())   : null );
+				   	 Long statusAtual  = ( textoSplit[3] != null && !textoSplit[3].isEmpty() ? Long.parseLong(textoSplit[3].trim()) : null );
 				   	 if( renovacao && statusAtual == 4) {
 				   			DAOContratoRepository daoContratoRepository = new DAOContratoRepository();	
 				   		    Long renovacaoContratoOrigem = ( textoSplit[1] != null && !textoSplit[1].trim().isEmpty()      ? Long.parseLong(textoSplit[1].trim())    : null );
@@ -1251,7 +1293,7 @@ public class ServletContratoController extends HttpServlet {
 							// Cancelamento de contrato em caso de renovacao.							
 							DesativacaoContrato.setUser_desativacao( userDesativacao );
 							DesativacaoContrato.setId_contrato     ( renovacaoContratoOrigem      );
-							String retorno = daoContratoRepository.CancelaContrato( DesativacaoContrato );
+							String retorno = daoContratoRepository.CancelaContrato( DesativacaoContrato, 1 );
 							if( retorno == null ) retorno = "O Contrato: " + idContrato + " e todo(s) os produtos e recusso(s) a ele vinculados(caso exista), foram cancelados com sucesso";
 							daoRascunho.atualizaStatusRascunhoContrato( Long.parseLong( idContrato ), Long.parseLong( idStatusContrato ) );
 							Gson gson         = new Gson();
@@ -1269,7 +1311,7 @@ public class ServletContratoController extends HttpServlet {
 						 DesativacaoContrato.setUser_desativacao( (String) session.getAttribute("usuario") );
 						 DesativacaoContrato.setId_contrato     ( Long.parseLong( idContrato )             );
 	
-						 String retorno = daoContratoRepository.CancelaContrato( DesativacaoContrato );
+						 String retorno = daoContratoRepository.CancelaContrato( DesativacaoContrato, 0 );
 						 if( retorno == null )
 						     msnRetorno = "O Contrato: " + idContrato + " e todo(s) os produtos e recusso(s) a ele vinculados(caso exista), foram cancelados com sucesso";
 						 else msnRetorno = retorno;
@@ -1287,7 +1329,24 @@ public class ServletContratoController extends HttpServlet {
 					    String lista = gson.toJson(modelClientes);
 					    response.getWriter().write(lista);
 					
-				}else{
+				}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("atualizaStatusContratoDescomissionamento") ) {	
+			   		String idStatusContrato = request.getParameter("idStatusContrato"   );
+			   		String idContrato       = request.getParameter("idContrato"         );
+			   		String idCliente        = request.getParameter("idCliente"          );
+			   		String motivoDescomiss  = request.getParameter("mDescomissionamento");
+
+			   		ModalDescomissionamento mDescomissionamento = new ModalDescomissionamento();
+			   		mDescomissionamento.setId_contrato              ( idContrato       != null && !idContrato.isEmpty()       ? Long.parseLong(idContrato.trim())       : null );
+			   		mDescomissionamento.setId_cliente               ( idCliente        != null && !idCliente.isEmpty()        ? Long.parseLong(idCliente.trim())        : null );
+			   		mDescomissionamento.setId_status_contrato       ( idStatusContrato != null && !idStatusContrato.isEmpty() ? Long.parseLong(idStatusContrato.trim()) : null );
+			   		mDescomissionamento.setMotivo_descomissionamento( motivoDescomiss  != null && !motivoDescomiss.isEmpty()  ? motivoDescomiss                         : null );
+			   		
+			   		DAOContratoRepository daoContratoRepository = new DAOContratoRepository();	
+			   		String result = daoContratoRepository.atualizaStatusDescomissionamento(mDescomissionamento);
+
+				    response.getWriter().write(result);
+				
+			    }else{
 					  request.getRequestDispatcher("principal/contrato.jsp").forward(request, response);
 			    }
     	}catch(Exception e){
@@ -1322,8 +1381,31 @@ public class ServletContratoController extends HttpServlet {
 		    String valor_Cotacao          = request.getParameter( "valor_Cotacao"         );
 			String id_rascunho            = request.getParameter( "id_rascunho"           );
 			String motivo_rascunho        = request.getParameter( "motivoRascunho"        );
-			String id_suporte_b1          = request.getParameter( "id_suporte_b1"           );
-			String id_comercial           = request.getParameter( "id_comercial"        );
+			String id_suporte_b1          = request.getParameter( "id_suporte_b1"         );
+			String id_comercial           = request.getParameter( "id_comercial"          );
+			
+			String comissao               = request.getParameter( "comissao"              );
+			String valor_setup            = request.getParameter( "idValorSetup"          );
+			String valor_parcela_setup    = request.getParameter( "vlrParcelas"           );
+			String qty_parcela_setup      = request.getParameter( "qtyParcSetup"          );
+			String qty_mese_setup         = request.getParameter( "qtyMesesContrato"      );
+			
+			
+		    if(valor_parcela_setup != null && !valor_parcela_setup.isEmpty()) {
+		    	valor_parcela_setup = Normalizer.normalize(valor_parcela_setup, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+			       if(valor_parcela_setup.indexOf(" ") >= 0 )
+			    	   valor_parcela_setup = valor_parcela_setup.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+			       else
+			    	   valor_parcela_setup = valor_parcela_setup.replaceAll("\\.", "").replaceAll("\\,", ".");
+			}
+
+		    if(valor_setup != null && !valor_setup.isEmpty()) {
+		    	valor_setup = Normalizer.normalize(valor_setup, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+			       if(valor_setup.indexOf(" ") >= 0 )
+			    	   valor_setup = valor_setup.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+			       else
+			    	   valor_setup = valor_setup.replaceAll("\\.", "").replaceAll("\\,", ".");
+			}
 
 			if(valor_total != null && !valor_total.isEmpty()) {
 		       valor_total = Normalizer.normalize(valor_total, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
@@ -1385,7 +1467,18 @@ public class ServletContratoController extends HttpServlet {
 		    modelContrato.setCotacao_moeda         ( valor_Cotacao           != null && !valor_Cotacao.isEmpty()          ? valor_Cotacao.trim()                        : null );
 		    modelContrato.setId_suporte_b1         ( id_suporte_b1           != null && !id_suporte_b1.isEmpty()          ? Long.parseLong(id_suporte_b1.trim())        : null );
 		    modelContrato.setId_comercial          ( id_comercial            != null && !id_comercial.isEmpty()           ? Long.parseLong(id_comercial.trim())         : null );
-		    
+//		    modelContrato.setSetup                 ( Integer.parseInt(Setup)       == 1                                   ? true                                        : false );
+		    modelContrato.setValor_setup           ( valor_setup             != null && !valor_setup.isEmpty()            ? valor_setup.trim()                          : null );
+		    modelContrato.setComissao              ( comissao                != null && !comissao.isEmpty()               ? comissao.trim()                             : null );
+
+		    modelContrato.setQty_parcela_setup     ( qty_parcela_setup       != null && !qty_parcela_setup.isEmpty()      ? Integer.valueOf(qty_parcela_setup.trim())   : 1    );
+		    modelContrato.setQty_mese_setup        ( qty_mese_setup          != null && !qty_mese_setup.isEmpty()         ? Integer.valueOf(qty_mese_setup.trim())      : 1    );
+		    modelContrato.setValor_parcela_setup   ( valor_parcela_setup     != null && !valor_parcela_setup.isEmpty()    ? valor_parcela_setup.trim()                  : null );
+	/*	    
+			String valor_parcela_setup    = request.getParameter( "vlrParcelas"               );
+			String qty_parcela_setup      = request.getParameter( "qtyParcSetup"       );
+			String qty_mese_setup         = request.getParameter( "qtyMesesContrato"               );
+*/
 		    // informacoes sobre a vigencia do contrato.
 		    modelContrato.setId_vigencia           ( id_vigencia             != null && !id_vigencia.isEmpty()            ? Long.parseLong(id_vigencia.trim())          : null );
 		    modelContrato.setId_tempo_contrato     ( id_tempo_contrato       != null && !id_tempo_contrato.isEmpty()      ? Long.parseLong(id_tempo_contrato.trim())    : null );

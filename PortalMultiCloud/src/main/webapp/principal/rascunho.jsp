@@ -111,14 +111,11 @@
 					tbody.innerText = '';
 					for(let i = 0; i < listRascunho.length; i++){
 						// Cria as linhas
-
 						let tr = tbody.insertRow();
 			            // Crias as celulas
 			            let td_id_contrato        = tr.insertCell();
 			            let td_status_contrato    = tr.insertCell();
-			            
 			            let td_motivo_rascunho    = tr.insertCell();
-			            
 			            let td_qty_tempo_rascunho = tr.insertCell();
 			            let td_dt_update_status   = tr.insertCell();
 			            let td_razao_social       = tr.insertCell();
@@ -141,7 +138,8 @@
 			            td_vigencia.innerText          = listRascunho[i].vigencia;
 			            td_qty_usuario.innerText       = listRascunho[i].qty_usuario_contratada;
 			            td_vl_total.innerText          = listRascunho[i].vl_total;
-		
+			            
+			            // Botao Atualizar
 			            let imgliberar = document.createElement('img');
 			            imgliberar.src = getContextPath() +'/imagens/atualizar-20.png';
 			            let funcLib = "atualizaStatus( " + listRascunho[i].id_contrato   + ", " 
@@ -154,7 +152,8 @@
                         imgliberar.setAttribute('title', 'Atualizar Status para "Ativo"!' );                        
 			            td_liberar.appendChild(imgliberar);
 			            td_liberar.classList.add('center');
-		
+			            
+			            // Botao Editar
 			            let imgEdit = document.createElement('img');
 			            imgEdit.src = getContextPath() +'/imagens/edit-20.png';
 			            let funcEdit = "goContrato( " + listRascunho[i].id_cliente + ")";
@@ -164,6 +163,8 @@
 			            imgEdit.setAttribute('title', 'Ir para o modulo "Edição!"' );
 			            td_editar.appendChild(imgEdit);
 			            td_editar.classList.add('center');
+			            
+			            // Botao Delete
 			            let imgDelete = document.createElement('img');
 			            imgDelete.src = getContextPath() +'/imagens/delete-20.png';
 			            let funcdelete = "deleteRascunho( " + listRascunho[i].id_contrato   + ", " 

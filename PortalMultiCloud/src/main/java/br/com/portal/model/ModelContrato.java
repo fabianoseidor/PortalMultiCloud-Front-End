@@ -41,8 +41,54 @@ public class ModelContrato {
 	private String observacao_vigencia;
 	private boolean isRenovacao;
 	private Long   id_contrato_origem;
-
+	// Informacoes da comissicao de venda sobre o contrato equivalente a equipe de vendas
+	private String  comissao;
+	private String  valor_setup;
+	private String  valor_parcela_setup;
+	private int     qty_parcela_setup;
+	private int     qty_mese_setup;
 	
+	
+	public String getComissao() {
+		return comissao;
+	}
+
+	public void setComissao(String comissao) {
+		this.comissao = comissao;
+	}
+
+	public int getQty_mese_setup() {
+		return qty_mese_setup;
+	}
+
+	public void setQty_mese_setup(int qty_mese_setup) {
+		this.qty_mese_setup = qty_mese_setup;
+	}
+	
+	public String getValor_parcela_setup() {
+		return valor_parcela_setup;
+	}
+
+	public void setValor_parcela_setup(String valor_parcela_setup) {
+		this.valor_parcela_setup = valor_parcela_setup;
+	}
+
+	public int getQty_parcela_setup() {
+		return qty_parcela_setup;
+	}
+
+	public void setQty_parcela_setup(int qty_parcela_setup) {
+		this.qty_parcela_setup = qty_parcela_setup;
+	}
+
+	public String getValor_setup() {
+		return valor_setup;
+	}
+
+	public void setValor_setup(String valor_setup) {
+		this.valor_setup = valor_setup;
+	}
+
 	public Long getId_comercial() {
 		return id_comercial;
 	}

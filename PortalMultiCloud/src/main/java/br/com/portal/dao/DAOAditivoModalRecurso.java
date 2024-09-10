@@ -38,18 +38,19 @@ public class DAOAditivoModalRecurso {
 		if( objeto.isNovo() ){
 			String sql = null;
 		    if( objeto.getId_status() == 4 ) {
-			    sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO   , "
-			        + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO, "
-		            + "                        ID_HUB_SPOT      , ID_RASCUNHO   , MOTIVO_RASCUNHO                           )"
-			        + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                       ";
+			    sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO     , DT_CRIACAO         , ID_CONTRATO      , "
+			        + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA  , ID_MOEDA           , LOGIN_CADASTRO   , "
+		            + "                        ID_HUB_SPOT      , SETUP         , VALOR_SETUP    , VALOR_PARCELA_SETUP, QTY_PARCELA_SETUP, "
+		            + "                        QTY_MESE_SETUP   , ID_RASCUNHO   , MOTIVO_RASCUNHO                                        ) "
+			        + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                      ";
 		    }else {
-			    sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO, ID_CONTRATO       , "
-				        + "                        VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA  , LOGIN_CADASTRO, "
-			            + "                        ID_HUB_SPOT                                                                  )"
-				        + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                           ";
+			    sql = "INSERT INTO ADITIVADO ( ID_STATUS_ADITIVO, VLR_TOTAL_ADIT, OBSERVACAO   , DT_CRIACAO         , ID_CONTRATO      , "
+				        + "                    VALOR_CONVERTIDO , CUSTO_TOTAL   , COTACAO_MOEDA, ID_MOEDA           , LOGIN_CADASTRO   , "
+			            + "                    ID_HUB_SPOT      , SETUP         , VALOR_SETUP  , VALOR_PARCELA_SETUP, QTY_PARCELA_SETUP, "
+			            + "                    QTY_MESE_SETUP                                                                          ) "
+				        + "               VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                      ";
 		    }
 
-			
 			try {
 				PreparedStatement prepareSql;
 				prepareSql = connection.prepareStatement(sql);
@@ -65,9 +66,14 @@ public class DAOAditivoModalRecurso {
 				prepareSql.setLong     ( 9 , objeto.getId_moeda()                                   ); // ID_MOEDA
 				prepareSql.setString   ( 10, objeto.getLogin_cadastro()                             ); // LOGIN_CADASTRO
 				prepareSql.setString   ( 11, objeto.getHubspot_aditivo()                            ); // ID_HUB_SPOT
+				prepareSql.setBoolean  ( 12, objeto.getComissao_adit()                              ); // SETUP
+				prepareSql.setString   ( 13, objeto.getValor_setup_adit()                           ); // VALOR_SETUP
+				prepareSql.setString   ( 14, objeto.getValor_parcela_setup_adit()                   ); // VALOR_PARCELA_SETUP
+				prepareSql.setInt      ( 15, objeto.getQty_parcela_setup_adit()                     ); // QTY_PARCELA_SETUP
+				prepareSql.setInt      ( 16, objeto.getQty_mese_setup_adit()                        ); // QTY_MESE_SETUP
 				if( objeto.getId_status() == 4 ) {
-				    prepareSql.setLong     ( 12, objeto.getId_rascunho()                                ); // ID_RASCUNHO
-				    prepareSql.setString   ( 13, objeto.getMotivoRascunho()                             ); // MOTIVO_RASCUNHO
+				    prepareSql.setLong     ( 17, objeto.getId_rascunho()                            ); // ID_RASCUNHO
+				    prepareSql.setString   ( 18, objeto.getMotivoRascunho()                         ); // MOTIVO_RASCUNHO
 				}
 
 				prepareSql.execute();
@@ -80,7 +86,7 @@ public class DAOAditivoModalRecurso {
 				vigenciaAditivo.setId_tempo_contrato( objeto.getId_tempo_contrato()   );
 				vigenciaAditivo.setDt_inicio        ( objeto.getDt_inicio()           );
 				vigenciaAditivo.setDt_final         ( objeto.getDt_final()            );
-				vigenciaAditivo.setObservacao       ( objeto.getObservacao_aditivo()  );
+				vigenciaAditivo.setObservacao       ( objeto.getObservacao_vigencia() );
 				
 				try {
 					vigenciaAditivo = this.gravarVigenciaAditivo( vigenciaAditivo );
@@ -567,6 +573,11 @@ public class DAOAditivoModalRecurso {
 			       + "   , ADI.COTACAO_MOEDA                                      "
 			       + "   , ADI.ID_RASCUNHO                                        "
 			       + "   , ADI.MOTIVO_RASCUNHO                                    "
+			       + "   , ADI.SETUP                                              "
+			       + "   , ADI.VALOR_SETUP                                        "
+			       + "   , ADI.QTY_PARCELA_SETUP                                  "
+			       + "   , ADI.VALOR_PARCELA_SETUP                                "
+			       + "   , ADI.QTY_MESE_SETUP                                     "
 
 			       + "   , REC.ID_RECURSO                                         "
 			       + "   , REC.ID_STATUS_RECURSO                                  "
@@ -716,12 +727,34 @@ public class DAOAditivoModalRecurso {
 				modelAitivoRecurso.setDt_inicio                  ( daoUtil.FormataDataStringTelaData( set.getString("DT_INICIO"))               );
 				modelAitivoRecurso.setDt_final                   ( daoUtil.FormataDataStringTelaData( set.getString("DT_FINAL"))                );
 				modelAitivoRecurso.setDt_criacao_vigencia        ( daoUtil.FormataDataStringTelaDataTime( set.getString("DT_CRIACAO_VIGENCIA")) );
-				modelAitivoRecurso.setObservacao_vigencia        ( set.getString("OBS_VIGENCIA"              )                                  );
-				valorReal      = Double.valueOf                  ( set.getString("VALOR_RECURSO"             )                                  );
-				modelAitivoRecurso.setValor_recurso              ( dinheiro.format(valorReal)                                                   );
+				modelAitivoRecurso.setObservacao_vigencia        ( set.getString ("OBS_VIGENCIA"             )                                  );
+				modelAitivoRecurso.setId_moeda                   ( set.getLong   ("ID_MOEDA"                 )                                  );				
+				modelAitivoRecurso.setComissao_adit              ( set.getBoolean("SETUP"                    )                                  );				
+				modelAitivoRecurso.setQty_mese_setup_adit        ( set.getInt    ("QTY_MESE_SETUP"           )                                  );
+				modelAitivoRecurso.setQty_parcela_setup_adit     ( set.getInt    ("QTY_PARCELA_SETUP"        )                                  );
 				
-				modelAitivoRecurso.setId_moeda                   ( set.getLong  ("ID_MOEDA")                                                    );
+				vlrRecuperado = set.getString("VALOR_PARCELA_SETUP");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   modelAitivoRecurso.setValor_parcela_setup_adit(dinheiro.format(valorReal) );
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
 
+				vlrRecuperado = set.getString("VALOR_SETUP");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   modelAitivoRecurso.setValor_setup_adit            ( dinheiro.format(valorReal) );
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
+				
+				vlrRecuperado = set.getString("VALOR_RECURSO");
+				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
+				   valorReal      = Double.valueOf( vlrRecuperado );
+				   modelAitivoRecurso.setValor_recurso              ( dinheiro.format(valorReal)  );				
+				   vlrRecuperado = null;
+				} else vlrRecuperado = null;
+				
+				
 				vlrRecuperado = set.getString("VALOR_CONVERTIDO");
 				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
 				   valorReal      = Double.valueOf( vlrRecuperado );
@@ -732,14 +765,14 @@ public class DAOAditivoModalRecurso {
 				vlrRecuperado = set.getString("CUSTO_TOTAL");
 				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
 				   valorReal      = Double.valueOf( vlrRecuperado );
-				   modelAitivoRecurso.setCusto_total                 ( dinheiro.format(valorReal)                                                       );
+				   modelAitivoRecurso.setCusto_total                 ( dinheiro.format(valorReal) );
 				   vlrRecuperado = null;
 				} else vlrRecuperado = null;
 				
 				vlrRecuperado = set.getString("COTACAO_MOEDA");
 				if(vlrRecuperado != null && !vlrRecuperado.isEmpty()) {
 				   valorReal      = Double.valueOf( vlrRecuperado );
-				   modelAitivoRecurso.setCotacao_moeda               ( dinheiro.format(valorReal)                                                       );
+				   modelAitivoRecurso.setCotacao_moeda               ( dinheiro.format(valorReal) );
 				   vlrRecuperado = null;
 				} else vlrRecuperado = null;
 												

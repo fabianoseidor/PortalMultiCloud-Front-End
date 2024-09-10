@@ -74,8 +74,8 @@
 	       	   var senha1 = document.getElementById("senha1").value;
 	    	   var senha2 = document.getElementById("senha2").value;
 	    	  
-	    	   if( senha1 !== senha2 ) document.getElementById("resultado-pesquisa").innerHTML = "Senhas não converem!"; // document.getElementById("msg").textContent = 'Senhas não converem!';
-	    	   else document.getElementById("resultado-pesquisa").innerHTML = "Senhas Converem!"; // document.getElementById("msg").textContent = 'Senhas Converem!';
+	    	   if( senha1 !== senha2 ) document.getElementById("resultado-pesquisa").innerHTML = "Senhas não conferem!"; // document.getElementById("msg").textContent = 'Senhas não conferem!';
+	    	   else document.getElementById("resultado-pesquisa").innerHTML = "Senhas Conferem!"; // document.getElementById("msg").textContent = 'Senhas Conferem!';
 		    	     
 	    	}	        
  	        var password = document.getElementById("senha1")

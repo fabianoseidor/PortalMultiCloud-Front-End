@@ -3,15 +3,13 @@ package br.com.portal.dao;
 
 import java.util.Date;
 import java.text.*;
-import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.time.*;
 
 public class DAOUtil {
 	
-	public DAOUtil() {
-		// TODO Auto-generated constructor stub
-	}
+	public DAOUtil() { }
 	
 
 	public String getDateTime() {
@@ -49,6 +47,22 @@ public class DAOUtil {
         return d2;
         */
     }
+    
+    public Date getDataBDTrunc( String dataBD ) {
+    	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    	if(dataBD != null && !dataBD.isEmpty()) {
+	    	Date data;
+			try {
+				data = (Date) formatter.parse(dataBD);
+				return data;
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	// System.out.println(data);
+    	}
+		return null;
+    }
 
     public Date getDataBD( String dataBD ) {
     	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -65,6 +79,8 @@ public class DAOUtil {
     	}
 		return null;
     }
+     
+    // stmtInsert.setTimestamp(2,new java.sql.Timestamp(java.util.Calendar.getInstance().getTimeInMillis()));
 
     public String FormataDataStringTelaDataTime(String dataBD){
     	if(dataBD != null && !dataBD.isEmpty()) {

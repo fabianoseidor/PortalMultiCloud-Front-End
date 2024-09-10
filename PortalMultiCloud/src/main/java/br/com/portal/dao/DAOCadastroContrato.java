@@ -201,10 +201,11 @@ public class DAOCadastroContrato {
 	/******************************************************************/	
 	public String insertContrato( ModelContrato objeto ) {
 		String returnProcessamento = null;
-		String sql = "INSERT INTO CONTRATO ( ID_NUVEM              , ID_FASE_CONTRATO, ID_STATUS_CONTRATO, ID_CLIENTE   , ID_CICLO_UPDATE, ID_SERVICO_CONTRATADO, DT_CRIACAO,    "
-				+ "                          QTY_USUARIO_CONTRATADA, ID_SITE         , VALOR_TOTAL       , PEP          , TERMO_ADMIN    , TERMO_DOWNLOAD       , OBSERVACAO,    "
-				+ "                          ID_HUB_SPOT           , ID_MOEDA        , VALOR_CONVERTIDO  , COTACAO_MOEDA, LOGIN_CADASTRO , ID_SUPORTE_B1        , ID_COMERCIAL ) "
-				+ "     VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                                                                       ";
+		String sql = "INSERT INTO CONTRATO ( ID_NUVEM              , ID_FASE_CONTRATO, ID_STATUS_CONTRATO, ID_CLIENTE   , ID_CICLO_UPDATE, ID_SERVICO_CONTRATADO, DT_CRIACAO  , "
+				+ "                          QTY_USUARIO_CONTRATADA, ID_SITE         , VALOR_TOTAL       , PEP          , TERMO_ADMIN    , TERMO_DOWNLOAD       , OBSERVACAO  , "
+				+ "                          ID_HUB_SPOT           , ID_MOEDA        , VALOR_CONVERTIDO  , COTACAO_MOEDA, LOGIN_CADASTRO , ID_SUPORTE_B1        , ID_COMERCIAL, "
+				+ "                          SETUP                 , VALOR_SETUP     , QTY_PARCELA_SETUP , VALOR_PARCELA_SETUP, QTY_MESE_SETUP          )                       "
+				+ "     VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                                                    ";
 
 		PreparedStatement prepareSql;
 		try {
@@ -231,6 +232,11 @@ public class DAOCadastroContrato {
 			prepareSql.setString   (19, objeto.getLogin_cadastro()                             );
 			prepareSql.setLong     (20, objeto.getId_suporte_b1()                              );
 			prepareSql.setLong     (21, objeto.getId_comercial()                               );
+			prepareSql.setBoolean  (22, objeto.getComissao().equalsIgnoreCase("Sim")? true: false );
+			prepareSql.setString   (23, objeto.getValor_setup()                                );
+			prepareSql.setInt      (24, objeto.getQty_parcela_setup()                          );
+			prepareSql.setString   (25, objeto.getValor_parcela_setup()                        );
+			prepareSql.setInt      (26, objeto.getQty_mese_setup()                             );
 
 			prepareSql.execute();
 			connection.commit();
@@ -288,11 +294,11 @@ public class DAOCadastroContrato {
 	/******************************************************************/	
 	public String insertContratoRascunho( ModelContrato objeto ) {
 		String returnProcessamento = null;
-		String sql = "INSERT INTO CONTRATO ( ID_NUVEM              , ID_FASE_CONTRATO, ID_STATUS_CONTRATO, ID_CLIENTE   , ID_CICLO_UPDATE, ID_SERVICO_CONTRATADO, DT_CRIACAO , "
-				+ "                          QTY_USUARIO_CONTRATADA, ID_SITE         , VALOR_TOTAL       , PEP          , TERMO_ADMIN    , TERMO_DOWNLOAD       , OBSERVACAO , "
-				+ "                          ID_HUB_SPOT           , ID_MOEDA        , VALOR_CONVERTIDO  , COTACAO_MOEDA, LOGIN_CADASTRO , MOTIVO_RASCUNHO      , ID_RASCUNHO, "
-				+ "                          ID_SUPORTE_B1         , ID_COMERCIAL                                                                                            ) "
-				+ "     VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                                                               ";
+		String sql = "INSERT INTO CONTRATO ( ID_NUVEM              , ID_FASE_CONTRATO, ID_STATUS_CONTRATO, ID_CLIENTE   , ID_CICLO_UPDATE  , ID_SERVICO_CONTRATADO, DT_CRIACAO ,     "
+				+ "                          QTY_USUARIO_CONTRATADA, ID_SITE         , VALOR_TOTAL       , PEP          , TERMO_ADMIN      , TERMO_DOWNLOAD       , OBSERVACAO ,     "
+				+ "                          ID_HUB_SPOT           , ID_MOEDA        , VALOR_CONVERTIDO  , COTACAO_MOEDA, LOGIN_CADASTRO   , MOTIVO_RASCUNHO      , ID_RASCUNHO,     "
+				+ "                          ID_SUPORTE_B1         , ID_COMERCIAL    , SETUP             , VALOR_SETUP  , QTY_PARCELA_SETUP, VALOR_PARCELA_SETUP  , QTY_MESE_SETUP ) "
+				+ "     VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )                                                                ";
 
 		PreparedStatement prepareSql;
 		try {
@@ -321,6 +327,11 @@ public class DAOCadastroContrato {
 			prepareSql.setLong     (21, objeto.getId_rascunho()                                );
 			prepareSql.setLong     (22, objeto.getId_suporte_b1()                              );
 			prepareSql.setLong     (23, objeto.getId_comercial()                               );
+			prepareSql.setBoolean  (24, objeto.getComissao().equalsIgnoreCase("Sim")? true: false );
+			prepareSql.setString   (25, objeto.getValor_setup()                                );
+			prepareSql.setInt      (26, objeto.getQty_parcela_setup()                          );
+			prepareSql.setString   (27, objeto.getValor_parcela_setup()                        );
+			prepareSql.setInt      (26, objeto.getQty_mese_setup()                             );
 
 			prepareSql.execute();
 			connection.commit();

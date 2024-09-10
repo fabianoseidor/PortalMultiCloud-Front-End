@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.portal.connection.SingleConnectionBanco;
+import br.com.portal.model.ModalDescomissionamento;
 import br.com.portal.model.ModelComercial;
 import br.com.portal.model.ModelContrato;
 import br.com.portal.model.ModelContratoProduto;
@@ -39,16 +40,18 @@ public class DAOContratoRepository {
 		if( !objeto.isNovo() ) {
 			if( objeto.getId_status_contrato() == 4 ) {
 			    sql = "UPDATE CONTRATO "
-					+ "   SET  ID_NUVEM = ? , ID_FASE_CONTRATO = ?, ID_STATUS_CONTRATO = ?, ID_CLIENTE      = ?, ID_CICLO_UPDATE = ?, ID_SERVICO_CONTRATADO = ?, QTY_USUARIO_CONTRATADA = ? "
-					+ "      , ID_SITE  = ? , VALOR_TOTAL      = ?, PEP                = ?, TERMO_ADMIN     = ?, TERMO_DOWNLOAD  = ?, OBSERVACAO            = ?, ID_HUB_SPOT            = ? "
-					+ "      , ID_MOEDA = ? , VALOR_CONVERTIDO = ?, COTACAO_MOEDA      = ?, ID_SUPORTE_B1   = ?, ID_COMERCIAL    = ?, MOTIVO_RASCUNHO = ?, ID_RASCUNHO     = ?              "
-					+ " WHERE ID_CONTRATO = ?                                                                                                                                               ";
+					+ "   SET  ID_NUVEM          = ? , ID_FASE_CONTRATO    = ?, ID_STATUS_CONTRATO = ?, ID_CLIENTE       = ?, ID_CICLO_UPDATE = ?, ID_SERVICO_CONTRATADO = ?, QTY_USUARIO_CONTRATADA = ? "
+					+ "      , ID_SITE           = ? , VALOR_TOTAL         = ?, PEP                = ?, TERMO_ADMIN      = ?, TERMO_DOWNLOAD  = ?, OBSERVACAO            = ?, ID_HUB_SPOT            = ? "
+					+ "      , ID_MOEDA          = ? , VALOR_CONVERTIDO    = ?, COTACAO_MOEDA      = ?, ID_SUPORTE_B1    = ?, ID_COMERCIAL    = ?, SETUP                 = ?, VALOR_SETUP            = ? "
+					+ "      , QTY_PARCELA_SETUP = ? , VALOR_PARCELA_SETUP = ? , QTY_MESE_SETUP    = ? , MOTIVO_RASCUNHO = ?, ID_RASCUNHO     = ?                                                        "
+					+ " WHERE ID_CONTRATO = ?                                                                                                                                                            ";
 			}else {
 			    sql = "UPDATE CONTRATO "
-					+ "   SET  ID_NUVEM = ? , ID_FASE_CONTRATO = ?, ID_STATUS_CONTRATO = ?, ID_CLIENTE      = ?, ID_CICLO_UPDATE = ?, ID_SERVICO_CONTRATADO = ?, QTY_USUARIO_CONTRATADA = ? "
-					+ "      , ID_SITE  = ? , VALOR_TOTAL      = ?, PEP                = ?, TERMO_ADMIN     = ?, TERMO_DOWNLOAD  = ?, OBSERVACAO            = ?, ID_HUB_SPOT            = ? "
-					+ "      , ID_MOEDA = ? , VALOR_CONVERTIDO = ?, COTACAO_MOEDA      = ?, ID_SUPORTE_B1   = ?, ID_COMERCIAL    = ?                                                                                                  "
-					+ " WHERE ID_CONTRATO = ?                                                                                                                                               ";
+					+ "   SET  ID_NUVEM          = ? , ID_FASE_CONTRATO    = ?, ID_STATUS_CONTRATO = ?, ID_CLIENTE      = ?, ID_CICLO_UPDATE = ?, ID_SERVICO_CONTRATADO = ?, QTY_USUARIO_CONTRATADA = ? "
+					+ "      , ID_SITE           = ? , VALOR_TOTAL         = ?, PEP                = ?, TERMO_ADMIN     = ?, TERMO_DOWNLOAD  = ?, OBSERVACAO            = ?, ID_HUB_SPOT            = ? "
+					+ "      , ID_MOEDA          = ? , VALOR_CONVERTIDO    = ?, COTACAO_MOEDA      = ?, ID_SUPORTE_B1   = ?, ID_COMERCIAL    = ?, SETUP                 = ? , VALOR_SETUP           = ? "
+					+ "      , QTY_PARCELA_SETUP = ? , VALOR_PARCELA_SETUP = ? , QTY_MESE_SETUP    = ?                                                                                                  "
+					+ " WHERE ID_CONTRATO = ?                                                                                                                                                           ";
 				
 			}
 
@@ -73,12 +76,18 @@ public class DAOContratoRepository {
 			prepareSql.setString   (17, objeto.getCotacao_moeda()         );
 			prepareSql.setLong     (18, objeto.getId_suporte_b1()         );
 			prepareSql.setLong     (19, objeto.getId_comercial()          );
+			prepareSql.setBoolean  (20, objeto.getComissao().equalsIgnoreCase("Sim")? true: false );
+			prepareSql.setString   (21, objeto.getValor_setup()           );
+			prepareSql.setInt      (22, objeto.getQty_parcela_setup()     );
+			prepareSql.setString   (23, objeto.getValor_parcela_setup()   );
+			prepareSql.setInt      (24, objeto.getQty_mese_setup()        );
+			
 			if( objeto.getId_status_contrato() == 4 ) {
-			    prepareSql.setString   (20, objeto.getMotivoRascunho()        );
-			    prepareSql.setLong     (21, objeto.getId_rascunho()           );
-			    prepareSql.setLong     (22, objeto.getId_contrato()           );
+			    prepareSql.setString   (25, objeto.getMotivoRascunho()        );
+			    prepareSql.setLong     (26, objeto.getId_rascunho()           );
+			    prepareSql.setLong     (27, objeto.getId_contrato()           );
 			}else {
-			    prepareSql.setLong     (20, objeto.getId_contrato()           );				
+			    prepareSql.setLong     (25, objeto.getId_contrato()           );				
 			}
 
 			prepareSql.executeUpdate();
@@ -203,7 +212,7 @@ public class DAOContratoRepository {
 //		
 	public Boolean isExistProduto( Long idContrato, Long idProduto ) throws Exception {
 
-		String sql = "SELECT COUNT(1) AS TOTAL  FROM CONTRATO_PRODUTO   WHERE ID_CONTRATO = ? AND ID_PRODUTO  = ?";
+		String sql = "SELECT COUNT(1) AS TOTAL  FROM CONTRATO_PRODUTO WHERE ID_CONTRATO = ? AND ID_PRODUTO  = ?";
 		PreparedStatement prepareSql = connection.prepareStatement(sql);
 		prepareSql.setLong     ( 1, idContrato );
 		prepareSql.setLong     ( 2, idProduto  );
@@ -344,13 +353,30 @@ public class DAOContratoRepository {
 			modelContrato.setMotivoRascunho        ( resultado.getString("MOTIVO_RASCUNHO")                                     );
 			modelContrato.setId_comercial          ( resultado.getLong  ("ID_COMERCIAL")                                        );
 			modelContrato.setId_suporte_b1         ( resultado.getLong  ("ID_SUPORTE_B1")                                       );
+			modelContrato.setComissao              ( resultado.getBoolean("SETUP") == true ? "Sim":"Não"                        );
+			
+			Locale localeBR = new Locale("pt","BR");
+			NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
+			Double valorReal      = 0.0;
+					
+		    String valorSetup = resultado.getString("VALOR_SETUP");				
+		    if(valorSetup != null && !valorSetup.isEmpty()) {
+		    	valorReal      = Double.valueOf( valorSetup );
+			   modelContrato.setValor_setup( dinheiro.format(valorReal) );
+	   	    }
+			modelContrato.setQty_parcela_setup( resultado.getInt("QTY_PARCELA_SETUP") );
+			modelContrato.setQty_mese_setup   ( resultado.getInt("QTY_MESE_SETUP"   ) );
+			
+			valorSetup = resultado.getString("VALOR_PARCELA_SETUP");				
+			if(valorSetup != null && !valorSetup.isEmpty()) {
+				valorReal      = Double.valueOf( valorSetup );
+				modelContrato.setValor_parcela_setup( dinheiro.format(valorReal) );
+			}
 
 			/*********************************************************/
 			/* Configura o atributo Valor para demostrar como Real.  */
 			/*********************************************************/
-			Locale localeBR = new Locale("pt","BR");
-			NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
-			Double valorReal = Double.valueOf( resultado.getDouble("VALOR_TOTAL") ) ;
+		    valorReal = Double.valueOf( resultado.getDouble("VALOR_TOTAL") ) ;
 			String vlr = dinheiro.format(valorReal);
 			modelContrato.setValor_total( vlr );
 			/*********************************************************/
@@ -373,8 +399,8 @@ public class DAOContratoRepository {
 			modelContrato.setDt_final           ( vigenciaContrato.getDt_final()         );
 			modelContrato.setDt_criacao_vigencia( vigenciaContrato.getDt_criacao()       );
 			modelContrato.setObservacao_vigencia( vigenciaContrato.getObservacao()       );
-		}
-		
+			
+		}		
 		return modelContrato;
 	}
 	/*
@@ -443,7 +469,7 @@ public class DAOContratoRepository {
 	 * 
 	 * */	
 	public Boolean isExstContratoAtivo( Long idContrato ) throws SQLException {
-		String sql = "SELECT COUNT( ID_CONTRATO ) AS EXIST FROM CONTRATO WHERE ID_CLIENTE = ? AND ID_STATUS_CONTRATO IN ( 1, 4 )";
+		String sql = "SELECT COUNT( ID_CONTRATO ) AS EXIST FROM CONTRATO WHERE ID_CLIENTE = ? AND ID_STATUS_CONTRATO IN ( 1, 4, 5 )";
 
 		PreparedStatement prepareSql = connection.prepareStatement(sql);
 		prepareSql.setLong     ( 1, idContrato);
@@ -470,7 +496,7 @@ public class DAOContratoRepository {
 			Locale localeBR       = new Locale("pt","BR");
 			NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
 			Double valorReal      = 0.0;			
-			String sql = "SELECT * FROM CONTRATO WHERE ID_CLIENTE = ? AND ID_STATUS_CONTRATO IN ( 1, 4 )";
+			String sql = "SELECT * FROM CONTRATO WHERE ID_CLIENTE = ? AND ID_STATUS_CONTRATO IN ( 1, 4, 5 )";
 			
 			PreparedStatement statement = connection.prepareStatement(sql);
 			
@@ -480,9 +506,9 @@ public class DAOContratoRepository {
 			while (resultado.next()) {
 				
 				modelContrato.setId_contrato           ( resultado.getLong  ( "ID_CONTRATO"                               ) );
-				modelContrato.setId_nuvem              ( resultado.getLong   ( "ID_NUVEM"                                 ) );
-				modelContrato.setId_servico_contratado ( resultado.getLong   ( "ID_SERVICO_CONTRATADO"                    ) );
-				modelContrato.setId_status_contrato    ( resultado.getLong   ( "ID_STATUS_CONTRATO"                       ) );
+				modelContrato.setId_nuvem              ( resultado.getLong  ( "ID_NUVEM"                                  ) );
+				modelContrato.setId_servico_contratado ( resultado.getLong  ( "ID_SERVICO_CONTRATADO"                     ) );
+				modelContrato.setId_status_contrato    ( resultado.getLong  ( "ID_STATUS_CONTRATO"                        ) );
 				modelContrato.setId_cliente            ( resultado.getLong  ( "ID_CLIENTE"                                ) );
 				
 				nomeClienteBD = Normalizer.normalize( this.buscaCliente( resultado.getLong("ID_CLIENTE")), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
@@ -517,7 +543,7 @@ public class DAOContratoRepository {
 				modelContrato.setId_hub_spot           ( resultado.getString( "ID_HUB_SPOT"                               ) );
 				modelContrato.setObservacao            ( resultado.getString( "OBSERVACAO"                                ) );
 				modelContrato.setLogin_cadastro        ( resultado.getString("login_cadastro"                             ) );
-				modelContrato.setId_moeda              (resultado.getLong   ( "ID_MOEDA"                                  ) );
+				modelContrato.setId_moeda              ( resultado.getLong   ( "ID_MOEDA"                                 ) );
 				
 				valorReal = Double.valueOf( resultado.getDouble("VALOR_CONVERTIDO") ) ;
 				modelContrato.setValor_convertido(dinheiro.format(valorReal));
@@ -527,6 +553,25 @@ public class DAOContratoRepository {
 				
 				valorReal = Double.valueOf( resultado.getDouble("COTACAO_MOEDA") ) ;
 				modelContrato.setCotacao_moeda(dinheiro.format(valorReal));
+
+				modelContrato.setComissao(resultado.getBoolean("SETUP") == true? "Sim" : "Não");
+				
+				String valorSetup = resultado.getString("VALOR_SETUP");				
+				if(valorSetup != null && !valorSetup.isEmpty()) {
+					valorReal      = Double.valueOf( valorSetup );
+					modelContrato.setValor_setup( dinheiro.format(valorReal) );
+					valorSetup = null;
+				}else valorSetup = null;
+								
+				modelContrato.setQty_parcela_setup( resultado.getInt("QTY_PARCELA_SETUP") );
+				modelContrato.setQty_mese_setup   ( resultado.getInt("QTY_MESE_SETUP"   ) );
+				
+				valorSetup = resultado.getString("VALOR_PARCELA_SETUP");				
+				if(valorSetup != null && !valorSetup.isEmpty()) {
+					valorReal      = Double.valueOf( valorSetup );
+					modelContrato.setValor_parcela_setup( dinheiro.format(valorReal) );
+				}
+
 			}
 			
 			vigenciaContrato = this.getContratoVigencia(modelContrato.getId_contrato());
@@ -646,7 +691,7 @@ public class DAOContratoRepository {
 				+ "  , NUVEM               AS NUV                        "
 				+ "  , SITE                AS SIT                        "				
 				+ "WHERE CON.ID_CLIENTE         = ?                      "
-				+ "  AND CON.ID_STATUS_CONTRATO IN ( 1, 4 )              "
+				+ "  AND CON.ID_STATUS_CONTRATO IN ( 1, 4, 5 )           "
 				+ "  AND REC.ID_CONTRATO        = CON.ID_CONTRATO        "				
 				+ "  AND SR.ID_STATUS_RECURSO   = REC.ID_STATUS_RECURSO  "
 				+ "  AND RB.ID_RETENCAO_BACKUP  = REC.ID_RETENCAO_BACKUP "
@@ -868,14 +913,40 @@ public class DAOContratoRepository {
 		return null;
 	}	
 	
-	public String CancelaContrato( ModelDesativacaoContrato modelDesativacaoContrato ) throws SQLException {
+	
+	public String atualizaStatusDescomissionamento(ModalDescomissionamento mDescomissionamento ) throws SQLException {
 		
+			String sql = "INSERT INTO DESCOMISSIONAMENTO                    "
+					   + "           ( ID_CONTRATO                          "
+					   + "           , ID_CLIENTE                           "
+					   + "           , ID_STATUS_CONTRATO                   "
+					   + "           , MOTIVO_DESCOMISSIONAMENTO          ) "
+					   + " VALUES ( ?, ?, ?, ? )";
+
+			PreparedStatement prepareSql = connection.prepareStatement(sql);
+			prepareSql.setLong     ( 1, mDescomissionamento.getId_contrato()               );
+			prepareSql.setLong     ( 2, mDescomissionamento.getId_cliente()                );
+			prepareSql.setLong     ( 3, mDescomissionamento.getId_status_contrato()        );
+			prepareSql.setString   ( 4, mDescomissionamento.getMotivo_descomissionamento() ); 
+
+			prepareSql.execute();
+			connection.commit();
+		return "Sucesso";
+	}
+	
+	
+	
+	
+	
+	
+	public String CancelaContrato( ModelDesativacaoContrato modelDesativacaoContrato, int tipoCancelamento ) throws SQLException {
+		//fa
 		String retornoErro     = null;
-		String sqlRecurso      = "UPDATE RECURSO          SET ID_STATUS_RECURSO  = 2, USER_DESATIVACAO = ? WHERE ID_CONTRATO  = ?";
-		String sqlContrato     = "UPDATE CONTRATO         SET ID_STATUS_CONTRATO = 2                       WHERE ID_CONTRATO  = ?";
-		String sqlAditivo      = "UPDATE ADITIVADO        SET ID_STATUS_ADITIVO  = 2                       WHERE ID_CONTRATO  = ?";
-		String sqlVigencia     = "UPDATE VIGENCIA         SET DT_DESATIVACAO     = ?, USER_DESATIVACAO = ? WHERE ID_CONTRATO  = ?";
-		String sqlVigenciaAdt  = "UPDATE VIGENCIA_ADITIVO SET DT_DESATIVACAO     = ?, USER_DESATIVACAO = ? WHERE ID_ADITIVADO = ?";
+		String sqlRecurso      = "UPDATE RECURSO          SET ID_STATUS_RECURSO  = 2, USER_DESATIVACAO = ?                WHERE ID_CONTRATO  = ?";
+		String sqlContrato     = "UPDATE CONTRATO         SET ID_STATUS_CONTRATO = 2                                      WHERE ID_CONTRATO  = ?";
+		String sqlAditivo      = "UPDATE ADITIVADO        SET ID_STATUS_ADITIVO  = 2                                      WHERE ID_CONTRATO  = ?";
+		String sqlVigencia     = "UPDATE VIGENCIA         SET DT_DESATIVACAO     = ?, USER_DESATIVACAO = ?, RENOVACAO = ? WHERE ID_CONTRATO  = ?";
+		String sqlVigenciaAdt  = "UPDATE VIGENCIA_ADITIVO SET DT_DESATIVACAO     = ?, USER_DESATIVACAO = ?                WHERE ID_ADITIVADO = ?";
 
 		Timestamp dtDes        = new java.sql.Timestamp(new java.util.Date().getTime());
 		String dataDesativacao =  dtDes.toString().substring(0, 19);
@@ -899,7 +970,8 @@ public class DAOContratoRepository {
 		      
 		    updateVigencia.setString    ( 1, dataDesativacao                                );
 		    updateVigencia.setString    ( 2, modelDesativacaoContrato.getUser_desativacao() );
-		    updateVigencia.setLong      ( 3, modelDesativacaoContrato.getId_contrato()      );
+		    updateVigencia.setInt       ( 3, tipoCancelamento                               );
+		    updateVigencia.setLong      ( 4, modelDesativacaoContrato.getId_contrato()      );
 		    updateVigencia.executeUpdate();
 	    	
 		    List<ModelDesativacaoContrato> aditivoDesativacoes = listaAditicoCancelar( modelDesativacaoContrato.getId_contrato() );

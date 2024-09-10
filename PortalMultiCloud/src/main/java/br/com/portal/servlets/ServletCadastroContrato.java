@@ -47,6 +47,7 @@ import br.com.portal.model.ModelRenovacaoContrato;
 import br.com.portal.model.ModelSite;
 import br.com.portal.model.ModelTempoContrato;
 import br.com.portal.model.ModelVigenciaContrato;
+import br.com.portal.servise.CriarMudancaComissionamento;
 
 
 @MultipartConfig
@@ -389,13 +390,13 @@ public class ServletCadastroContrato extends HttpServlet {
 			
 			DAOCadastroContrato daoCadastroContrato = new DAOCadastroContrato();
 			
+			// Validar se esta logado, se nao redireciona para a tela de login
+			HttpServletRequest req = (HttpServletRequest) request;
+		    HttpSession session    = req.getSession();
+            String userDesativacao = (String) session.getAttribute("usuario");
+            String urlParaAutent   = req.getServletPath(); // URL que esta sendo acessada.						
+			
 			if( dadosContrato.isRenovacao() ) {
-				
-				HttpServletRequest req = (HttpServletRequest) request;
-			    HttpSession session    = req.getSession();
-                String userDesativacao = (String) session.getAttribute("usuario");
-                String urlParaAutent   = req.getServletPath(); // URL que esta sendo acessada.						
-                // Validar se esta logado, se nao redireciona para a tela de login
                 if( userDesativacao == null && !urlParaAutent.equalsIgnoreCase("/principal/ServletLogin") ) {
                     RequestDispatcher redireciona = request.getRequestDispatcher("/index.jsp?url="+urlParaAutent);
                     request.setAttribute("msg", "Por favor, realizar o login!");
@@ -410,7 +411,7 @@ public class ServletCadastroContrato extends HttpServlet {
 					DesativacaoContrato.setUser_desativacao( userDesativacao );
 					DesativacaoContrato.setId_contrato     ( idContrato      );
 	
-					String retorno = daoContratoRepository.CancelaContrato( DesativacaoContrato );
+					String retorno = daoContratoRepository.CancelaContrato( DesativacaoContrato, 1 );
 					if( retorno == null )
 						retorno = "O Contrato: " + idContrato + " e todo(s) os produtos e recusso(s) a ele vinculados(caso exista), foram cancelados com sucesso";
 				}
@@ -422,6 +423,28 @@ public class ServletCadastroContrato extends HttpServlet {
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");
 				request.setAttribute("msg", retornoProcessamento);	
 			}
+			
+			if( !dadosContrato.isRenovacao() ) {
+                // <!-- URL da base da API Base TST ou PRD  -->
+				String urlBase           = (String) session.getAttribute("urlAPI_PortalMudanca");
+			    String loginUser         = (String) session.getAttribute("usuario");
+				String email_solicitante = (String) session.getAttribute("usuarioEmail");		
+				String idCliente         = dadosContrato.getId_cliente().toString();
+				String idContrato        = dadosContrato.getId_contrato().toString();
+				String urlPostMudacao    = urlBase + "salvarMudancaPadrao";  // "http://localhost:8090/PortalMudanca/salvarMudancaPadrao"
+				
+				CriarMudancaComissionamento criarMudancaComiss = new CriarMudancaComissionamento( urlBase,idCliente, idContrato, loginUser, email_solicitante );
+				try {
+					String result = criarMudancaComiss.sendPOST( urlPostMudacao );
+					
+					System.out.println( result );
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+
 			
 		    String url= request.getContextPath() + "/ServletContratoController?acao=buscarContratoCliente&idContratoCliente=" + dadosContrato.getId_cliente();
 			response.sendRedirect( url ); 
@@ -524,10 +547,32 @@ public class ServletCadastroContrato extends HttpServlet {
 		String id_contrato_origem     = objJsonContrato.getString( "id_contrato"            );		
 		String id_suporte_b1          = objJsonContrato.getString( "id_suporte_b1"          );
 		String id_comercial           = objJsonContrato.getString( "id_comercial"           );		
+		String comissao               = objJsonContrato.getString( "comissao"               );
+		String valor_setup            = objJsonContrato.getString( "valor_setup"            );		
+		String qty_parcela_setup      = objJsonContrato.getString( "qty_parcela_setup"      );
+		String valor_parcela_setup    = objJsonContrato.getString( "valor_parcela_setup"    );		
+		String qty_mes_setup          = objJsonContrato.getString( "qty_mes_setup"          );
+		
 		
 	    HttpServletRequest req        = (HttpServletRequest) request;
 		HttpSession session           = req.getSession();
 	    String usuarioLogado          = (String) session.getAttribute("usuario");
+
+	    if(valor_parcela_setup != null && !valor_parcela_setup.isEmpty()) {
+	    	valor_parcela_setup = Normalizer.normalize(valor_parcela_setup, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+		       if(valor_parcela_setup.indexOf(" ") >= 0 )
+		    	   valor_parcela_setup = valor_parcela_setup.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+		       else
+		    	   valor_parcela_setup = valor_parcela_setup.replaceAll("\\.", "").replaceAll("\\,", ".");
+		}
+
+	    if(valor_setup != null && !valor_setup.isEmpty()) {
+	    	valor_setup = Normalizer.normalize(valor_setup, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+		       if(valor_setup.indexOf(" ") >= 0 )
+		    	   valor_setup = valor_setup.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+		       else
+		    	   valor_setup = valor_setup.replaceAll("\\.", "").replaceAll("\\,", ".");
+		}
 
 	    if(valor_total != null && !valor_total.isEmpty()) {
 	       valor_total = Normalizer.normalize(valor_total, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
@@ -582,7 +627,13 @@ public class ServletCadastroContrato extends HttpServlet {
 		contrato.setCotacao_moeda         ( valor_Cotacao           != null && !valor_Cotacao.isEmpty()          ? valor_Cotacao.trim()                        : null );
 		contrato.setId_comercial          ( id_comercial            != null && !id_comercial.isEmpty()           ? Long.parseLong(id_comercial.trim())         : null );
 		contrato.setId_suporte_b1         ( id_suporte_b1           != null && !id_suporte_b1.isEmpty()          ? Long.parseLong(id_suporte_b1.trim())        : null );
-		contrato.setRenovacao             ( Integer.parseInt(isRenovacao) == 1                                   ? true                                        : false );
+		contrato.setRenovacao             ( Integer.parseInt(isRenovacao) == 1                                   ? true                                        : false );		
+		contrato.setComissao              ( comissao                != null && !comissao.isEmpty()               ? comissao.trim()                             : null );
+		contrato.setValor_setup           ( valor_setup             != null && !valor_setup.isEmpty()            ? valor_setup.trim()                          : null );
+		contrato.setQty_parcela_setup     ( qty_parcela_setup       != null && !qty_parcela_setup.isEmpty()      ? Integer.valueOf(qty_parcela_setup.trim())   : 0    );
+		contrato.setValor_parcela_setup   ( valor_parcela_setup     != null && !valor_parcela_setup.isEmpty()    ? valor_parcela_setup.trim()                  : null );
+		contrato.setQty_mese_setup        ( qty_mes_setup           != null && !qty_mes_setup.isEmpty()          ? Integer.valueOf(qty_mes_setup.trim())       : 0    );
+		// 
 
 	    // informacoes sobre a vigencia do contrato.
 //		contrato.setId_vigencia           ( id_vigencia             != null && !id_vigencia.isEmpty()            ? Long.parseLong(id_vigencia.trim())          : null );

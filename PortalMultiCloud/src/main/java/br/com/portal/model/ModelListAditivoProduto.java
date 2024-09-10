@@ -29,8 +29,97 @@ public class ModelListAditivoProduto {
 	 private String hubspot_aditivo;
 	 private Long   id_rascunho;
 	 private String motivoRascunho;
+	 
+	 // Referencia a tabela Vigencia
+	 private Long   id_vigencia;
+	 private Long   id_aditivo_recurso;
+	 private Long   id_tempo_contrato;
+	 private String dt_inicio;                    // dtInicioMAR
+	 private String dt_final;                     // dtFinalMAR
+	 private String dt_criacao_vigencia;         
+	 private String observacao_vigencia;
 
-	
+	// Informacoes da comissicao de venda sobre o contrato equivalente a equipe de vendas
+	private Boolean comissao_adit;
+	private String  valor_setup_adit;
+	private String  valor_parcela_setup_adit;
+	private int     qty_parcela_setup_adit;
+	private int     qty_mese_setup_adit;
+
+
+	public Boolean getComissao_adit() {
+		return comissao_adit;
+	}
+	public void setComissao_adit(Boolean comissao_adit) {
+		this.comissao_adit = comissao_adit;
+	}
+	public String getValor_setup_adit() {
+		return valor_setup_adit;
+	}
+	public void setValor_setup_adit(String valor_setup_adit) {
+		this.valor_setup_adit = valor_setup_adit;
+	}
+	public String getValor_parcela_setup_adit() {
+		return valor_parcela_setup_adit;
+	}
+	public void setValor_parcela_setup_adit(String valor_parcela_setup_adit) {
+		this.valor_parcela_setup_adit = valor_parcela_setup_adit;
+	}
+	public int getQty_parcela_setup_adit() {
+		return qty_parcela_setup_adit;
+	}
+	public void setQty_parcela_setup_adit(int qty_parcela_setup_adit) {
+		this.qty_parcela_setup_adit = qty_parcela_setup_adit;
+	}
+	public int getQty_mese_setup_adit() {
+		return qty_mese_setup_adit;
+	}
+	public void setQty_mese_setup_adit(int qty_mese_setup_adit) {
+		this.qty_mese_setup_adit = qty_mese_setup_adit;
+	}
+	public Long getId_vigencia() {
+		return id_vigencia;
+	}
+	public void setId_vigencia(Long id_vigencia) {
+		this.id_vigencia = id_vigencia;
+	}
+	public Long getId_aditivo_recurso() {
+		return id_aditivo_recurso;
+	}
+	public void setId_aditivo_recurso(Long id_aditivo_recurso) {
+		this.id_aditivo_recurso = id_aditivo_recurso;
+	}
+	public Long getId_tempo_contrato() {
+		return id_tempo_contrato;
+	}
+	public void setId_tempo_contrato(Long id_tempo_contrato) {
+		this.id_tempo_contrato = id_tempo_contrato;
+	}
+	public String getDt_inicio() {
+		return dt_inicio;
+	}
+	public void setDt_inicio(String dt_inicio) {
+		this.dt_inicio = dt_inicio;
+	}
+	public String getDt_final() {
+		return dt_final;
+	}
+	public void setDt_final(String dt_final) {
+		this.dt_final = dt_final;
+	}
+	public String getDt_criacao_vigencia() {
+		return dt_criacao_vigencia;
+	}
+	public void setDt_criacao_vigencia(String dt_criacao_vigencia) {
+		this.dt_criacao_vigencia = dt_criacao_vigencia;
+	}
+	public String getObservacao_vigencia() {
+		return observacao_vigencia;
+	}
+	public void setObservacao_vigencia(String observacao_vigencia) {
+		this.observacao_vigencia = observacao_vigencia;
+	}
+
 	public Long getId_rascunho() {
 		return id_rascunho;
 	}

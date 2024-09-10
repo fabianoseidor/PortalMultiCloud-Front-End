@@ -198,7 +198,7 @@
 
 																    <div class="form-group form-default form-static-label col-md-3 mb-4">
 																        <span  class="font-weight-bold font-italic" style="color: #708090" >Valor Corrente</span>
-																	    <input style="color: #000000" type="text" name="valor_total" id="valor_total" onblur="cauculoConversao();" class="form-control step_1_validar"  placeholder="Valor do contrato" value="">
+																	    <input style="color: #000000" type="text" name="valor_total" id="valor_total" onblur="cauculoConversao();atualizaVlrContratoBase();" class="form-control step_1_validar"  placeholder="Valor do contrato" value="">
 																    </div>
 
 																    <div class="form-group form-default form-static-label col-md-3 mb-4">
@@ -210,7 +210,21 @@
 																	    <span class="font-weight-bold font-italic" style="color: #708090">Valor Convertido</span>
 																	    <input style="color: #000000" type="text" name="valor_convertido" id="valor_convertido" disabled="disabled" class="form-control" placeholder="Valor do contrato" value="">
 																    </div>
-
+<!--  
+																	<div class="form-group form-default form-static-label col-md-2 mb-3">
+																	    <span class="font-weight-bold font-italic" style="color: #708090">Setup</span>
+																		<select style="color: #000000" name="idSetup" id="idSetup" class="form-control step_1_validar" required="required" onchange="habilitaSetup();">
+																		  <option value="" disabled selected>[-Selecione-]</option>
+																		  <option value=1>Sim</option>
+																		  <option value=0>Não</option>
+																		</select> 
+																	</div>
+																	
+																    <div class="form-group form-default form-static-label col-md-2 mb-4">
+																	    <span class="font-weight-bold font-italic" style="color: #708090">Valor Setup</span>
+																	    <input style="color: #000000" type="text" name="idValorSetup" id="idValorSetup" disabled="disabled" class="form-control" placeholder="Valor Setup" value="">
+																    </div>
+-->																    
 															    </div>
 															
 															    <hr>  
@@ -221,7 +235,7 @@
 																          <span class="font-weight-bold font-italic" style="color: #708090">Status Contrato</span>
 																	      <select style="color: #000000" name="id_status_contrato" id="id_status_contrato" onchange="habilitaStatusMotivoRascunho(); validaStatusPepProvisorio();" class="form-control step_1_validar" >
 																                  <option value="" disabled selected>[-Selecione-]</option>
-																                  <tagsContrato:listaStatusContrato/>
+																                  <tagsContrato:listaStatusContratoCadastro/>
 												                          </select>
 																     </div>
 																     
@@ -368,7 +382,7 @@
 																		       <div class="row d-flex justify-content-center">
 																		            <div class="col-sm">
 																		                 <input type="file" name="arqContratoPDF" id="arqContratoPDF" accept="application/pdf" >
-                                                                                         <label for="arqContratoPDF" class="btn waves-effect waves-dark btn-success btn-outline-success btn-icon"  data-toggle="tooltip" data-placement="top" title="Upload do contrato!">
+                                                                                         <label for="arqContratoPDF" class="btn waves-effect waves-dark btn-success btn-outline-success btn-icon" data-toggle="tooltip" data-placement="top" title="Upload do contrato!">
                                                                                                <i class="fa fa-upload" aria-hidden="true" ></i>
                                                                                          </label>  
                                                                                     </div>
@@ -426,40 +440,87 @@
                                                            <div id="step_2" class="step">
                                                                 <div class="row">
 																     <div class="col-sm-12">
+																     
 																	      <div class="card">
-																		       <div class="card-block">
-																		            <!-- Informacoes do Tempo de Contrato -->
-																					<div class="form-row">
-																						<!-- Campo Tempo Contrato -->
-																						<div class="form-group form-default form-static-label col-md-4 mb-3">
-																						    <span class="font-weight-bold font-italic" style="color: #708090">Tempo Contrato</span>
-																							<select style="color: #000000" name="selectTempoContrato" id="selectTempoContrato" onchange="calculaDataFinalVigencia();" class="form-control step_2_validar" >
-																								<option value="" disabled selected>[-Selecione-]</option>
-																								    <tagsContrato:listaTempoContrato/>
-																							</select> <!--  <label class="float-label">Tempo Contrato</label> -->
+																		       <div class="card-block">																		       
+                                                                                    <div class="card-body ">	
+	                                                                                    <h5 class="card-title">Vigência</h5><hr>																	            
+																						<div class="form-row">
+																						    
+																							<!-- Campo Tempo Contrato -->
+																							<div class="form-group form-default form-static-label col-md-4 mb-3">
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Tempo Contrato</span>
+																								<select style="color: #000000" name="selectTempoContrato" id="selectTempoContrato" onchange="calculaDataFinalVigencia();habilitaSetup();" class="form-control step_2_validar" >
+																									<option value="" disabled selected>[-Selecione-]</option>
+																									    <tagsContrato:listaTempoContrato/>
+																								</select> <!--  <label class="float-label">Tempo Contrato</label> -->
+																							</div>
+										                                                    <!-- Campo Data Início --> 
+										                                                    <div class="form-group form-default form-static-label col-md-4 mb-6">
+										                                                        <span class="font-weight-bold font-italic" style="color: #708090">Data Início</span>
+																								<input style="color: #000000" type="text" name="dt_inicio" id="dt_inicio" class="form-control step_2_validar" onchange="calculaDataFinalVigencia(); calcular();"  placeholder="Data início do contrato" value=""> 
+																								<!-- <label class="float-label">Data Início</label> -->
+										                                                    </div>
+																						
+																							<!-- Campo Data Final -->
+																							<div class="form-group form-default form-static-label col-md-4 mb-6">
+																							     <span class="font-weight-bold font-italic" style="color: #708090">Data Final</span>
+									                                                             <input style="color: #000000" type="text" name="dt_final" id="dt_final"  class="form-control step_2_validar" onchange="calcular();" placeholder="Data final do contrato" value="">
+																							</div>
 																						</div>
-									                                                    <!-- Campo Data Início --> 
-									                                                    <div class="form-group form-default form-static-label col-md-4 mb-6">
-									                                                        <span class="font-weight-bold font-italic" style="color: #708090">Data Início</span>
-																							<input style="color: #000000" type="text" name="dt_inicio" id="dt_inicio" class="form-control step_2_validar" onchange="calculaDataFinalVigencia();"  placeholder="Data início do contrato" value=""> 
-																							<!-- <label class="float-label">Data Início</label> -->
-									                                                    </div>
-																					
-																						<!-- Campo Data Final -->
-																						<div class="form-group form-default form-static-label col-md-4 mb-6">
-																						     <span class="font-weight-bold font-italic" style="color: #708090">Data Final</span>
-								                                                             <input style="color: #000000" type="text" name="dt_final" id="dt_final"  class="form-control step_2_validar"  placeholder="Data final do contrato" value="">
+	
+																					    
+																						<br>
+																						
+																						<div class="form-row">
+																						     <div class="form-group form-default form-static-label col-md-12 mb-12">
+																								  <span class="font-weight-bold font-italic" style="color: #708090">Observação Vigência</span>
+																								  <textarea style="color: #000000" class="form-control" id="observacaoVigencia" name="observacaoVigencia" placeholder="Observação" rows="100" ></textarea>
+																							 </div>
 																						</div>
-																					</div>
-																				    <hr>  
+                                                                                    </div>																					
+																				    
 																					<br>
-																					<div class="form-row">
-																					     <div class="form-group form-default form-static-label col-md-12 mb-12">
-																							  <span class="font-weight-bold font-italic" style="color: #708090">Observação Vigência</span>
-																							  <textarea style="color: #000000" class="form-control" id="observacaoVigencia" name="observacaoVigencia" placeholder="Observação" rows="100" >${modelContrato.observacao_vigencia}</textarea>
-																						 </div>
+
+                                                                                    <div class="card-body ">	
+	                                                                                    <h5 class="card-title">Comissão</h5><hr>																	            
+																					    <div class="form-row">
+																					        <div class="form-group form-default form-static-label col-md-2 mb-3">
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Comissão</span>
+																								<select style="color: #000000" name="idSetup" id="idSetup" class="form-control step_2_validar" disabled="disabled" required="required" onchange="habilitaSetup(); calcular();">
+																								  <option value="" disabled selected>[-Selecione-]</option>
+																								  <option value=1>Sim</option>
+																								  <option value=0>Não</option>
+																								</select> 
+																							</div>
+																							
+																						    <div class="form-group form-default form-static-label col-md-2 mb-4">
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Quantidades Meses Contrato</span>
+																							    <input style="color: #000000" type="text" name="qtyMesesContrato" id="qtyMesesContrato" disabled="disabled" class="form-control" placeholder="Quantidades Meses Contrato" value="">
+																						    </div>
+																						    
+																						    <div class="form-group form-default form-static-label col-md-2 mb-4">
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Valor Contrato</span>
+																							    <input style="color: #000000" type="text" name="qtyMesesContrato" id="vlrContratoBase" disabled="disabled" class="form-control" placeholder="Quantidades Meses Contrato" value="">
+																						    </div>
+																						    <div class="form-group form-default form-static-label col-md-2 mb-4">
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Valor Parcelas</span>
+																							    <input style="color: #000000" type="text" name="vlrParcelas" id="vlrParcelas" disabled="disabled" class="form-control" placeholder="Quantidades Meses Contrato" value="">
+																						    </div>
+																						    
+																						    <div class="form-group form-default form-static-label col-md-2 mb-4">
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Quantidade Parcelas Comissão</span>
+																							    <input style="color: #000000" type="text" name="qtyParcSetup" id="qtyParcSetup" disabled="disabled" class="form-control" placeholder="Quantidade Parcelas Comissão" value="">
+																						    </div>
+																							
+																						    <div class="form-group form-default form-static-label col-md-2 mb-4">
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Valor Comissão</span>
+																							    <input style="color: #000000" type="text" name="idValorSetup" id="idValorSetup" disabled="disabled" class="form-control" placeholder="Valor Comissão" value="">
+																						    </div>
+																					    </div>
 																					</div>
 												                               </div>
+
 												                          </div>
 												                     </div>
 												                </div>
@@ -785,6 +846,10 @@
 																			      <th class="font-weight-bold font-italic " style="color: #708090">ID HubSpot         </th>
 																			      <th class="font-weight-bold font-italic " style="color: #708090">Quantidade Usuário </th>
 																			      <th class="font-weight-bold font-italic " style="color: #708090">Observação         </th>
+																			      <th class="font-weight-bold font-italic " style="color: #708090">Setup              </th>
+																			      <th class="font-weight-bold font-italic " style="color: #708090">Valor Setup        </th>
+																			      <th class="font-weight-bold font-italic " style="color: #708090">Quantidade Parcelas</th>
+																			      <th class="font-weight-bold font-italic " style="color: #708090">Valor Parcelas     </th>
 																			    </tr>
 																			  </thead>
 																			  <tbody id="TbodyResumoContratoCad">
@@ -898,8 +963,8 @@
 																  
 																  <input type="hidden" name="conteudoContrato" id="conteudoContrato" readonly="readonly" value="">
 																  <input type="hidden" name="conteudoVigencia" id="conteudoVigencia" readonly="readonly" value="">
-																  <input type="hidden" name="conteudoRecurso" id="conteudoRecurso"   readonly="readonly" value="">
-																  <input type="hidden" name="conteudoProduto" id="conteudoProduto"   readonly="readonly" value="">
+																  <input type="hidden" name="conteudoRecurso"  id="conteudoRecurso"  readonly="readonly" value="">
+																  <input type="hidden" name="conteudoProduto"  id="conteudoProduto"  readonly="readonly" value="">
 																                           
                                                            </div> <!-- Fim etapa 5 -->
                                                         </form>

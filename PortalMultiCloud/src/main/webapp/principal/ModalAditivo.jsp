@@ -18,7 +18,8 @@
 				<div class="col-sm-12">
 					<!-- Basic Form Inputs card start -->
 					<div class="card">
-						<div class="card-block">	
+						<div class="card-block">
+						    <h5 class="card-title">Info. Aditivo</h5><hr>	
 							<div class="form-row">
 								<!-- Campo ID Aditivo -->
 								<div class="form-group form-default form-static-label col-md-4 mb-6">
@@ -50,6 +51,7 @@
 					<form class="form-material">
 						<div class="card">
 							<div class="card-block">
+							    <h5 class="card-title">Info. Produto</h5><hr>
 							    <div class="form-row">
 		                            <!-- Campo Tipo Aditivo -->
 									<div class="form-group form-default form-static-label col-md-12 mb-6">
@@ -118,7 +120,7 @@
 										<input type="text" name="valor_CotacaoModalAditivo" id="valor_CotacaoModalAditivo" disabled="disabled" onblur="cauculoConversaoModalAdit();" class="form-control" placeholder="Valor do contrato" value="${modelListAditivoProduto.cotacao_moeda}">
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</form>
@@ -339,30 +341,114 @@
             <!-- data final, de acordo com a data final do contrato.                                           -->			
 			<!--                                                                                               -->
 			<!-- ********************************************************************************************* -->
-			<div class="row" id="DivVigenciaAditivo" >
-				<div class="col-sm-12">
-					<!-- Basic Form Inputs card start -->
-					<div class="card">
-						<div class="card-block">
-							<div class="form-row">
-								<!-- Campo Data Início --> 
-								<div class="form-group form-default form-static-label col-md-6 mb-6">
-									<span class="font-weight-bold font-italic" style="color: #708090">Data Início</span>
-									<input style="color: #B0C4DE" type="text" name="dtInicioModalAditivo" id="dtInicioModalAditivo" class="form-control" required="required" placeholder="Data início do Aditivo" value="${modelListAditivoProduto.dt_inicio}"> 
-									
-								</div>
-					
-								<!-- Campo Data Final -->
-								<div class="form-group form-default form-static-label col-md-6 mb-6">
-									<span class="font-weight-bold font-italic" style="color: #708090">Data Final</span>
-									<input style="color: #B0C4DE" type="text" name="dtFinalModalAditivo" id="dtFinalModalAditivo" required="required" class="form-control" readonly="readonly" placeholder="Data final do Aditivo" value="${modelListAditivoProduto.dt_final}">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+            <div class="row" id="DivVigenciaAditivo" >
+               <form class="form-material">
+                  <div class="col-sm-12">
+                     <div class="card">
+                        <div class="card-block">
+                           <h5 class="card-title">Vigência Aditivo</h5><hr>
+                           <div class="form-row">
+                              <div class="form-group form-default form-static-label col-md-6 mb-6">
+                                  <label class="font-weight-bold font-italic" >ID Vigência</label>
+                                 <input type="text" name="id_vigenciaModalAditivo" id="id_vigenciaModalAditivo" class="form-control" readonly="readonly" disabled="disabled">	
+                              </div>
+                              <div class="form-group form-default form-static-label col-md-6 mb-6">
+                                 <label class="font-weight-bold font-italic" >Data Cadastro</label>
+                                 <input type="text" name="dt_criacao_vigenciaModalAditivo" id="dt_criacao_vigenciaModalAditivo" class="form-control" readonly="readonly" disabled="disabled">	
+                              </div>
+                           </div>
+                        
+                           <div class="form-row">
+                              <div class="form-group form-default form-static-label col-md-4 mb-3">
+                                 <label class="font-weight-bold font-italic" >Tempo Contrato</label>
+                                 <select style="color: #000000" name="selectTempoContratoModalAditivo" id="selectTempoContratoModalAditivo" onchange="calculaDataFinalVigenciaModalAditivo(); habilitaSetupModalAditivo();" class="form-control">
+                                    <option value="" disabled selected>Selecione Tempo Contrato</option>
+                                    <tagsContrato:listaTempoContratoAditivo/>
+                                 </select>
+                              </div>
+                              <!-- Campo Data Início --> 
+                              <div class="form-group form-default form-static-label col-md-4 mb-6">
+                                 <label class="font-weight-bold font-italic" >Data Início</label>
+                                 <input type="text" name="dtInicioModalAditivo" id="dtInicioModalAditivo" class="form-control" onchange="calculaDataFinalVigenciaModalAditivo();">	
+                              </div>
+                              <div class="form-group form-default form-static-label col-md-4 mb-6">
+                                 <label class="font-weight-bold font-italic" >Data Final</label>
+                                 <input type="text" name="dtFinalModalAditivo" id="dtFinalModalAditivo" class="form-control" >	
+                              </div>
+                           </div>
+                        
+                           <div class="form-group form-default form-static-label mb-6">
+                              <label class="font-weight-bold font-italic" >Observaçãoo Vigência</label>
+                              <textarea style="color: #000000" class="form-control" id="observacaoVigenciaModalAditivo" name="observacaoVigenciaModalAditivo" placeholder="Observação" rows="10" ></textarea>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </form>
+            </div>
+
+            <hr>
+            <br>
+
+			<!-- ********************************************************************************************* -->
+			<!--                                                                                               -->
+            <!-- A Data Vigencia, sempre ira ser visivel com os valores da data atual(Abetro para alteracao) e -->
+            <!-- data final, de acordo com a data final do contrato.                                           -->			
+			<!--                                                                                               -->
+			<!-- ********************************************************************************************* -->
 			
+            <div class="row" id="DivComissaoAditivoMR" >
+               <form class="form-material">
+                  <div class="col-sm-12">
+                     <div class="card">
+                        <div class="card-block">
+                           <h5 class="card-title">Comissão</h5><hr>
+                           
+                           <div class="form-row">  
+
+					        <div class="form-group form-default form-static-label col-md-6 mb-3">
+							    <span class="font-weight-bold font-italic" style="color: #708090">Comissão</span>
+								<select style="color: #000000" name="comissaoModalAditivo" id="comissaoModalAditivo" class="form-control" disabled="disabled" required="required" onchange="calcularModalAditivo()">
+								  <option value="" disabled selected>[-Selecione-]</option>
+								  <option value=1>Sim</option>
+								  <option value=0>Não</option>
+								</select> 
+							</div>
+															
+                           <div class="form-group form-default form-static-label col-md-6 mb-4">
+                                 <span class="font-weight-bold font-italic" style="color: #708090">Quantidades Meses Contrato</span>
+                                 <input style="color: #000000" type="text" name="qtyMesesContratoModalAditivo" id="qtyMesesContratoModalAditivo" readonly class="form-control" placeholder="Quantidades Meses Contrato">
+                              </div>
+                           </div>
+
+                           <div class="form-row">  
+                              <div class="form-group form-default form-static-label col-md-4 mb-4">
+                                 <span class="font-weight-bold font-italic" style="color: #708090">Valor Parcelas</span>
+                                 <input style="color: #000000" type="text" name="vlrParcelasModalAditivo" id="vlrParcelasModalAditivo" readonly class="form-control" placeholder="Valor Parcelas">
+                              </div>
+
+                              <div class="form-group form-default form-static-label col-md-4 mb-4">
+                                 <span class="font-weight-bold font-italic" style="color: #708090">Quantidade Parcelas Setup</span>
+                                 <input style="color: #000000" type="text" name="qtyParcSetupModalAditivo" id="qtyParcSetupModalAditivo" readonly class="form-control" placeholder="Quantidade Parcelas Comissão">
+                              </div>
+
+                              <div class="form-group form-default form-static-label col-md-4 mb-4">
+                                 <span class="font-weight-bold font-italic" style="color: #708090">Valor Setup</span>
+                                 <input style="color: #000000" type="text" name="idValorSetupModalAditivo" id="idValorSetupModalAditivo" readonly class="form-control" placeholder="Valor Comissão" >
+                              </div>																															
+
+                           </div>
+
+
+                        </div>
+                     </div>
+                  </div>
+               </form>
+            </div>
+            <hr>
+            <br>
+
+
 	      </div>
 	      
 	      <h4 class="h4stilo" style="text-align: center; color:#00008B; font-style: italic;font-weight: bold;text-decoration: underline;">Lista de Aditivo por Contrato</h4>
@@ -417,6 +503,115 @@
 	</div>
  
  <script type="text/javascript">
+
+  async function calcularModalAditivo(){
+		var dt1     = await formatDataStr( document.getElementById("dtInicioModalAditivo").value ); 
+		var dt2     = await formatDataStr( document.getElementById("dtFinalModalAditivo" ).value );
+		var idSetup = document.getElementById("comissaoModalAditivo"  ).value; 
+
+		let vlrContrato = document.getElementById("vlrTotalModalAditivo").value;
+
+		if( ( vlrContrato === null || vlrContrato === '' || vlrContrato.trim() === '' ) ){
+			  var iconi           = "warning";
+			  var tituloPrincipal = "Valor Total Aditivo";
+			  var textoPrincipal  = "Para realizar o cálculo da comissão, precisa preencher o valor total do Aditivo!";
+			  var nomeModal       = 'ModalAditivoProduto';
+		      MensagemConfimacaoModal( iconi, tituloPrincipal, textoPrincipal, nomeModal );
+		      document.getElementById("vlrTotalModalAditivo").focus();
+		      $( '#comissaoModalAditivo' ).get(0).selectedIndex = 0;	
+		} else{		
+			if( ( dt1 != null && dt1 != '' && dt1.trim() != '' ) && 
+			    ( dt2 != null && dt2 != '' && dt2.trim() != '' ) ){
+		
+				  var data1 = new Date(dt1); 
+				  var data2 = new Date(new Date(dt2));
+				  var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
+				   
+				  vlrConvet =  parseFloat( vlrContrato.replace(".", "").replace(",", ".") );
+				  let vlrParcela = vlrConvet / total;
+				  document.getElementById("qtyMesesContratoModalAditivo").value = total;			
+				  document.getElementById("vlrParcelasModalAditivo"     ).value = vlrParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+		
+				  if(idSetup === "1" ){
+					 
+					if( total > 35 ){
+						var vlr = vlrConvet / total;
+						const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						document.getElementById("idValorSetupModalAditivo").value = formatado;
+						document.getElementById("qtyParcSetupModalAditivo").value = "1";
+					}else if( total < 36 ){
+						var vlr = vlrConvet * 0.027;
+						const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+						document.getElementById("idValorSetupModalAditivo").value = formatado;
+						document.getElementById("qtyParcSetupModalAditivo").value = "1";				
+					}
+				  }else if(idSetup === "0" ){
+					
+					var data1 = new Date(dt1); 
+					var data2 = new Date(new Date(dt2));
+					var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
+					document.getElementById("qtyMesesContratoModalAditivo").value = total;
+					
+					vlrContrato = vlrContrato.replace(".", "").replace(",", ".");
+		
+					let vlrConvet = parseFloat( vlrContrato )
+					var vlr = (vlrConvet / total) * 0.02;
+					const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+					document.getElementById("idValorSetupModalAditivo").value = formatado;
+					document.getElementById("qtyParcSetupModalAditivo").value = total;
+				  }
+			}
+		}
+	}
+	
+/******************************************************************/
+/*                                                                */
+/*                                                                */
+/******************************************************************/ 
+ 
+ 
+ 
+ /******************************************************************/
+ /*                                                                */
+ /*                                                                */
+ /******************************************************************/
+  function calculaDataFinalVigenciaModalAditivo() {
+ 	 
+ 	 var idTempoContratoMA    = selectTempoContratoModalAditivo.options[selectTempoContratoModalAditivo.selectedIndex].value;
+ 	 var dtInicioModalAditivo = document.getElementById("dtInicioModalAditivo" ).value;
+ 	 var dtFinalModalAditivo  = document.getElementById("dtFinalModalAditivo"  ).value;
+ 	 var urlAction            = document.getElementById("formContrato"         ).action;
+  
+ 	 $.ajax({ 			
+   			method : "get",
+   			url : urlAction,
+   			data : 'acao=CalculaVigencia&idTempoContrato=' + idTempoContratoMA + '&dtInicio=' + dtInicioModalAditivo + '&dtFinal=' + dtFinalModalAditivo,
+   			success: function(lista){
+   				var json = JSON.parse(lista);
+   				$("#dt_criacao_vigenciaModalAditivo").val( json.dt_criacao );
+   				$("#dtInicioModalAditivo"           ).val( json.dt_inicio  );
+   				$("#dtFinalModalAditivo"            ).val( json.dt_final   );
+
+    			}
+   	 }).fail(function( xhr, status, errorThrown ){
+  // 			alert('Erro carregar select Produto: ' + xhr.responseText);
+ 			var iconi           = "error";
+  			var tituloPrincipal = "ERRO";
+  			var textoPrincipal  = "Erro: Calcula Vigencia: " + xhr.responseText;
+  			var nomeModal       = 'ModalAditivoProduto';
+			MensagemConfimacaoModal( iconi, tituloPrincipal, textoPrincipal, nomeModal )
+   	 }); 
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  //$("#vlrTotalModalAditivo").maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
  $("#vlrTotalModalAditivo"        ).maskMoney({ showSymbol:true, symbol:""   , decimal:",", thousands:"." } );
@@ -426,9 +621,32 @@
  $("#valor_CotacaoModalAditivo"   ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." } );
  $("#vlrUnitDRModalAditivo"       ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." } );
  $("#vlrUnitVPNModalAditivo"      ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." } );
+ $("#idValorSetupModalAditivo"    ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." } );
  function esconderLinha(idDaLinha) {
    // procura o elemento com o ID passado para a função e coloca o estado para o contrario do estado actual
     $("#" + idDaLinha).toggle();
+ }
+
+ /******************************************************************/
+ /*                                                                */
+ /*                                                                */
+ /******************************************************************/ 
+ function habilitaSetupModalAditivo() {
+
+	  	var comMAR      = document.getElementById("comissaoModalAditivo"  ).value;
+	  	var idValorSetup = document.querySelector("#idValorSetupModalAditivo");
+	  		
+	  	if(comMAR === "0"){
+	  		$("#idValorSetupModalAditivo"    ).val('R$ 0,00');
+	  		$("#qtyMesesContratoModalAditivo").val('0'      );
+	  		$("#vlrParcelasModalAditivo"     ).val('R$ 0,00');
+	  		$("#qtyParcSetupModalAditivo"    ).val('0'      );
+	  		idValorSetupModalAditivo.disabled = true;
+	  	}else{
+	  		idValorSetupModalAditivo.disabled = false;
+	  		comissaoModalAditivo.disabled = false;
+	  	}
+ 		
  }
 
  /******************************************************************/
@@ -527,12 +745,12 @@
 	/*                                                                */
 	/******************************************************************/
 	$('#ModalAditivoProduto').on('show.bs.modal', function(e){
-
+/*
 		var dtFinal = document.getElementById( "dt_final" ).value; // 6
-
 		const horas = new Date();
 		$("#dtInicioModalAditivo").val( horas.toLocaleDateString('pt-BR') );
 		$("#dtFinalModalAditivo" ).val( dtFinal                           );
+*/		
 		listaAditivosInicial();
 	});
 
@@ -604,6 +822,30 @@
 		        document.getElementById("vlrTotalModalAditivo").focus();
 		        return false
 		 }
+		
+		
+		 // Info. Vigencia 
+		 if(document.getElementById("dtInicioModalAditivo").value == ""){
+		        // alert('Por favor, informe um Valor para o Aditivo!');
+		        MensagemConfimacaoModal( iconi, "Validação de Formulário", 'Por favor, informe a data início da Vigência!', nomeModal );
+		        document.getElementById("dtInicioModalAditivo").focus();
+		        return false
+		 }
+		 
+		 if(document.getElementById("dtFinalModalAditivo").value == ""){
+		        // alert('Por favor, informe um Valor para o Aditivo!');
+		        MensagemConfimacaoModal( iconi, "Validação de Formulário", 'Por favor, informe a data fim da Vigência!', nomeModal );
+		        document.getElementById("dtFinalModalAditivo").focus();
+		        return false
+		 }
+		 if($('#selectTempoContratoModalAditivo').get(0).selectedIndex == 0 ){
+		        // alert('Por favor, informe um Valor para o Aditivo!');
+		        MensagemConfimacaoModal( iconi, "Validação de Formulário", 'Por favor, informe o periódo da Vigência!', nomeModal );
+		        document.getElementById("selectTempoContratoModalAditivo").focus();
+		        return false
+		 }
+		 
+
 	    // Valida por tipo aditivo selecionando.
 		var idTipoAditivo = idTipoAditivoModalAditivo.options[idTipoAditivoModalAditivo.selectedIndex].value;
 
@@ -652,82 +894,101 @@
 		 var nomeModal          = 'ModalAditivoProduto';
 		 var iconi              = 'success';
 
-		 var urlAction      = document.getElementById("formContrato").action;
+		 var urlAction            = document.getElementById("formContrato").action;
 	     // informaoes para todos!
-		 var dtInicio      = document.getElementById( "dtInicioModalAditivo"           ).value; //  1
-		 var dtFinal       = document.getElementById( "dtFinalModalAditivo"            ).value; //  2
-		 var idTipoAditivo = document.getElementById( "idTipoAditivoModalAditivo"      ).value; //  3
-		 var idStatus      = document.getElementById( "idStatusModalAditivo"           ).value; //  4
-		 var idAditivo     = document.getElementById( "idAditivoModalAditivo"          ).value; //  5
-		 var dtCriacao     = document.getElementById( "dtCriacaoModalAditivo"          ).value; //  6
-		 var observacao    = document.getElementById( "observacaoModalAditivo"         ).value; //  7
-		 var vlrTotal      = document.getElementById( "vlrTotalModalAditivo"           ).value; //  8
-		 var idHubSpotAdi  = document.getElementById( "idHubSpotAditivoPROD"           ).value; //  9
+		 var dtInicio             = document.getElementById( "dtInicioModalAditivo"           ).value; //  1
+		 var dtFinal              = document.getElementById( "dtFinalModalAditivo"            ).value; //  2
+		 var idTipoAditivo        = document.getElementById( "idTipoAditivoModalAditivo"      ).value; //  3
+		 var idStatus             = document.getElementById( "idStatusModalAditivo"           ).value; //  4
+		 var idAditivo            = document.getElementById( "idAditivoModalAditivo"          ).value; //  5
+		 var dtCriacao            = document.getElementById( "dtCriacaoModalAditivo"          ).value; //  6
+		 var observacao           = document.getElementById( "observacaoModalAditivo"         ).value; //  7
+		 var vlrTotal             = document.getElementById( "vlrTotalModalAditivo"           ).value; //  8
+		 var idHubSpotAdi         = document.getElementById( "idHubSpotAditivoPROD"           ).value; //  9
 		 // Incremento de Serviços
-		 var servicoCont   = document.getElementById( "servicoContratadoModalAditivo"  ).value; // 10
-		 var qtyServico    = document.getElementById( "qtyServicoModalAditivo"         ).value; // 11
-		 var vlrUnitServ   = document.getElementById( "vlrUnitservicoModalAditivo"     ).value; // 12 
-		 var descServCont  = document.getElementById( "descServContratadoModalAditivo" ).value; // 13
+		 var servicoCont          = document.getElementById( "servicoContratadoModalAditivo"  ).value; // 10
+		 var qtyServico           = document.getElementById( "qtyServicoModalAditivo"         ).value; // 11
+		 var vlrUnitServ          = document.getElementById( "vlrUnitservicoModalAditivo"     ).value; // 12 
+		 var descServCont         = document.getElementById( "descServContratadoModalAditivo" ).value; // 13
 		 // Contratação do DR
-		 var produtoDR     = document.getElementById( "produtoDRModalAditivo"          ).value; // 14
-		 var tpDR          = document.getElementById( "tpDRModalAditivo"               ).value; // 15
-		 var qtyDR         = document.getElementById( "qtyDRModalAditivo"              ).value; // 16
-		 var vlrUnitDR     = document.getElementById( "vlrUnitDRModalAditivo"          ).value; // 17
+		 var produtoDR            = document.getElementById( "produtoDRModalAditivo"          ).value; // 14
+		 var tpDR                 = document.getElementById( "tpDRModalAditivo"               ).value; // 15
+		 var qtyDR                = document.getElementById( "qtyDRModalAditivo"              ).value; // 16
+		 var vlrUnitDR            = document.getElementById( "vlrUnitDRModalAditivo"          ).value; // 17
 	     // Incremento de Usuário
-		 var qtyUser       = document.getElementById( "qtyUserModalAditivo"            ).value; // 18
-		 var vlrUnitUser   = document.getElementById( "vlrUnitUserMModalAditivo"       ).value; // 19
-		 var produtoUser   = document.getElementById( "produtoUserModalAditivo"        ).value; // 20
+		 var qtyUser              = document.getElementById( "qtyUserModalAditivo"            ).value; // 18
+		 var vlrUnitUser          = document.getElementById( "vlrUnitUserMModalAditivo"       ).value; // 19
+		 var produtoUser          = document.getElementById( "produtoUserModalAditivo"        ).value; // 20
 		 // Contratação de VPN
-		 var produtoVPN    = document.getElementById( "produtoVPNodalAditivo"          ).value; // 21
-		 var tpVPN         = document.getElementById( "tpVPNodalAditivo"               ).value; // 22
-		 var qtyVPN        = document.getElementById( "qtyVPNodalAditivo"              ).value; // 23
-		 var vlrUnitVPN    = document.getElementById( "vlrUnitVPNModalAditivo"         ).value; // 24
+		 var produtoVPN           = document.getElementById( "produtoVPNodalAditivo"          ).value; // 21
+		 var tpVPN                = document.getElementById( "tpVPNodalAditivo"               ).value; // 22
+		 var qtyVPN               = document.getElementById( "qtyVPNodalAditivo"              ).value; // 23
+		 var vlrUnitVPN           = document.getElementById( "vlrUnitVPNModalAditivo"         ).value; // 24
 	     // Formulario principal
-		 var idContrato    = document.getElementById("id_contrato"                     ).value; // 25
+		 var idContrato           = document.getElementById("id_contrato"                     ).value; // 25
 		 // Informacao do tipo de Moeda Contratada para o Atidivo.
-		 var idMoedaMA     = document.getElementById( "id_moedaModalAditivo"           ).value; // 26
-		 var vlrConvertMA  = document.getElementById( "valor_convertidoModalAditivo"   ).value; // 27
-		 var vlrCotacaoMA  = document.getElementById( "valor_CotacaoModalAditivo"      ).value; // 28
-		 var idRascunho    = document.getElementById( "id_rascunhoAditivo"             ).value; // 29
-		 var mRascunho     = document.getElementById( "motivoRascunhoAditivo"          ).value; // 30
+		 var idMoedaMA            = document.getElementById( "id_moedaModalAditivo"           ).value; // 26
+		 var vlrConvertMA         = document.getElementById( "valor_convertidoModalAditivo"   ).value; // 27
+		 var vlrCotacaoMA         = document.getElementById( "valor_CotacaoModalAditivo"      ).value; // 28
+		 var idRascunho           = document.getElementById( "id_rascunhoAditivo"             ).value; // 29
+		 var mRascunho            = document.getElementById( "motivoRascunhoAditivo"          ).value; // 30
+		// Informacoes da comissicao de venda sobre o contrato equivalente a equipe de vendas
+		 var comissaoMA           = document.getElementById( "comissaoModalAditivo"           ).value; // 31
+		 var idValorSetupMA       = document.getElementById( "idValorSetupModalAditivo"       ).value; // 32
+		 var qtyMesesContratoMA   = document.getElementById( "qtyMesesContratoModalAditivo"   ).value; // 33
+		 var vlrParcelasMA        = document.getElementById( "vlrParcelasModalAditivo"        ).value; // 34
+		 var qtyParcSetupMA       = document.getElementById( "qtyParcSetupModalAditivo"       ).value; // 35
 		 
-		 var dados = 'acao=AddAditivoModal' +
-		             '&dtInicio='       	+ dtInicio		+ //  1
-		             '&dtFinal='      		+ dtFinal		+ //  2
-		             '&idTipoAditivo='      + idTipoAditivo	+ //  3
-		             '&idStatus='     		+ idStatus		+ //  4
-		             '&idAditivo='      	+ idAditivo		+ //  5
-		             '&dtCriacao='      	+ dtCriacao		+ //  6
-		             '&observacao='      	+ observacao	+ //  7	 
-		             '&vlrTotal='      		+ vlrTotal		+ //  8
+		 var TempoContratoMA      = document.getElementById( "selectTempoContratoModalAditivo").value; // 36
+		 var observacaoVigenciaMA = document.getElementById( "observacaoVigenciaModalAditivo" ).value; // 37
+
+		 
+		 var dados = 'acao=AddAditivoModal'   +
+		             '&dtInicio='       	  + dtInicio	 	    + //  1
+		             '&dtFinal='      		  + dtFinal		        + //  2
+		             '&idTipoAditivo='        + idTipoAditivo	    + //  3
+		             '&idStatus='     		  + idStatus		    + //  4
+		             '&idAditivo='      	  + idAditivo	 	    + //  5
+		             '&dtCriacao='      	  + dtCriacao		    + //  6
+		             '&observacao='      	  + observacao	        + //  7	 
+		             '&vlrTotal='      		  + vlrTotal		    + //  8
 					 // Incremento de Serviços
-		             '&servicoCont='      	+ servicoCont	+ //  9
-		             '&qtyServico='      	+ qtyServico	+ // 10	 
-		             '&vlrUnitServ='      	+ vlrUnitServ	+ // 11
-		             '&descServCont='      	+ descServCont	+ // 12
+		             '&servicoCont='      	  + servicoCont	        + //  9
+		             '&qtyServico='      	  + qtyServico	        + // 10	 
+		             '&vlrUnitServ='      	  + vlrUnitServ	        + // 11
+		             '&descServCont='      	  + descServCont	    + // 12
 					 // Contratação do DR
-		             '&produtoDR='      	+ produtoDR		+ // 13
-		             '&tpDR='      			+ tpDR			+ // 14
-		             '&qtyDR='      		+ qtyDR			+ // 15
-		             '&vlrUnitDR='      	+ vlrUnitDR		+ // 16
+		             '&produtoDR='      	  + produtoDR		    + // 13
+		             '&tpDR='      			  + tpDR		 	    + // 14
+		             '&qtyDR='      		  + qtyDR		  	    + // 15
+		             '&vlrUnitDR='      	  + vlrUnitDR		    + // 16
 		             // Incremento de Usuário
-		             '&qtyUser='      		+ qtyUser		+ // 17
-		             '&vlrUnitUser='		+ vlrUnitUser	+ // 18
-		             '&produtoUser='		+ produtoUser	+ // 19
+		             '&qtyUser='      		  + qtyUser		        + // 17
+		             '&vlrUnitUser='		  + vlrUnitUser	        + // 18
+		             '&produtoUser='		  + produtoUser	        + // 19
 		 			 // Contratação de VPN
-		             '&produtoVPN='      	+ produtoVPN	+ // 20
-		             '&tpVPN='      		+ tpVPN			+ // 21
-		             '&qtyVPN='      		+ qtyVPN		+ // 22
-		             '&vlrUnitVPN='      	+ vlrUnitVPN	+ // 23
+		             '&produtoVPN='      	  + produtoVPN	        + // 20
+		             '&tpVPN='      		  + tpVPN			    + // 21
+		             '&qtyVPN='      		  + qtyVPN		        + // 22
+		             '&vlrUnitVPN='      	  + vlrUnitVPN	        + // 23
 		             // Formulario principal
-		             '&idContrato='      	+ idContrato	+ // 24
+		             '&idContrato='      	  + idContrato	        + // 24
 		             // Informacao do tipo de Moeda Contratada para o Atidivo.
-		             '&idMoedaMA='      	+ idMoedaMA	    + // 25
-		             '&vlrConvertMA='      	+ vlrConvertMA	+ // 26
- 		             '&vlrCotacaoMA='      	+ vlrCotacaoMA	+ // 27
- 		             '&idHubSpotAdi='      	+ idHubSpotAdi	+ // 28
- 		             '&idRascunho='      	+ idRascunho	+ // 29
- 		             '&mRascunho='      	+ mRascunho    	; // 30 		             
+		             '&idMoedaMA='      	  + idMoedaMA	        + // 25
+		             '&vlrConvertMA='      	  + vlrConvertMA	    + // 26
+ 		             '&vlrCotacaoMA='         + vlrCotacaoMA	    + // 27
+ 		             '&idHubSpotAdi='      	  + idHubSpotAdi	    + // 28
+ 		             '&idRascunho='      	  + idRascunho	        + // 29
+ 		             '&mRascunho='      	  + mRascunho    	    + // 30
+ 		             // Info sombre comissao
+ 		             '&comissaoMA='      	  + comissaoMA	        + // 31
+ 		             '&idValorSetupMA='       + idValorSetupMA      + // 32
+ 		             '&qtyMesesContratoMA='   + qtyMesesContratoMA  + // 33
+ 		             '&vlrParcelasMA='        + vlrParcelasMA       + // 34
+ 		             '&qtyParcSetupMA='       + qtyParcSetupMA	    + // 35
+                     // Info. Vigencia
+ 		             '&TempoContratoMA='      + TempoContratoMA	    + // 36
+ 		             '&observacaoVigenciaMA=' + observacaoVigenciaMA; // 37 		             
  		             
 		 var editCampo = 0;
 		if( idAditivo != null && idAditivo != '' && idAditivo.trim() != '' ){
@@ -981,17 +1242,35 @@
 	//		document.getElementById("idTipoAditivoModalAditivo"    ).selectedIndex = "0";
 			
 			if(novoAdit != 0){
-				$("#idAditivoModalAditivo"         ).val( '' );
-				$("#dtCriacaoModalAditivo"         ).val( '' );
-				$("#valor_convertidoModalAditivo"  ).val( '' );
-				$("#valor_CotacaoModalAditivo"     ).val( '' );
-				document.getElementById("id_moedaModalAditivo").selectedIndex = "0";
-				$("#vlrTotalModalAditivo"          ).val( '' );
-				document.getElementById("idStatusModalAditivo"         ).selectedIndex = "0";
-				$("#observacaoModalAditivo"        ).val( '' );
-				$("#loginCadastroAditivo"          ).val( '' );
-				document.getElementById("idTipoAditivoModalAditivo"    ).selectedIndex = "0";
-				$("#idHubSpotAditivoPROD"          ).val( '' );				
+				$("#idAditivoModalAditivo"          ).val( '' );
+				$("#dtCriacaoModalAditivo"          ).val( '' );
+				$("#valor_convertidoModalAditivo"   ).val( '' );
+				$("#valor_CotacaoModalAditivo"      ).val( '' );
+				document.getElementById("id_moedaModalAditivo"     ).selectedIndex = 0;
+				$("#vlrTotalModalAditivo"           ).val( '' );
+				document.getElementById("idStatusModalAditivo"     ).selectedIndex = 0;
+				$("#observacaoModalAditivo"         ).val( '' );
+				$("#loginCadastroAditivo"           ).val( '' );
+				document.getElementById("idTipoAditivoModalAditivo").selectedIndex = 0;
+				$("#idHubSpotAditivoPROD"           ).val( '' );
+                // Limpa dados Vigencia
+				$("#id_vigenciaModalAditivo"         ).val( '' );
+				$("#dt_criacao_vigenciaModalAditivo" ).val( '' );
+				$("#dtInicioModalAditivo"            ).val( '' );
+				$("#dtFinalModalAditivo"             ).val( '' );
+				$("#observacaoVigenciaModalAditivo"  ).val( '' );
+				document.getElementById("selectTempoContratoModalAditivo").selectedIndex = 0;
+				
+				$("#idValorSetupModalAditivo"        ).val( '' );
+				$("#qtyMesesContratoModalAditivo"    ).val( '' );
+				$("#vlrParcelasModalAditivo"         ).val( '' );
+				$("#qtyParcSetupModalAditivo"        ).val( '' );
+				document.getElementById("comissaoModalAditivo").selectedIndex = 0;
+				
+				
+				// document.getElementById("idSetupModalAditivo"      ).selectedIndex = 0;
+				// $("#idValorSetupModalAditivo"       ).val( '' );	
+
 		    }
 			// Incremento de Serviços
 			document.getElementById("servicoContratadoModalAditivo").selectedIndex = "0";
@@ -1051,11 +1330,15 @@
 	    document.getElementById('qtyVPNodalAditivo'             ).disabled = habilitar;                               
 	    document.getElementById('vlrUnitVPNModalAditivo'        ).disabled = habilitar;                                   
 	    document.getElementById('observacaoModalAditivo'        ).disabled = habilitar;                         
-	    document.getElementById('dtInicioModalAditivo'          ).disabled = habilitar;                            
-	    document.getElementById('dtFinalModalAditivo'           ).disabled = habilitar;
 	    document.getElementById('btAddAditivoModalSalvar'       ).disabled = habilitar;
 	    document.getElementById('id_rascunhoAditivo'            ).disabled = habilitar;
 	    document.getElementById('motivoRascunhoAditivo'         ).disabled = habilitar;
+//	    document.getElementById('idSetupModalAditivo'           ).disabled = habilitar;
+//	    document.getElementById('idValorSetupModalAditivo'      ).disabled = habilitar;
+
+//	    document.getElementById('dtInicioModalAditivo'          ).disabled = habilitar;                            
+//	    document.getElementById('dtFinalModalAditivo'           ).disabled = habilitar;
+	    
 	    
 	 }
 
@@ -1100,7 +1383,7 @@
 				 $("#qtyDRModalAditivo"              ).val( json.qty_produto_contratado     ); // qty_Produto
 				 $("#vlrUnitDRModalAditivo"          ).val( json.valor_unitario_contratado  ); // qty_Produto
 				 
-				// Servico VPN
+				 // Servico VPN
 				 $("#produtoVPNodalAditivo"          ).val( json.id_produto_contratado      ); // id_Produto
 				 $("#tpVPNodalAditivo"               ).val( json.id_tipo_protudo_contratado ); // id_tipo_produto
 				 $("#qtyVPNodalAditivo"              ).val( json.qty_produto_contratado     ); // qty_Produto
@@ -1111,6 +1394,23 @@
 				 $("#id_moedaModalAditivo"           ).val( json.id_moeda                   ); // id_moeda
 				 $("#valor_convertidoModalAditivo"   ).val( json.valor_convertido           ); // valor_convertido
 				 $("#valor_CotacaoModalAditivo"      ).val( json.cotacao_moeda              ); // cotacao_moeda
+				 
+				 // info. vigencia
+				 $("#id_vigenciaModalAditivo"        ).val( json.id_vigencia                ); // id_vigencia
+				 $("#dt_criacao_vigenciaModalAditivo").val( json.dt_criacao_vigencia        ); // dt_criacao_vigencia
+				 $("#selectTempoContratoModalAditivo").val( json.id_tempo_contrato          ); // id_tempo_contrato
+				 $("#dtInicioModalAditivo"           ).val( json.dt_inicio                  ); // dt_inicio
+				 $("#dtFinalModalAditivo"            ).val( json.dt_final                   ); // dt_final
+				 $("#observacaoVigenciaModalAditivo" ).val( json.observacao_vigencia        ); // observacao_vigencia
+				 
+				 
+				 if( json.comissao_adit === true ) $('#comissaoModalAditivo').get(0).selectedIndex = 1;
+				 else $('#comissaoModalAditivo').get(0).selectedIndex = 2;
+				 $("#idValorSetupModalAditivo"    ).val( json.valor_setup_adit         );
+				 $("#qtyMesesContratoModalAditivo").val( json.qty_mese_setup_adit      );
+				 $("#vlrParcelasModalAditivo"     ).val( json.valor_parcela_setup_adit );
+				 $("#qtyParcSetupModalAditivo"    ).val( json.qty_parcela_setup_adit   );
+				 
 	 
 				 divVisibleHidden( json.id_tipo_aditivo, 0, 0 );
 				 

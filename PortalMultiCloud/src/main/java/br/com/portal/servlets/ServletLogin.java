@@ -49,8 +49,21 @@ public class ServletLogin extends ServletGeniricUtil {
 				String loginUnificado = request.getParameter("loginUnificado");
 
 				String urlAPI = "";
-		        if(node.equals("PIBASTIANDEV")) urlAPI = "http://localhost:8091/loginUnificado/";
-		        else urlAPI = "http://10.154.20.134:8091/loginUnificado/";
+				String urlAPIInicioPortalLogin = "";
+				String urlAPI_PortalMudanca = "";
+				
+		        if(node.equals("PIBASTIANDEV")) urlAPI_PortalMudanca = "http://localhost:8090/PortalMudanca/";
+		        else urlAPI_PortalMudanca = "http://10.154.20.134:8090/PortalMudanca/";
+
+				
+		        if(node.equals("PIBASTIANDEV")) {
+		        	urlAPI = "http://localhost:8091/loginUnificado/";
+		        	urlAPIInicioPortalLogin = "http://localhost:8080/pjLoginUnificado/principal/PagPrincipal.jsp";
+		        }
+		        else {
+		        	urlAPI = "http://10.154.20.134:8091/loginUnificado/";
+		        	urlAPIInicioPortalLogin = "http://10.154.20.134:8080/loginunificado/principal/PagPrincipal.jsp";
+		        }
 
 				String urlBuscaLogin = urlAPI + "buscarByLogin/" + login;
 				Users user = UserService.buscaUserLogin( urlBuscaLogin); 
@@ -58,12 +71,16 @@ public class ServletLogin extends ServletGeniricUtil {
 				if( user != null ) {
 					
 					List<ModelPerfilLogado> perfilUserLogados = daoLoginRepository.getPerfilUserLogadoPorLogin( login );
-					request.getSession().setAttribute( "usuario"          , user.getLogin()                             );
-					request.getSession().setAttribute( "nomeUsuario"      , user.getPessoa().getNome_pessoa()           );
-					request.getSession().setAttribute( "fotoUsuario"      , user.getPessoa().getFotouser()              );
-					request.getSession().setAttribute( "useradmin"        , admin                                       );
-					request.getSession().setAttribute( "perfilUserLogados", perfilUserLogados                           );
-					request.getSession().setAttribute( "loginUnificado"   , loginUnificado != null ? loginUnificado : 0 );
+					request.getSession().setAttribute( "usuario"                , user.getLogin()                             );
+					request.getSession().setAttribute( "usuarioEmail"           , user.getPessoa().getEmail()                 );
+					request.getSession().setAttribute( "nomeUsuario"            , user.getPessoa().getNome_pessoa()           );
+					request.getSession().setAttribute( "fotoUsuario"            , user.getPessoa().getFotouser()              );
+					request.getSession().setAttribute( "useradmin"              , admin                                       );
+					request.getSession().setAttribute( "perfilUserLogados"      , perfilUserLogados                           );
+					request.getSession().setAttribute( "loginUnificado"         , loginUnificado != null ? loginUnificado : 0 );
+					request.getSession().setAttribute( "urlAPIInicioPortalLogin", urlAPIInicioPortalLogin                     );
+					request.getSession().setAttribute( "urlAPI_PortalMudanca"   , urlAPI_PortalMudanca                     );
+					
 					
 					String nomeDatabase = daoLoginRepository.getNomeDataBase();
 
@@ -80,7 +97,7 @@ public class ServletLogin extends ServletGeniricUtil {
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher(url);
 					requestDispatcher.forward(request, response);
 				}else {
-					request.setAttribute("msg", "Login ou Senha incorretamentos!");
+					request.setAttribute("msg", "Login ou Senha incorretos!");
 					String urlLonginUnificado = "";
 			        if(node.equals("PIBASTIANDEV")) urlLonginUnificado = "http://localhost:8080/pjLoginUnificado/index.jsp";
 			        else urlLonginUnificado       = "http://10.154.20.134:8080/loginunificado/index.jsp";
@@ -94,7 +111,7 @@ public class ServletLogin extends ServletGeniricUtil {
 */					
 				}
 			}else {
-				request.setAttribute("msg", "Login ou Senha incorretamentos!");
+				request.setAttribute("msg", "Login ou Senha incorretos!");
 				String urlLonginUnificado = "";
 		        if(node.equals("PIBASTIANDEV")) urlLonginUnificado = "http://localhost:8080/pjLoginUnificado/index.jsp";
 		        else urlLonginUnificado       = "http://10.154.20.134:8080/loginunificado/index.jsp";
@@ -171,12 +188,12 @@ public class ServletLogin extends ServletGeniricUtil {
 					requestDispatcher.forward(request, response);
 				}else {
 					RequestDispatcher requestDispatcher = request.getRequestDispatcher("/index.jsp");
-					request.setAttribute("msg", "Login ou Senha incorretamentos!");
+					request.setAttribute("msg", "Login ou Senha incorretos!");
 					requestDispatcher.forward(request, response);
 				}
 			}else {
 				RequestDispatcher requestDispatcher = request.getRequestDispatcher("index.jsp");
-				request.setAttribute("msg", "Informe Login e Senha corretamente!");
+				request.setAttribute("msg", "Informe Login e Senha corretos!");
 				requestDispatcher.forward(request, response);
 			}
 		}catch (Exception e) {
