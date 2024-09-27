@@ -1,8 +1,8 @@
 
-function atualizaVlrContratoBase(){
+function atualizaVlrContratoBase( qtyParcelas ){
 	let vlrContrato = document.getElementById("valor_total").value; 
 	vlrContrato = vlrContrato.replace(".", "").replace(",", ".");
-	let vlr = parseFloat( vlrContrato );
+	let vlr = ( parseFloat( vlrContrato ) * qtyParcelas );
 	const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 	document.getElementById("vlrContratoBase").value = formatado; 
 }
@@ -31,14 +31,14 @@ async function calcular(){
 		  var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
 		  let vlrContrato = document.getElementById("valor_total").value; 
 		  vlrConvet =  parseFloat( vlrContrato.replace(".", "").replace(",", ".") );
-		  let vlrParcela = vlrConvet / total;
+		  let vlrParcela = vlrConvet;//  total;
 		  document.getElementById("qtyMesesContrato").value = total;			
 		  document.getElementById("vlrParcelas"     ).value = vlrParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
+		  atualizaVlrContratoBase( total ); // Atualizar valor total base de cauclo na tela.
 		  if(idSetup === "1" ){
 			 
 			if( total > 35 ){
-				var vlr = vlrConvet / total;
+				var vlr = vlrConvet; // total;
 				const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 				document.getElementById("idValorSetup").value = formatado;
 				document.getElementById("qtyParcSetup").value = "1";
@@ -59,7 +59,7 @@ async function calcular(){
 			vlrContrato = vlrContrato.replace(".", "").replace(",", ".");
 
 			let vlrConvet = parseFloat( vlrContrato )
-			var vlr = (vlrConvet / total) * 0.02;
+			var vlr = (vlrConvet /*/ total*/) * 0.02;
 			const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 			document.getElementById("idValorSetup").value = formatado;
 			document.getElementById("qtyParcSetup").value = total;
@@ -399,7 +399,7 @@ $(document).ready( function(){
   /******************************************************************/ 
   function habilitaCotacao() {
 	
-	var idMoeda              = document.getElementById("id_moeda"  ).value;
+	var idMoeda              = document.getElementById("selectIdMoeda").value;
 	var inputValorConvertido = document.querySelector("#valor_convertido");
 	var inputValorCotacao    = document.querySelector("#valor_Cotacao");
 	

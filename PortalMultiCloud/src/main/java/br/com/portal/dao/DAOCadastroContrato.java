@@ -76,7 +76,7 @@ public class DAOCadastroContrato {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			DAOError daoError = new DAOError();
-			String errorContatenado = "ID Produto: " + objeto.getId_contrato() + " - Contrato: " + objeto.getId_contrato() + " - Error: " + e.getMessage();
+			String errorContatenado = "ID Produto: " + objeto.getId_produto() + " - Contrato: " + objeto.getId_contrato() + " - Error: " + e.getMessage();
 			daoError.insertError("DAOCadastroContrato", "cadastroContrato.jsp", "Cadastro Contrato(Produto)", "73", loginUser, errorContatenado );
 
 		}
@@ -327,11 +327,11 @@ public class DAOCadastroContrato {
 			prepareSql.setLong     (21, objeto.getId_rascunho()                                );
 			prepareSql.setLong     (22, objeto.getId_suporte_b1()                              );
 			prepareSql.setLong     (23, objeto.getId_comercial()                               );
-			prepareSql.setBoolean  (24, objeto.getComissao().equalsIgnoreCase("Sim")? true: false );
+			prepareSql.setBoolean  (24, objeto.getComissao().equalsIgnoreCase("1")? true: false );
 			prepareSql.setString   (25, objeto.getValor_setup()                                );
 			prepareSql.setInt      (26, objeto.getQty_parcela_setup()                          );
 			prepareSql.setString   (27, objeto.getValor_parcela_setup()                        );
-			prepareSql.setInt      (26, objeto.getQty_mese_setup()                             );
+			prepareSql.setInt      (28, objeto.getQty_mese_setup()                             );
 
 			prepareSql.execute();
 			connection.commit();

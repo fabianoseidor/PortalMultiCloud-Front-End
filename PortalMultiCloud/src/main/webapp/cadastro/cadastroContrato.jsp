@@ -190,7 +190,7 @@
 																    <!-- Campo Moeda -->
 															  	    <div class="form-group form-default form-static-label col-md-3 mb-4">
 																	    <span  class="font-weight-bold font-italic" style="color: #708090">Moeda</span>
-																	    <select style="color: #000000" name="id_moeda" id="id_moeda" class="form-control step_1_validar" onchange="habilitaCotacao();"  >
+																	    <select style="color: #000000" name="selectIdMoeda" id="selectIdMoeda" class="form-control step_1_validar" onchange="habilitaCotacao();"  >
 																		    <option value="" disabled selected>[-Selecione-]</option>
 																		    <tagsContrato:listaMoeda />
 																	    </select> 
@@ -198,7 +198,7 @@
 
 																    <div class="form-group form-default form-static-label col-md-3 mb-4">
 																        <span  class="font-weight-bold font-italic" style="color: #708090" >Valor Corrente</span>
-																	    <input style="color: #000000" type="text" name="valor_total" id="valor_total" onblur="cauculoConversao();atualizaVlrContratoBase();" class="form-control step_1_validar"  placeholder="Valor do contrato" value="">
+																	    <input style="color: #000000" type="text" name="valor_total" id="valor_total" onblur="cauculoConversao();" class="form-control step_1_validar"  placeholder="Valor do contrato" value="">
 																    </div>
 
 																    <div class="form-group form-default form-static-label col-md-3 mb-4">
@@ -406,7 +406,7 @@
 																     </div>	 
 																	 -->
 																	 <input type="hidden"  name="pepEscondido" id="pepEscondido" readonly="readonly" value="${modelContrato.pep}">
-			                                                         <div class="form-group form-default form-static-label col-md-4 mb-6">
+			                                                         <div class="form-group form-default form-static-label col-md-3 mb-3">
 
 																          <label for="pep" class="col-md-2 col-form-label font-weight-bold font-italic" style="color: #708090">PEP</label>
 																	     <select style="color: #000000" name="pep" id="pep" class="form-control step_1_validar" >
@@ -415,15 +415,26 @@
 																     </div>	 
 
 			                                                         <!-- Campo ID HubSpot -->
-			                                                         <div class="form-group form-default form-static-label col-md-4 mb-6">
+			                                                         <div class="form-group form-default form-static-label col-md-3 mb-3">
 																	      <span class="font-weight-bold font-italic" style="color: #708090">ID HubSpot</span>
 																	      <input style="color: #000000" type="text" name="id_hub_spot" id="id_hub_spot" maxlength="20" class="form-control" placeholder="Informe o ID HubSpot do cliente" value=""> 
 																	 </div>
 																     <!-- Campo Nuvem -->
-																     <div class="form-group form-default form-static-label col-md-3 mb-6">
+																     <div class="form-group form-default form-static-label col-md-3 mb-3">
 																          <span class="font-weight-bold font-italic" style="color: #708090">Quantidade Usuário</span>
 		                                                                  <input style="color: #000000" type="number" name="qty_usuario_contratada" id="qty_usuario_contratada"  class="form-control step_1_validar"  placeholder="Informe a quantdade" value="">
 																     </div>
+																     
+																     <!-- Abrir GMUD -->
+																     <div class="form-group form-default form-static-label col-md-2 mb-2">
+																          <span class="font-weight-bold font-italic" style="color: #708090">Abrir GMUD</span>
+																	      <select style="color: #000000" name="isGmud" id="isGmud" class="form-control step_1_validar">
+																	         <option value="" disabled selected>[-Selecione-]</option>
+																	         <option value=1>Sim</option>
+																	         <option value=2>Não</option>
+																	      </select> <!-- <label class="float-label">Termo Administrador</label> -->
+																     </div>
+
 															    </div>
 															    <div class="nomeArquivo"></div>
 															    <hr>  
@@ -495,7 +506,7 @@
 																							</div>
 																							
 																						    <div class="form-group form-default form-static-label col-md-2 mb-4">
-																							    <span class="font-weight-bold font-italic" style="color: #708090">Quantidades Meses Contrato</span>
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Qty Meses Contrato</span>
 																							    <input style="color: #000000" type="text" name="qtyMesesContrato" id="qtyMesesContrato" disabled="disabled" class="form-control" placeholder="Quantidades Meses Contrato" value="">
 																						    </div>
 																						    
@@ -509,7 +520,7 @@
 																						    </div>
 																						    
 																						    <div class="form-group form-default form-static-label col-md-2 mb-4">
-																							    <span class="font-weight-bold font-italic" style="color: #708090">Quantidade Parcelas Comissão</span>
+																							    <span class="font-weight-bold font-italic" style="color: #708090">Qty Parcelas Comissão</span>
 																							    <input style="color: #000000" type="text" name="qtyParcSetup" id="qtyParcSetup" disabled="disabled" class="form-control" placeholder="Quantidade Parcelas Comissão" value="">
 																						    </div>
 																							

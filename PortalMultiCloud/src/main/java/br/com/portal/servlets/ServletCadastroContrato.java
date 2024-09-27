@@ -424,27 +424,28 @@ public class ServletCadastroContrato extends HttpServlet {
 				request.setAttribute("msg", retornoProcessamento);	
 			}
 			
-			if( !dadosContrato.isRenovacao() ) {
-                // <!-- URL da base da API Base TST ou PRD  -->
-				String urlBase           = (String) session.getAttribute("urlAPI_PortalMudanca");
-			    String loginUser         = (String) session.getAttribute("usuario");
-				String email_solicitante = (String) session.getAttribute("usuarioEmail");		
-				String idCliente         = dadosContrato.getId_cliente().toString();
-				String idContrato        = dadosContrato.getId_contrato().toString();
-				String urlPostMudacao    = urlBase + "salvarMudancaPadrao";  // "http://localhost:8090/PortalMudanca/salvarMudancaPadrao"
-				
-				CriarMudancaComissionamento criarMudancaComiss = new CriarMudancaComissionamento( urlBase,idCliente, idContrato, loginUser, email_solicitante );
-				try {
-					String result = criarMudancaComiss.sendPOST( urlPostMudacao );
+			if( dadosContrato.getIsGmud()  ) {
+				if( !dadosContrato.isRenovacao() ) {
+	                // <!-- URL da base da API Base TST ou PRD  -->
+					String urlBase           = (String) session.getAttribute("urlAPI_PortalMudanca");
+				    String loginUser         = (String) session.getAttribute("usuario");
+					String email_solicitante = (String) session.getAttribute("usuarioEmail");		
+					String idCliente         = dadosContrato.getId_cliente().toString();
+					String idContrato        = dadosContrato.getId_contrato().toString();
+					String urlPostMudacao    = urlBase + "salvarMudancaPadrao";  // "http://localhost:8090/PortalMudanca/salvarMudancaPadrao"
 					
-					System.out.println( result );
+					CriarMudancaComissionamento criarMudancaComiss = new CriarMudancaComissionamento( urlBase,idCliente, idContrato, loginUser, email_solicitante );
+					try {
+						String result = criarMudancaComiss.sendPOST( urlPostMudacao );
+						
+						System.out.println( result );
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
-				
 			}
-
 			
 		    String url= request.getContextPath() + "/ServletContratoController?acao=buscarContratoCliente&idContratoCliente=" + dadosContrato.getId_cliente();
 			response.sendRedirect( url ); 
@@ -521,37 +522,38 @@ public class ServletCadastroContrato extends HttpServlet {
 	/*                                                                */
 	/******************************************************************/
 	public ModelContrato trataObjetoContrato ( JSONObject objJsonContrato, JSONObject objJsonVigencia, HttpServletRequest request ) throws IOException, ServletException {
-		
-		String id_cliente             = objJsonContrato.getString( "id_cliente"             );
-		String nomeCliente            = objJsonContrato.getString( "nomeCliente"            );
-		String valor_total            = objJsonContrato.getString( "valor_total"            );
-		String valor_Cotacao          = objJsonContrato.getString( "valor_Cotacao"          );
-		String valor_convertido       = objJsonContrato.getString( "valor_convertido"       );
-//		String extensaocontratopdf    = objJsonContrato.getString( "arqContratoPDF"         );
-		String pep                    = objJsonContrato.getString( "pep"                    );
-		String id_hub_spot            = objJsonContrato.getString( "id_hub_spot"            );
-		String qty_usuario_contratada = objJsonContrato.getString( "qty_usuario_contratada" );
-		String id_moeda               = objJsonContrato.getString( "id_moeda"               );
-		String id_status_contrato     = objJsonContrato.getString( "id_status_contrato"     );
-		String id_rascunho            = objJsonContrato.getString( "id_rascunho"            );
-		String motivo_rascunho        = objJsonContrato.getString( "motivoRascunho"         );
-		String id_nuvem               = objJsonContrato.getString( "id_nuvem"               );
-		String id_site                = objJsonContrato.getString( "id_site"                );
-		String id_fase_contrato       = objJsonContrato.getString( "id_fase_contrato"       );
-		String id_ciclo_update        = objJsonContrato.getString( "id_ciclo_updadate"      );
-		String id_servico_contratado  = objJsonContrato.getString( "id_servico_contratado"  );
-		String termo_admin            = objJsonContrato.getString( "termo_admin"            );
-		String termo_download         = objJsonContrato.getString( "termo_download"         );
-		String observacao             = objJsonContrato.getString( "observacao"             ); 
-		String isRenovacao            = objJsonContrato.getString( "isRenovacao"            );
-		String id_contrato_origem     = objJsonContrato.getString( "id_contrato"            );		
-		String id_suporte_b1          = objJsonContrato.getString( "id_suporte_b1"          );
-		String id_comercial           = objJsonContrato.getString( "id_comercial"           );		
-		String comissao               = objJsonContrato.getString( "comissao"               );
-		String valor_setup            = objJsonContrato.getString( "valor_setup"            );		
-		String qty_parcela_setup      = objJsonContrato.getString( "qty_parcela_setup"      );
-		String valor_parcela_setup    = objJsonContrato.getString( "valor_parcela_setup"    );		
-		String qty_mes_setup          = objJsonContrato.getString( "qty_mes_setup"          );
+	 	
+		String id_cliente             = objJsonContrato.getString ( "id_cliente"             );
+		String nomeCliente            = objJsonContrato.getString ( "nomeCliente"            );
+		String valor_total            = objJsonContrato.getString ( "valor_total"            );
+		String valor_Cotacao          = objJsonContrato.getString ( "valor_Cotacao"          );
+		String valor_convertido       = objJsonContrato.getString ( "valor_convertido"       );
+//		String extensaocontratopdf    = objJsonContrato.getString ( "arqContratoPDF"         );
+		String pep                    = objJsonContrato.getString ( "pep"                    );
+		String id_hub_spot            = objJsonContrato.getString ( "id_hub_spot"            );
+		String qty_usuario_contratada = objJsonContrato.getString ( "qty_usuario_contratada" );
+		String id_moeda               = objJsonContrato.getString ( "id_moeda"               );
+		String id_status_contrato     = objJsonContrato.getString ( "id_status_contrato"     );
+		String id_rascunho            = objJsonContrato.getString ( "id_rascunho"            );
+		String motivo_rascunho        = objJsonContrato.getString ( "motivoRascunho"         );
+		String id_nuvem               = objJsonContrato.getString ( "id_nuvem"               );
+		String id_site                = objJsonContrato.getString ( "id_site"                );
+		String id_fase_contrato       = objJsonContrato.getString ( "id_fase_contrato"       );
+		String id_ciclo_update        = objJsonContrato.getString ( "id_ciclo_updadate"      );
+		String id_servico_contratado  = objJsonContrato.getString ( "id_servico_contratado"  );
+		String termo_admin            = objJsonContrato.getString ( "termo_admin"            );
+		String termo_download         = objJsonContrato.getString ( "termo_download"         );
+		String observacao             = objJsonContrato.getString ( "observacao"             ); 
+		String isRenovacao            = objJsonContrato.getString ( "isRenovacao"            );
+		String id_contrato_origem     = objJsonContrato.getString ( "id_contrato"            );		
+		String id_suporte_b1          = objJsonContrato.getString ( "id_suporte_b1"          );
+		String id_comercial           = objJsonContrato.getString ( "id_comercial"           );		
+		String comissao               = objJsonContrato.getString ( "comissao"               );
+		String valor_setup            = objJsonContrato.getString ( "valor_setup"            );		
+		String qty_parcela_setup      = objJsonContrato.getString ( "qty_parcela_setup"      );
+		String valor_parcela_setup    = objJsonContrato.getString ( "valor_parcela_setup"    );		
+		String qty_mes_setup          = objJsonContrato.getString ( "qty_mes_setup"          );
+		Boolean isGmud                = objJsonContrato.getBoolean( "isGmud"                 );
 		
 		
 	    HttpServletRequest req        = (HttpServletRequest) request;
@@ -633,6 +635,7 @@ public class ServletCadastroContrato extends HttpServlet {
 		contrato.setQty_parcela_setup     ( qty_parcela_setup       != null && !qty_parcela_setup.isEmpty()      ? Integer.valueOf(qty_parcela_setup.trim())   : 0    );
 		contrato.setValor_parcela_setup   ( valor_parcela_setup     != null && !valor_parcela_setup.isEmpty()    ? valor_parcela_setup.trim()                  : null );
 		contrato.setQty_mese_setup        ( qty_mes_setup           != null && !qty_mes_setup.isEmpty()          ? Integer.valueOf(qty_mes_setup.trim())       : 0    );
+		contrato.setIsGmud                (isGmud);
 		// 
 
 	    // informacoes sobre a vigencia do contrato.

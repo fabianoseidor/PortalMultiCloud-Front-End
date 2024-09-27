@@ -48,7 +48,17 @@ public class ModelContrato {
 	private int     qty_parcela_setup;
 	private int     qty_mese_setup;
 	
-	
+	// Variavel para controle da abertura de GMUD automatica.
+	private Boolean isGmud;
+
+	public Boolean getIsGmud() {
+		return isGmud;
+	}
+
+	public void setIsGmud(Boolean isGmud) {
+		this.isGmud = isGmud;
+	}
+
 	public String getComissao() {
 		return comissao;
 	}

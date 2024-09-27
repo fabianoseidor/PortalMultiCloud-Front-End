@@ -1067,7 +1067,7 @@ public class ServletContratoController extends HttpServlet {
 					    modelAitivoRecursoModal.setHubspot_aditivo            ( idHubSpotAditivoMAR         != null && !idHubSpotAditivoMAR.isEmpty()         ? idHubSpotAditivoMAR.trim()                    : null );
 					    modelAitivoRecursoModal.setId_rascunho                ( id_rascunhoMAR              != null && !id_rascunhoMAR.isEmpty()              ? Long.parseLong( id_rascunhoMAR.trim() )       : null );
 					    modelAitivoRecursoModal.setMotivoRascunho             ( motivoRascunhoMAR           != null && !motivoRascunhoMAR.isEmpty()           ? motivoRascunhoMAR.trim()                      : null );
-					    modelAitivoRecursoModal.setComissao_adit              ( Integer.parseInt(comissaoMAR)== 1                                             ? true                                          : false);
+					    modelAitivoRecursoModal.setComissao_adit              ( (comissaoMAR != null && !comissaoMAR.isEmpty()? Integer.parseInt(comissaoMAR)== 1 : false) ? true                             : false);
 					    modelAitivoRecursoModal.setValor_setup_adit           ( idValorSetupMAR             != null && !idValorSetupMAR.isEmpty()             ? idValorSetupMAR.trim()                        : null );
 					    modelAitivoRecursoModal.setQty_mese_setup_adit        ( qtyMesesContratoMAR         != null && !qtyMesesContratoMAR.isEmpty()         ? Integer.valueOf( qtyMesesContratoMAR.trim() ) : 0    );
 					    modelAitivoRecursoModal.setValor_parcela_setup_adit   ( vlrParcelasMAR              != null && !vlrParcelasMAR.isEmpty()              ? vlrParcelasMAR.trim()                         : null );

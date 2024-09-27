@@ -1315,12 +1315,22 @@
  			var selected = '';
  			var json = JSON.parse(lista);  
  			for(var p = 0; p < json.length; p++){
- 	 			if( json[p].pep === pep ) selected = 'selected';
+ 	 			if( json[p].pep === pep ) 
+ 	 				selected = 'selected';
  	 			else selected = '';
  				
 // 				option += '<option value=' + json[p].idContrato + ' ' + selected + '>' + json[p].pep + '</option>';
  				option += '<option value=' + json[p].pep + ' ' + selected + '>' + json[p].pep + '</option>';
  			}
+ 			
+ 			let idStatusContrato = document.getElementById("id_status_contrato").value;
+ 			if(idStatusContrato === 4 && pep !== 'EP PROVISÓRIO' ){
+ 				$('#pep').append('<option>PEP PROVISÓRIO</option>');
+ 				
+ 				option += '<option value="PEP" selected >"PEP PROVISÓRIO"</option>';
+            }
+ 			
+ 			
  			$("#pep").html(option).show();  
  /*			
  			for(var p = 0; p < json.length; p++){

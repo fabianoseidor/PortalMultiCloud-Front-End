@@ -792,14 +792,14 @@
 				  var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
 				   
 				  vlrConvet =  parseFloat( vlrContrato.replace(".", "").replace(".", "").replace(",", ".") );
-				  let vlrParcela = vlrConvet / total;
+				  let vlrParcela = vlrConvet;// / total;
 				  document.getElementById("qtyMesesContratoMAR").value = total;			
 				  document.getElementById("vlrParcelasMAR"     ).value = vlrParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 		
 				  if(idSetup === "1" ){
 					 
 					if( total > 35 ){
-						var vlr = vlrConvet / total;
+						var vlr = vlrConvet;// / total;
 						const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 						document.getElementById("idValorSetupMAR").value = formatado;
 						document.getElementById("qtyParcSetupMAR").value = "1";
@@ -819,7 +819,7 @@
 					vlrContrato = vlrContrato.replace(".", "").replace(",", ".");
 		
 					let vlrConvet = parseFloat( vlrContrato )
-					var vlr = (vlrConvet / total) * 0.02;
+					var vlr = (vlrConvet/* / total */ ) * 0.02;
 					const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 					document.getElementById("idValorSetupMAR").value = formatado;
 					document.getElementById("qtyParcSetupMAR").value = total;
@@ -1170,7 +1170,7 @@ function selecionaCpuRamVlrFamilia( idFamiliaFlSelect ) {
 			$("#nomeAprovadorMAR"           ).val( '' );
 			$("#periodoUtilizacaoMAR"       ).val( '' );			
 			$("#idValorSetupMAR"            ).val( '' );
-			$('#idTipoAditivoMAR'           ).get(0).selectedIndex = 0;
+//			$('#idTipoAditivoMAR'           ).get(0).selectedIndex = 0;
 			
 			// Limpeza para inserir novo item
 			if( tipoLimpeza !== 1 ){

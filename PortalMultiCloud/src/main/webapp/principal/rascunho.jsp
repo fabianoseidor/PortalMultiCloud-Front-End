@@ -156,6 +156,7 @@
 			            // Botao Editar
 			            let imgEdit = document.createElement('img');
 			            imgEdit.src = getContextPath() +'/imagens/edit-20.png';
+			            imgEdit.setAttribute('style', 'cursor:pointer;' );
 			            let funcEdit = "goContrato( " + listRascunho[i].id_cliente + ")";
 			            imgEdit.setAttribute('onclick', funcEdit);
 			            imgEdit.setAttribute('data-toggle', 'tooltip' );
@@ -167,6 +168,7 @@
 			            // Botao Delete
 			            let imgDelete = document.createElement('img');
 			            imgDelete.src = getContextPath() +'/imagens/delete-20.png';
+			            imgDelete.setAttribute('style', 'cursor:pointer;' );
 			            let funcdelete = "deleteRascunho( " + listRascunho[i].id_contrato   + ", " 
                                                             + listRascunho[i].id_aditivo    + ", '" 
                                                             + listRascunho[i].razao_social  +"' )";

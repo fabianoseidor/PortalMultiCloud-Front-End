@@ -75,11 +75,13 @@ class Contrato{
 
             let imgDelete = document.createElement('img');
             imgDelete.src = this.getContextPath() +'/imagens/delete-40.png';
+			imgDelete.setAttribute('style', 'cursor:pointer;' );
             imgDelete.setAttribute('onclick','contrato.delete( ' + this.listRecursos[i].idRecurso + ' )');
             td_delete.appendChild(imgDelete);
              
             let imgEdit = document.createElement('img');
             imgEdit.src = this.getContextPath() +'/imagens/edit-40.png';
+			imgEdit.setAttribute('style', 'cursor:pointer;' );
             imgEdit.setAttribute('onclick','contrato.preparaEdit( ' + JSON.stringify(this.listRecursos[i]) + ' )');
             td_editar.appendChild(imgEdit);
 		}
@@ -382,11 +384,13 @@ class Contrato{
  
             let imgDelete = document.createElement('img');
             imgDelete.src = this.getContextPath() +'/imagens/delete-40.png';
+			imgDelete.setAttribute('style', 'cursor:pointer;' );
             imgDelete.setAttribute('onclick','contrato.deleteProdutos( ' + this.listProduto[i].idProduto + ' )');
             td_delete.appendChild(imgDelete);
              
             let imgEdit = document.createElement('img');
             imgEdit.src = this.getContextPath() +'/imagens/edit-40.png';
+			imgEdit.setAttribute('style', 'cursor:pointer;' );
             imgEdit.setAttribute('onclick','contrato.preparaEditProdutos( ' + JSON.stringify(this.listProduto[i]) + ' )');
             td_editar.appendChild(imgEdit);
 		}
@@ -418,7 +422,8 @@ class Contrato{
 	    for(let i = 0; i < this.listProduto.length; i++){
 		    if( this.listProduto[i].idProduto === id ){
 				
-		        this.listProduto[i].idProdutoBD = select.options[selectProduto.selectedIndex].value;
+//		        this.listProduto[i].idProdutoBD = select.options[selectProduto.selectedIndex].value;
+				this.listProduto[i].idProdutoBD = document.getElementById("selectProduto").value;
 		        this.listProduto[i].produto     = $('#selectProduto').find(":selected").text( );
 		        this.listProduto[i].vlrProduto  = document.getElementById("vlrProduto").value;
 		        this.listProduto[i].obsProduto  = document.getElementById("obsProduto").value;
@@ -482,7 +487,8 @@ class Contrato{
     lerDadosProdutos(){
 		let produto = {};
 		produto.idProduto   = this.idProduto;
-        produto.idProdutoBD = select.options[selectProduto.selectedIndex].value;
+//        produto.idProdutoBD = select.options[selectProduto.selectedIndex].value;
+		produto.idProdutoBD = document.getElementById("selectProduto").value;
         produto.produto     = $('#selectProduto').find(":selected").text( );
         produto.vlrProduto  = document.getElementById("vlrProduto").value;
         produto.obsProduto  = document.getElementById("obsProduto").value;
@@ -516,26 +522,32 @@ class Contrato{
 		contrato.valor_Cotacao          = document.getElementById("valor_Cotacao"         ).value;
 		contrato.valor_convertido       = document.getElementById("valor_convertido"      ).value;
 		contrato.arqContratoPDF         = document.getElementById("arqContratoPDF"        ).value;
-		contrato.pep                    = document.getElementById("pep"                   ).value;
+//		contrato.pep                    = document.getElementById("pep"                   ).value;
+		contrato.pep                    = $('#pep').find(":selected").text( )       ;
 		contrato.id_hub_spot            = document.getElementById("id_hub_spot"           ).value;
 		contrato.qty_usuario_contratada = document.getElementById("qty_usuario_contratada").value;
-		// select                                   
-		contrato.id_moeda               = select.options[id_moeda.selectedIndex           ].value;
-		contrato.moeda                  = $('#id_moeda').find(":selected").text( )          ;
-		contrato.id_status_contrato     = select.options[id_status_contrato.selectedIndex ].value;
-		contrato.status_contrato        = $('#id_status_contrato').find(":selected").text( )       ;
+		// select            
+		contrato.id_moeda               = document.getElementById("selectIdMoeda").value;
+		contrato.moeda                  = $('#selectIdMoeda').find(":selected").text( )       ;
+				
+		contrato.id_status_contrato     = document.getElementById("id_status_contrato").value;
+		contrato.status_contrato        = $('#id_status_contrato').find(":selected").text( );
 		
-		contrato.id_rascunho            = select.options[id_rascunho.selectedIndex        ].value;
+//		contrato.id_rascunho            = select.options[id_rascunho.selectedIndex        ].value;
+		contrato.id_rascunho            = document.getElementById("id_rascunho").value;
 		contrato.rascunho               = $('#id_rascunho').find(":selected").text( )       ;
 		contrato.motivoRascunho         = document.getElementById("motivoRascunho"        ).value;
 		
-		contrato.id_nuvem               = select.options[id_nuvem.selectedIndex           ].value;
+//		contrato.id_nuvem               = select.options[id_nuvem.selectedIndex           ].value;
+		contrato.id_nuvem               = document.getElementById("id_nuvem").value;
 		contrato.nuvem                  = $('#id_nuvem').find(":selected").text( )                 ;
-		contrato.id_site                = select.options[id_site.selectedIndex            ].value;
+//		contrato.id_site                = select.options[id_site.selectedIndex            ].value;
+		contrato.id_site                = document.getElementById("id_site").value;
 		contrato.site                   = $('#id_site').find(":selected").text( )                  ;
-		contrato.id_fase_contrato       = select.options[id_fase_contrato.selectedIndex   ].value;
+//		contrato.id_fase_contrato       = select.options[id_fase_contrato.selectedIndex   ].value;
+		contrato.id_fase_contrato       = document.getElementById("id_fase_contrato").value;
 		contrato.fase_contrato          = $('#id_fase_contrato').find(":selected").text( );
-		contrato.id_ciclo_updadate      = document.getElementById("id_ciclo_updadate").value; 
+		contrato.id_ciclo_updadate      = document.getElementById("id_ciclo_updadate").value;
 		contrato.ciclo_updadate         = $('#id_ciclo_updadate').find(":selected").text( );
 		
 		contrato.id_suporte_b1          = document.getElementById("id_suporte_b1").value; 
@@ -545,10 +557,12 @@ class Contrato{
 
 		contrato.id_servico_contratado  = document.getElementById("id_servico_contratado").value;		
 		contrato.servico_contratado     = $('#id_servico_contratado').find(":selected").text( )    ;
-		contrato.termo_admin            = select.options[termo_admin.selectedIndex          ].value;
+//		contrato.termo_admin            = select.options[termo_admin.selectedIndex          ].value;
+		contrato.termo_admin            = document.getElementById("termo_admin").value;	
 		contrato.termo_adminShow        = $('#termo_admin').find(":selected").text( )              ;
-		contrato.termo_download         = select.options[termo_download.selectedIndex       ].value;
-		contrato.termo_downloadShow     = $('#termo_download').find(":selected").text( )            ; 
+//		contrato.termo_download         = select.options[termo_download.selectedIndex       ].value;
+		contrato.termo_download         = document.getElementById("termo_download").value;	
+		contrato.termo_downloadShow     =$('#termo_download').find(":selected").text( )              ;
 		// textarea                                    
 		contrato.observacao             = document.getElementById("observacao").value;
 		contrato.isRenovacao            = document.getElementById("renovacaoContratoControle").value;
@@ -557,7 +571,8 @@ class Contrato{
 		contrato.valor_setup            = '';
 		contrato.qty_parcela_setup      = '';		
 		contrato.valor_parcela_setup    = '';
-		
+		contrato.isGmud                 = (document.getElementById("isGmud").value === 1 ? true : false);
+	
 		return contrato;
 	}
 

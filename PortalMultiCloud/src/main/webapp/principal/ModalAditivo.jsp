@@ -528,14 +528,14 @@
 				  var total = (data2.getFullYear() - data1.getFullYear())*12 + (data2.getMonth() - data1.getMonth());
 				   
 				  vlrConvet =  parseFloat( vlrContrato.replace(".", "").replace(",", ".") );
-				  let vlrParcela = vlrConvet / total;
+				  let vlrParcela = vlrConvet; // / total;
 				  document.getElementById("qtyMesesContratoModalAditivo").value = total;			
 				  document.getElementById("vlrParcelasModalAditivo"     ).value = vlrParcela.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 		
 				  if(idSetup === "1" ){
 					 
 					if( total > 35 ){
-						var vlr = vlrConvet / total;
+						var vlr = vlrConvet; // / total;
 						const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 						document.getElementById("idValorSetupModalAditivo").value = formatado;
 						document.getElementById("qtyParcSetupModalAditivo").value = "1";
@@ -555,7 +555,7 @@
 					vlrContrato = vlrContrato.replace(".", "").replace(",", ".");
 		
 					let vlrConvet = parseFloat( vlrContrato )
-					var vlr = (vlrConvet / total) * 0.02;
+					var vlr = (vlrConvet/* / total */ ) * 0.02;
 					const formatado = vlr.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 					document.getElementById("idValorSetupModalAditivo").value = formatado;
 					document.getElementById("qtyParcSetupModalAditivo").value = total;
