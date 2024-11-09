@@ -3,6 +3,7 @@ package br.com.portal.servlets;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,7 +21,7 @@ import br.com.portal.model.ModelRecursoAditivo;
 import br.com.portal.model.ModelRecursoContratoCliente;
 import br.com.portal.model.ModelRecursoContratoAditivoRel;
 
-public class ServletRecursoAditivo extends ServletGeniricUtil {
+public class ServletRecursoAditivo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 //	DAORecusoContrato daoRecusoContrato = new DAORecusoContrato();
        

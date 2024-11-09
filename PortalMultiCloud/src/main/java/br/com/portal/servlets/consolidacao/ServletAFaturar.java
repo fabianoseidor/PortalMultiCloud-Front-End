@@ -13,8 +13,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 import br.com.portal.dao.DAOUtil;
 import br.com.portal.dao.consolidacao.DAOAFaturar;
+import br.com.portal.model.InformacoesDW;
 import br.com.portal.model.consolidacao.ModelAFaturar;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -35,71 +38,133 @@ public class ServletAFaturar extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		try {
+	   		String acao = request.getParameter("acao");
+			
+	   		if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("montaTelaTAbelaDW") ) {
+	   			DAOAFaturar daoAFaturar = new DAOAFaturar();
+	   			List<InformacoesDW> listInformacoesDW = daoAFaturar.getInfoDW();
+				Gson gson = new Gson();
+				String lista = gson.toJson(listInformacoesDW);
+			    response.getWriter().write(lista);
+				
+		     }else{
+				  request.getRequestDispatcher("consolidacao/afaturar.jsp").forward(request, response);
+		    }		
+	   	}catch(Exception e){
+				e.printStackTrace();
+				RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");
+				request.setAttribute("msg", e.getMessage());
+				requestDispatcher.forward(request, response);			
+	    }
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DAOAFaturar daoAFaturar = new DAOAFaturar();
 		try {
-		   
-		   String filePath = getServletContext().getRealPath("/PROCESSOAFATURAR"); 
-           String arqProcessar = null;
-           String nomeArq = "";
-           
-           realPathLog = request.getServletContext().getRealPath("/LOG");
- 
-		   if (request.getPart("arqAFaturar") != null) {
-			    try {
-			    	for(Part part : request.getParts() ) {
-			    		makeDir(filePath);
-			    		if( part.getName().equals("arqAFaturar") ) { 
-			    			arqProcessar = filePath + File.separator + part.getSubmittedFileName();
-			    			nomeArq = part.getSubmittedFileName();			    			
-			    			File file = new File(arqProcessar);
-			    			if( checkFileExists(file) ) {
-			    			    file.delete();
-			    			    part.write(filePath + File.separator + part.getSubmittedFileName() );
-			    			}else {
-			    				part.write(filePath + File.separator + part.getSubmittedFileName() );
-			    			}
+		   Integer radioSelecionado = ( request.getParameter( "radioSelecionado" )  != null && !request.getParameter( "radioSelecionado" ).isEmpty() ? Integer.valueOf( request.getParameter( "radioSelecionado" ) ) : 0 );
+
+		   if( radioSelecionado == 1 ) {
+			   List<ModelAFaturar> listaAFaturar = daoAFaturar.porcessaBaseMySql();
+
+	            if(listaAFaturar != null) {
+	            	
+			    	request.setAttribute("msg", "Processamento Diretamente da View DW" );
+			    	int totalLinhas =  listaAFaturar.size();
+			    	
+			    	if(totalLinhas > 0) {
+			    		request.setAttribute("totalLinhas", totalLinhas );
+			    		
+			    		String vlrFaturaros[] = daoAFaturar.vlrsFaturamento();
+			    		for(String vt : vlrFaturaros) {
+							String textoSplit [] = vt.split(";");
+							if( textoSplit[0].trim().equals("BRL")) {
+	 						    request.setAttribute("real", textoSplit[0].trim() );
+	 						    request.setAttribute("vlrReal", textoSplit[1].trim() );
+							}else if( textoSplit[0].trim().equals("USD")) {
+	 						    request.setAttribute("dolar", textoSplit[0].trim() );
+	 						    request.setAttribute("vlrdolar", textoSplit[1].trim() );
+							}else if( textoSplit[0].trim().equals("EUR")) {
+	 						    request.setAttribute("euro", textoSplit[0].trim() );
+	 						    request.setAttribute("vlreuro", textoSplit[1].trim() );
+							}
+							
 			    		}
+			    		request.setAttribute("vlrTotal", daoAFaturar.getVlrTotal( ) );
+			    		request.setAttribute("msg", "Processamento Diretamente da View DW finalizado com sucesso!" );
+			    	}
+			    }
+//			   System.out.println(listaAFaturar);
+			   
+		   } else if( radioSelecionado == 2 ) {
+		   
+			   String filePath = getServletContext().getRealPath("/PROCESSOAFATURAR"); 
+	           String arqProcessar = null;
+	           String nomeArq = "";
+	           
+	           realPathLog = request.getServletContext().getRealPath("/LOG");
+	 
+			   if (request.getPart("arqAFaturar") != null) {
+				    try {
+				    	for(Part part : request.getParts() ) {
+				    		makeDir(filePath);
+				    		if( part.getName().equals("arqAFaturar") ) { 
+				    			arqProcessar = filePath + File.separator + part.getSubmittedFileName();
+				    			nomeArq = part.getSubmittedFileName();	
+				    			
+				    			if(nomeArq != null && !nomeArq.isEmpty()) {
+					    			File file = new File(arqProcessar);
+					    			if( checkFileExists(file) ) {
+					    			    file.delete();
+					    			    part.write(filePath + File.separator + part.getSubmittedFileName() );
+					    			}else {
+					    				part.write(filePath + File.separator + part.getSubmittedFileName() );
+					    			}
+				    			}else {
+				    				request.setAttribute("msg", "Favor Selecionar um Arquivo para processamento!" );
+				    			}
+				    		}
+				    	}
+				    	
+				      } catch (Exception e) {
+				        e.printStackTrace();
+				      }		    
+			    }
+			   
+	            if(arqProcessar != null && nomeArq != null && !nomeArq.isEmpty() ) {
+	            	
+			    	request.setAttribute("msg", "Procensando o arquivo: " + nomeArq );
+			    	int totalLinhas =  lerArquivoCargaBase(arqProcessar);
+			    	
+			    	if(totalLinhas > 0) {
+			    		request.setAttribute("totalLinhas", totalLinhas );
+			    		
+			    		String vlrFaturaros[] = daoAFaturar.vlrsFaturamento();
+			    		for(String vt : vlrFaturaros) {
+							String textoSplit [] = vt.split(";");
+							if( textoSplit[0].trim().equals("BRL")) {
+	 						    request.setAttribute("real", textoSplit[0].trim() );
+	 						    request.setAttribute("vlrReal", textoSplit[1].trim() );
+							}else if( textoSplit[0].trim().equals("USD")) {
+	 						    request.setAttribute("dolar", textoSplit[0].trim() );
+	 						    request.setAttribute("vlrdolar", textoSplit[1].trim() );
+							}else if( textoSplit[0].trim().equals("EUR")) {
+	 						    request.setAttribute("euro", textoSplit[0].trim() );
+	 						    request.setAttribute("vlreuro", textoSplit[1].trim() );
+							}
+							
+			    		}
+			    		request.setAttribute("vlrTotal", daoAFaturar.getVlrTotal( ) );
+			    		request.setAttribute("msg", "Arquivo '" + nomeArq + "' procesando com sucesso!" );
 			    	}
 			    	
-			      } catch (Exception e) {
-			        e.printStackTrace();
-			      }		    
+			    	File file = new File(arqProcessar);
+			    	file.delete();
+			    }
+			    
+			    request.setAttribute("nomeArq", nomeArq );
 		    }
-		   
-            if(arqProcessar != null) {
-            	
-		    	request.setAttribute("msg", "Procensando o arquivo: " + nomeArq );
-		    	int totalLinhas =  lerArquivoCargaBase(arqProcessar);
-		    	
-		    	if(totalLinhas > 0) {
-		    		request.setAttribute("totalLinhas", totalLinhas );
-		    		DAOAFaturar daoAFaturar = new DAOAFaturar();
-		    		String vlrFaturaros[] = daoAFaturar.vlrsFaturamento();
-		    		for(String vt : vlrFaturaros) {
-						String textoSplit [] = vt.split(";");
-						if( textoSplit[0].trim().equals("BRL")) {
- 						    request.setAttribute("real", textoSplit[0].trim() );
- 						    request.setAttribute("vlrReal", textoSplit[1].trim() );
-						}else if( textoSplit[0].trim().equals("USD")) {
- 						    request.setAttribute("dolar", textoSplit[0].trim() );
- 						    request.setAttribute("vlrdolar", textoSplit[1].trim() );
-						}else if( textoSplit[0].trim().equals("EUR")) {
- 						    request.setAttribute("euro", textoSplit[0].trim() );
- 						    request.setAttribute("vlreuro", textoSplit[1].trim() );
-						}
-						
-		    		}
-		    		request.setAttribute("vlrTotal", daoAFaturar.getVlrTotal( ) );
-		    		request.setAttribute("msg", "Arquivo '" + nomeArq + "' procesando com sucesso!" );
-		    	}
-		    	
-		    	File file = new File(arqProcessar);
-		    	file.delete();
-		    }
-		    
-		    request.setAttribute("nomeArq", nomeArq );
 		    
 		    request.getRequestDispatcher("consolidacao/afaturar.jsp").forward(request, response); 
 		    

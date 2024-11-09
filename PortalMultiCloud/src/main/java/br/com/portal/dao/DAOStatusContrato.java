@@ -65,6 +65,31 @@ public class DAOStatusContrato {
 		return modelStatusContratos;
 	}
 
+	public List<ModelStatusContrato> listaStatusContratoManutencaoDesativados(){
+		
+		String sql = "SELECT * FROM STATUS_CONTRATO ORDER BY ID_STATUS_CONTRATO";
+		List<ModelStatusContrato> modelStatusContratos = new ArrayList<ModelStatusContrato>();
+		DAOUtil daoUtil = new DAOUtil();
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ResultSet set = ps.executeQuery();
+			
+			while(set.next()) {
+				ModelStatusContrato modelStatusContrato = new ModelStatusContrato();
+				modelStatusContrato.setId_status_contrato( set.getLong("ID_STATUS_CONTRATO")                                    );
+				modelStatusContrato.setStatus_contrato   ( set.getString("STATUS_CONTRATO")                                     );
+				modelStatusContrato.setObservacao        ( set.getString("OBSERVACAO")                                          );
+				modelStatusContrato.setDt_criacao        ( daoUtil.FormataDataStringTelaDataTime( set.getString("DT_CRIACAO") ) );
+				modelStatusContratos.add(modelStatusContrato);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return modelStatusContratos;
+	}
+	
+	
+	
 	public List<ModelStatusContrato> listaStatusContratoDescomissionamento(){
 		
 		String sql = "SELECT * FROM STATUS_CONTRATO WHERE ID_STATUS_CONTRATO IN ( 2, 3 ) ORDER BY ID_STATUS_CONTRATO";

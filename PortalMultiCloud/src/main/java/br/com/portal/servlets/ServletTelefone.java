@@ -5,15 +5,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import br.com.portal.dao.DAOClienteRepository;
 import br.com.portal.dao.DAOTelefoneRepository;
 import br.com.portal.model.ModelTelefone;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-public class ServletTelefone extends ServletGeniricUtil {
+public class ServletTelefone extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	DAOClienteRepository  daoClienteRepository  = new DAOClienteRepository();
 	DAOTelefoneRepository daoTelefoneRepository = new DAOTelefoneRepository();

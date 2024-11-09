@@ -2,6 +2,7 @@ package br.com.portal.servlets;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,7 +25,7 @@ import br.com.portal.model.ModelProduto;
 import br.com.portal.model.ModelTempoContrato;
 import br.com.portal.model.ModelVigenciaContrato;
 
-public class ServletAditivo extends ServletGeniricUtil {
+public class ServletAditivo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOAditivo daoAditivo = new DAOAditivo();
 	private Integer offsetBegin = 0;

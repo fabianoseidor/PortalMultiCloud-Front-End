@@ -4,7 +4,6 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-  
   <servlet>
     <description></description>
     <display-name>ServletLogin</display-name>
@@ -44,16 +43,7 @@
     <servlet-name>ServletCliente</servlet-name>
     <url-pattern>/ServletCliente</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ServletGeniricUtil</display-name>
-    <servlet-name>ServletGeniricUtil</servlet-name>
-    <servlet-class>br.com.portal.servlets.ServletGeniricUtil</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ServletGeniricUtil</servlet-name>
-    <url-pattern>/ServletGeniricUtil</url-pattern>
-  </servlet-mapping>
+
   <servlet>
     <description></description>
     <display-name>ServletContratoController</display-name>
@@ -441,40 +431,50 @@
     <servlet-class>br.com.portal.servletsRelatorios.ServletsClientesPorPeiodoEntrada</servlet-class>
   </servlet>
   <servlet>
-  	<description>
+    <description>
   	</description>
-  	<display-name>ServletsFaturamentoProjetado</display-name>
-  	<servlet-name>ServletsFaturamentoProjetado</servlet-name>
-  	<servlet-class>br.com.portal.servlets.dashboard.ServletsFaturamentoProjetado</servlet-class>
+    <display-name>ServletsFaturamentoProjetado</display-name>
+    <servlet-name>ServletsFaturamentoProjetado</servlet-name>
+    <servlet-class>br.com.portal.servlets.dashboard.ServletsFaturamentoProjetado</servlet-class>
   </servlet>
   <servlet>
-  	<description>
+    <description>
   	</description>
-  	<display-name>ServletsClientesInfo</display-name>
-  	<servlet-name>ServletsClientesInfo</servlet-name>
-  	<servlet-class>br.com.portal.servlets.dashboard.ServletsClientesInfo</servlet-class>
+    <display-name>ServletsClientesInfo</display-name>
+    <servlet-name>ServletsClientesInfo</servlet-name>
+    <servlet-class>br.com.portal.servlets.dashboard.ServletsClientesInfo</servlet-class>
   </servlet>
   <servlet>
-  	<description>
+    <description>
   	</description>
-  	<display-name>ServletDescomissionamento</display-name>
-  	<servlet-name>ServletDescomissionamento</servlet-name>
-  	<servlet-class>br.com.portal.servlets.ServletDescomissionamento</servlet-class>
+    <display-name>ServletDescomissionamento</display-name>
+    <servlet-name>ServletDescomissionamento</servlet-name>
+    <servlet-class>br.com.portal.servlets.ServletDescomissionamento</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ServletsClientesPorPeiodoEntrada</servlet-name>
     <url-pattern>/ServletsClientesPorPeiodoEntrada</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>ServletsFaturamentoProjetado</servlet-name>
-  	<url-pattern>/ServletsFaturamentoProjetado</url-pattern>
+    <servlet-name>ServletsFaturamentoProjetado</servlet-name>
+    <url-pattern>/ServletsFaturamentoProjetado</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>ServletsClientesInfo</servlet-name>
-  	<url-pattern>/ServletsClientesInfo</url-pattern>
+    <servlet-name>ServletsClientesInfo</servlet-name>
+    <url-pattern>/ServletsClientesInfo</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-  	<servlet-name>ServletDescomissionamento</servlet-name>
-  	<url-pattern>/ServletDescomissionamento</url-pattern>
+    <servlet-name>ServletDescomissionamento</servlet-name>
+    <url-pattern>/ServletDescomissionamento</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ServletFaturamentoSAP</display-name>
+    <servlet-name>ServletFaturamentoSAP</servlet-name>
+    <servlet-class>br.com.portal.servletsRelatorios.ServletFaturamentoSAP</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletFaturamentoSAP</servlet-name>
+    <url-pattern>/ServletFaturamentoSAP</url-pattern>
   </servlet-mapping>
 </web-app>

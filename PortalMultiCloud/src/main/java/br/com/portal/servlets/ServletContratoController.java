@@ -37,6 +37,7 @@ import br.com.portal.model.ModelAitivoRecursoModal;
 import br.com.portal.model.ModelCliente;
 import br.com.portal.model.ModelContrato;
 import br.com.portal.model.ModelContratoProduto;
+import br.com.portal.model.ModelContratosDesativados;
 import br.com.portal.model.ModelDesativacaoContrato;
 import br.com.portal.model.ModelFamiliaFlavors;
 import br.com.portal.model.ModelHistoricoUpgrade;
@@ -282,7 +283,41 @@ public class ServletContratoController extends HttpServlet {
 					request.setAttribute("msg", e.getMessage());
 					requestDispatcher.forward(request, response);
 		       }
-		    }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarClienteCadAjax") ) {
+		    } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarClienteAjaxDesativados") ) {
+				
+				String nomeBusca = request.getParameter("nomeBuscaCliente");
+				List<ModelCliente> dadosJsonUser = daoClienteRepository.buscarListaClienteNomeDesativados(nomeBusca);
+				
+				ObjectMapper objectMapper = new ObjectMapper();
+				
+		        try {
+		          String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(dadosJsonUser);
+		          //System.out.println(json);
+		          response.getWriter().write(json);
+		        } catch(Exception e) {
+					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");
+					request.setAttribute("msg", e.getMessage());
+					requestDispatcher.forward(request, response);
+		       }
+		    } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarClienteDesativadosAjax") ) {
+				
+				String idCliente = request.getParameter("idCliente");
+				List<ModelContratosDesativados> contratosDesativados = daoClienteRepository.buscarDadosContratoDesativados( Long.parseLong( idCliente ) );
+				
+				ObjectMapper objectMapper = new ObjectMapper();
+				
+		        try {
+		          String json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(contratosDesativados);
+		          //System.out.println(json);
+		          response.getWriter().write(json);
+		        } catch(Exception e) {
+					e.printStackTrace();
+					RequestDispatcher requestDispatcher = request.getRequestDispatcher("erro.jsp");
+					request.setAttribute("msg", e.getMessage());
+					requestDispatcher.forward(request, response);
+		       }
+		    } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarClienteCadAjax") ) {
 				
 				String nomeBusca = request.getParameter("nomeBuscaCliente");
 				List<ModelCliente> dadosJsonUser = daoClienteRepository.buscarListaClienteNome(nomeBusca);
@@ -338,6 +373,32 @@ public class ServletContratoController extends HttpServlet {
 	
 					}
 				} 
+		    }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarContratoClienteDesativado") ) {
+				String                 idContratoCliente      = request.getParameter("idContrato");
+				ModelContrato          modelContrato          = new ModelContrato();
+				DAOAditivoModalRecurso daoAditivoModalRecurso = new DAOAditivoModalRecurso();
+				DAOAditivoModal        daoAditivoModal        = new DAOAditivoModal();
+				
+				if( idContratoCliente != null && !idContratoCliente.isEmpty() ) {
+					modelContrato = daoContratoRepository.getContratoDesativoCliente( Long.parseLong(idContratoCliente)  );
+					List<ModelListaRecursoContratoAditivo> listaRecursoContratos    = daoContratoRepository.getListaRecursoContratoDesativos ( Long.parseLong(idContratoCliente.trim()) );
+					List<ModelContratoProduto>             listaContratoProdutos    = daoContratoRepository.getListaContratoProduto          ( modelContrato.getId_contrato()           );
+					List<ModelListAditivoProduto>          listAditivoProdutos      = daoAditivoModal.buscarListaAditivoProdutosContratados  ( modelContrato.getId_contrato()           );
+    				List<ModelAitivoRecursoModal>          modelAitivoRecursoModals = daoAditivoModalRecurso.getListaAditivoRecursoID        ( modelContrato.getId_contrato()           );
+    				List<ModelHistoricoUpgrade>            listaHistoricoUpgrade    = daoAditivoModal.getListaHistoricoUpgrade               ( modelContrato.getId_contrato()           );
+ 
+					request.setAttribute("msg", "Contrto do Cliente em Edição" );
+
+				    request.setAttribute("modelContrato"           , modelContrato            );
+				    request.setAttribute("listaContratoProdutos"   , listaContratoProdutos    );
+				    request.setAttribute("listaRecursoContratos"   , listaRecursoContratos    );
+   					request.setAttribute("modelAitivoRecursoModals", modelAitivoRecursoModals );
+				    request.setAttribute("listAditivoProdutos"     , listAditivoProdutos      ); 
+				    request.setAttribute("listaHistoricoUpgrade"   , listaHistoricoUpgrade    );
+				    
+				    request.getRequestDispatcher("principal/contratosOld.jsp").forward(request, response);
+						
+				} 
 		    }else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("buscarContratoCliente") ) {
 				String                 idContratoCliente      = request.getParameter("idContratoCliente");
 				ModelContrato          modelContrato          = new ModelContrato();
@@ -369,6 +430,9 @@ public class ServletContratoController extends HttpServlet {
 						ModelCliente dadosCliente = daoClienteRepository.getClienteID( Long.parseLong(idContratoCliente.trim()) );
 						modelContrato.setId_cliente(dadosCliente.getId_cliente());
 						modelContrato.setNomeCliente( dadosCliente.getRazao_social() );
+						
+						//idContrato       != null && !idContrato.isEmpty()
+						if(modelContrato.getComissao() == null || modelContrato.getComissao().isEmpty() ) modelContrato.setComissao("Não");
 											
 					    request.setAttribute("msg", "O Cliente não possui contrato Ativo" );
 					    request.setAttribute("modelContrato", modelContrato);
@@ -703,7 +767,7 @@ public class ServletContratoController extends HttpServlet {
 					    modelAditivoModal.setId_rascunho          ( idRascunho      != null && !idRascunho.isEmpty()      ? Long.parseLong( idRascunho.trim() )    : null  );
 					    modelAditivoModal.setMotivoRascunho       ( mRascunho       != null && !mRascunho.isEmpty()       ? mRascunho.trim()                       : null  );
 					    // Referencia a Comissao
-					    modelAditivoModal.setComissao_adit           ( Integer.parseInt(comissaoMA)== 1                            ? true                                         : false);
+					    modelAditivoModal.setComissao_adit( (comissaoMA != null && !comissaoMA.isEmpty()? Integer.parseInt(comissaoMA)== 1 : false) ? true                        : false);
 					    modelAditivoModal.setValor_setup_adit        ( idValorSetupMA     != null && !idValorSetupMA.isEmpty()     ? idValorSetupMA.trim()                        : null );
 					    modelAditivoModal.setQty_mese_setup_adit     ( qtyMesesContratoMA != null && !qtyMesesContratoMA.isEmpty() ? Integer.valueOf( qtyMesesContratoMA.trim() ) : 0    );
 					    modelAditivoModal.setValor_parcela_setup_adit( vlrParcelasMA      != null && !vlrParcelasMA.isEmpty()      ? vlrParcelasMA.trim()                         : null );
@@ -1329,7 +1393,17 @@ public class ServletContratoController extends HttpServlet {
 					    String lista = gson.toJson(modelClientes);
 					    response.getWriter().write(lista);
 					
-				}else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("atualizaStatusContratoDescomissionamento") ) {	
+				} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("paginarPesquisaClienteDesativado") ) {	
+			   		String pag = request.getParameter("pag");
+			   		offsetBegin = Integer.parseInt( pag ) * OFFSET_END;
+			   		
+					List<ModelCliente> modelClientes = daoClienteRepository.buscarListaClienteDesativado( offsetBegin, OFFSET_END );
+					request.setAttribute("totalPagina", daoClienteRepository.getTotalPag( OFFSET_END ) );
+				    Gson gson = new Gson();
+				    String lista = gson.toJson(modelClientes);
+				    response.getWriter().write(lista);
+				
+			    } else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("atualizaStatusContratoDescomissionamento") ) {	
 			   		String idStatusContrato = request.getParameter("idStatusContrato"   );
 			   		String idContrato       = request.getParameter("idContrato"         );
 			   		String idCliente        = request.getParameter("idCliente"          );
@@ -1384,12 +1458,11 @@ public class ServletContratoController extends HttpServlet {
 			String id_suporte_b1          = request.getParameter( "id_suporte_b1"         );
 			String id_comercial           = request.getParameter( "id_comercial"          );
 			
-			String comissao               = request.getParameter( "comissao"              );
+			String comissao               = ( request.getParameter( "comissao" ).equals("1") ? "Sim": "Não" ) ;
 			String valor_setup            = request.getParameter( "idValorSetup"          );
 			String valor_parcela_setup    = request.getParameter( "vlrParcelas"           );
 			String qty_parcela_setup      = request.getParameter( "qtyParcSetup"          );
 			String qty_mese_setup         = request.getParameter( "qtyMesesContrato"      );
-			
 			
 		    if(valor_parcela_setup != null && !valor_parcela_setup.isEmpty()) {
 		    	valor_parcela_setup = Normalizer.normalize(valor_parcela_setup, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
@@ -1409,11 +1482,17 @@ public class ServletContratoController extends HttpServlet {
 
 			if(valor_total != null && !valor_total.isEmpty()) {
 		       valor_total = Normalizer.normalize(valor_total, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
-		       if(valor_total.indexOf(" ") >= 0 )
-		          valor_total = valor_total.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
-		       else
-		         valor_total = valor_total.replaceAll("\\.", "").replaceAll("\\,", ".");
+		       if(valor_total.indexOf(" ") >= 0 ) {
+		    	  if(id_moeda.equals("1")) 
+		             valor_total = valor_total.split("\\ ")[1].replaceAll("\\.", "").replaceAll("\\,", ".");
+		    	  else  valor_total = valor_total.replaceAll("\\$", "").replaceAll("\\.", "").replaceAll("\\,", ".");
+		       }else 
+		    	 if(id_moeda.equals("1")) 
+		            valor_total = valor_total.replaceAll("\\.", "").replaceAll("\\,", ".");
+		    	 else valor_total = valor_total.replaceAll("\\$", "").replaceAll("\\€", "").replaceAll("\\,", "");
 		    }
+			valor_total = valor_total.replaceAll("\\ ", "");
+			
 		    if(valor_convertido != null && !valor_convertido.isEmpty()) {
 		    	valor_convertido = Normalizer.normalize(valor_convertido, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
 			    if(valor_convertido.indexOf(" ") >= 0 )

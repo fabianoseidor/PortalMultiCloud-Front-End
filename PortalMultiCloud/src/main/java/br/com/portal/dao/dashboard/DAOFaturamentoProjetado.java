@@ -160,7 +160,10 @@ public class DAOFaturamentoProjetado {
 		
 		String sql = "SELECT                                   "
 				+ "     CON.ID_CONTRATO                        "
-				+ "   , CLI.CNPJ                               "
+				+ "   , CASE                                   "
+				+ "        WHEN CLI.CNPJ IS NULL THEN 'CNPJ NÃO CADASTRADO' "
+				+ "        ELSE CLI.CNPJ                       "
+				+ "     END AS CNPJ                            "
 				+ "  FROM                                      "
 				+ "     CONTRATO AS CON                        "
 				+ "   , CLIENTE  AS CLI                        "
@@ -177,7 +180,8 @@ public class DAOFaturamentoProjetado {
 		while (resultado.next()) {
 			ModalPepCnpj mdPepCnpj = new ModalPepCnpj();
 			mdPepCnpj.setId_contrato( resultado.getString ( "ID_CONTRATO" ) );
-			mdPepCnpj.setCnpj       ( resultado.getString ( "CNPJ"        ) );
+			mdPepCnpj.setCnpj       ( resultado.getString ( "CNPJ"        )  );
+			mdPepCnpj.setPep(pep);
 			mdPepCnpjs.add(mdPepCnpj);
 		}
 		
@@ -251,6 +255,7 @@ public class DAOFaturamentoProjetado {
 				+ "              , CON1.ID_MOEDA  AS ID_MOEDA                                                      "
 				+ "              FROM CONTRATO           AS CON1                                                   "
 				+ "            WHERE CON1.ID_CONTRATO  = ?                                                         "
+				+ "              AND CON1.ID_STATUS_CONTRATO NOT IN ( 2,3 )                                        "
 				+ "            UNION ALL                                                                           "
 				+ "            SELECT                                                                              "
 				+ "                SUM( ADT1.VLR_TOTAL_ADIT) AS VLR_TOTAL                                          "
@@ -259,6 +264,8 @@ public class DAOFaturamentoProjetado {
 				+ "            INNER JOIN ADITIVADO    AS ADT1                                                     "
 				+ "                ON ADT1.ID_CONTRATO  = CON2.ID_CONTRATO                                         "
 				+ "            WHERE CON2.ID_CONTRATO  = ?                                                         "
+				+ "              AND CON2.ID_STATUS_CONTRATO NOT IN ( 2,3 )                                        "
+				+ "              AND ADT1.ID_STATUS_ADITIVO  NOT IN ( 2,3 )                                        "
 				+ "            GROUP BY CON2.ID_MOEDA                                                              "
 				+ "    ) AS VLR_TOTAL                                                                              "
 				+ "GROUP BY ID_MOEDA                                                                               "
@@ -270,6 +277,7 @@ public class DAOFaturamentoProjetado {
 				+ "     , CON1.ID_MOEDA                                                                            "
 				+ "  FROM CONTRATO AS CON1                                                                         "
 				+ " WHERE CON1.ID_CONTRATO = ?                                                                     "
+				+ "   AND CON1.ID_STATUS_CONTRATO NOT IN ( 2,3 )                                                   "
 				+ "UNION ALL                                                                                       "
 				+ "SELECT                                                                                          "
 				+ "     0 AS VLR_TOTAL_CONV                                                                        "
@@ -280,6 +288,7 @@ public class DAOFaturamentoProjetado {
 				+ " INNER JOIN ADITIVADO    AS ADT1                                                                "
 				+ "         ON ADT1.ID_CONTRATO = CON2.ID_CONTRATO                                                 "
 				+ " WHERE CON2.ID_CONTRATO      = ?                                                                "
+				+ "   AND ADT1.ID_STATUS_ADITIVO NOT IN ( 2,3 )                                                    "
 				+ "GROUP BY CON2.ID_MOEDA                                                                          "
 				+ ") AS VLRS_CONTRATO                                                                              "
 				+ "GROUP BY VLRS_CONTRATO.ID_MOEDA                                                                 ";
@@ -437,10 +446,11 @@ public class DAOFaturamentoProjetado {
 				+ "    , 'Usuário' AS PRODUTO                                                                                                     "
 				+ "    , 'CONTRATO PRINCIPAL'      AS TIPO_CONTRATO                                                                               "
 				+ "    , SUM(CON.QTY_USUARIO_CONTRATADA) AS QTY_SERVICO                                                                           "
-				+ "    , 0 AS VALOR_UNITARIO                                                                                                      "
-				+ "    , 0 AS VALOR                                                                                                               "
+				+ "    , CON.VALOR_TOTAL AS VALOR_UNITARIO                                                                                        "
+				+ "    , CON.VALOR_TOTAL AS VALOR                                                                                                 "
 				+ "    FROM CONTRATO              AS CON                                                                                          "
-				+ "    GROUP BY CON.ID_CONTRATO, CON.ID_MOEDA                                                                                     "
+				+ "   WHERE CON.ID_STATUS_CONTRATO NOT IN ( 2,3 )                                                                                 "
+				+ "    GROUP BY CON.ID_CONTRATO, CON.ID_MOEDA, CON.VALOR_TOTAL                                                                    "
 				+ "    UNION ALL                                                                                                                  "
 				+ "    SELECT                                                                                                                     "
 				+ "      CON.ID_CONTRATO                                                                                                          "
@@ -456,6 +466,7 @@ public class DAOFaturamentoProjetado {
 				+ "            ON CON.ID_CONTRATO = CPR.ID_CONTRATO                                                                               "
 				+ "    LEFT JOIN PRODUTO          AS PRO                                                                                          "
 				+ "            ON CPR.ID_PRODUTO = PRO.ID_PRODUTO                                                                                 "
+				+ "   WHERE CON.ID_STATUS_CONTRATO NOT IN ( 2,3 )                                                                                 "
 				+ "    GROUP BY CON.ID_CONTRATO, CON.ID_MOEDA, PRO.ID_PRODUTO , PRO.PRODUTO, VALOR_UNITARIO                                       "
 				+ "    UNION ALL                                                                                                                  "
 				+ "    SELECT                                                                                                                     "
@@ -474,6 +485,8 @@ public class DAOFaturamentoProjetado {
 				+ "            ON ADI.ID_ADITIVADO = APR.ID_ADITIVADO                                                                             "
 				+ "    LEFT JOIN PRODUTO           AS PRD                                                                                         "
 				+ "            ON PRD.ID_PRODUTO = APR.ID_PRODUTO                                                                                 "
+				+ "   WHERE CON.ID_STATUS_CONTRATO NOT IN ( 2, 3 )                                                                                "
+				+ "     AND ADI.ID_STATUS_ADITIVO  NOT IN ( 2, 3 )                                                                                "
 				+ "    GROUP BY CON.ID_CONTRATO, CON.ID_MOEDA, PRD.ID_PRODUTO, PRD.PRODUTO, APR.ID_ADITIVADO, APR.QTY_PRODUTO, APR.VALOR_UNITARIO "
 				+ ") AS PRODUTOS                                                                                                                  "
 				+ "WHERE PRODUTOS.ID_CONTRATO = ?                                                                                                 ";
@@ -514,6 +527,7 @@ public class DAOFaturamentoProjetado {
 				+ "        ELSE 'SIM'                                               "
 				+ "    END AS RECURSO_TEMPORARIO                                    "
 				+ "  , REC.PERIODO_UTILIZACAO_BOLHA                                 "
+				+ "  , REC.PRIMARY_IP                                               "
 				+ "  , REC.TAMANHO_DISCO                                            "
 				+ "  , REC.DT_CADASTRO                                              "
 				+ "  , REB.RETENCAO_BACKUP                                          "
@@ -530,6 +544,8 @@ public class DAOFaturamentoProjetado {
 				+ "  FROM CONTRATO                  AS CON                          "
 				+ "   LEFT JOIN RECURSO             AS REC                          "
 				+ "          ON REC.ID_CONTRATO           = CON.ID_CONTRATO         "
+				+ "   LEFT JOIN ADITIVADO           AS ADI                          "
+				+ "		     ON ADI.ID_ADITIVADO          = REC.ID_ADITIVADO        "
 				+ "   LEFT JOIN SISTEMA_OPERACIONAL AS SIO                          "
 				+ "          ON SIO.ID_SO                 = REC.ID_SO               "
 				+ "   LEFT JOIN FAMILIA_FLAVORS     AS FAF                          "
@@ -545,7 +561,9 @@ public class DAOFaturamentoProjetado {
 				+ "  LEFT JOIN TEMPO_CONTRATO       AS TEC                          "
 				+ "          ON TEC.ID_TEMPO_CONTRATO = VIG.ID_TEMPO_CONTRATO       "
 				+ "  WHERE CON.ID_STATUS_CONTRATO IN ( 1, 4 )                       "
-				+ "  AND CON.ID_CONTRATO = ?                                        ";
+				+ "  AND CON.ID_CONTRATO = ?                                        "
+				+ "  AND REC.ID_STATUS_RECURSO NOT IN ( 2, 3 )                      "
+				+ "  AND ( ADI.ID_STATUS_ADITIVO NOT IN ( 2,3 ) OR ADI.ID_STATUS_ADITIVO IS NULL ) ";
 		
 		PreparedStatement statemet = connection.prepareStatement(sql);
 		statemet.setLong ( 1,  idContrato );
@@ -563,6 +581,7 @@ public class DAOFaturamentoProjetado {
 			mdRecursosContrato.setFamilia_flavors         ( resultado.getString ( "FAMILIA_FLAVORS"                                   ));
 			mdRecursosContrato.setRecurso_temporario      ( resultado.getString ( "RECURSO_TEMPORARIO"                                ));
 			mdRecursosContrato.setPeriodo_utilizacao_bolha( resultado.getString ( "PERIODO_UTILIZACAO_BOLHA"                          ));
+			mdRecursosContrato.setIp                      ( resultado.getString ( "PRIMARY_IP"                                        ));
 			mdRecursosContrato.setTamanho_disco           ( resultado.getString ( "TAMANHO_DISCO"                                     ));
 			mdRecursosContrato.setDt_cadastro             ( daoUtil.FormataDataStringTelaDataTime( resultado.getString("DT_CADASTRO") ));
 			mdRecursosContrato.setRetencao_backup         ( resultado.getString ( "RETENCAO_BACKUP"                                   ));

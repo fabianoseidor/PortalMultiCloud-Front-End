@@ -186,7 +186,7 @@
 				<!-- Modal footer -->
 				<div class="modal-footer">
 				    <button type="button" class="btn btn-outline-success" onclick="processarSolicitaDesligamento()">Atualizar</button>
-					<button type="button" class="btn btn-outline-success" data-dismiss="modal">Fechar</button>
+					<button type="button" class="btn btn-outline-success" onclick="FecharModal( '#ModalSolicitarDesligamento' )">Fechar</button>
 				</div>
 			
 			</div>
@@ -249,7 +249,7 @@
 				<!-- Modal footer -->
 				<div class="modal-footer">
 				    <button type="button" class="btn btn-outline-success" onclick="atualizaContratoReversao(  )">Atualizar</button>
-					<button type="button" class="btn btn-outline-success" data-dismiss="modal">Fechar</button>
+					<button type="button" class="btn btn-outline-success" onclick="FecharModal( '#ModalReversaoDistrato' )">Fechar</button>
 				</div>
 			
 			</div>
@@ -263,6 +263,12 @@
     <script type="text/javascript">
 
    listaCategoriaPadroesDesativacao( );
+   
+   
+   function FecharModal( modal ){
+	  $(modal).modal('hide');
+  }
+
    
   /******************************************************************/
   /*                                                                */ 
@@ -725,12 +731,13 @@
 
 			            // Botao Atualizar
 			            let imgliberar = document.createElement('img');
-			            
+			            imgliberar.setAttribute('style', 'cursor:pointer;' );
 			            let funcLib = "abrirModalSolicitarDesligamento( " + lista[i].id_contrato + ", '" + lista[i].cliente + "', " + lista[i].id_descomissionamento + ", " + lista[i].id_cliente +")";
 			            td_solicitar_deslig.appendChild(imgliberar);
 			            
 			            // Botao Editar abrirModalReversao( idContrato, Cliente )
-				        let imgEdit = document.createElement('img');				        
+				        let imgEdit = document.createElement('img');
+				        imgEdit.setAttribute('style', 'cursor:pointer;' );
 				        let funcEdit = "abrirModalReversao( " + lista[i].id_contrato + ", '" + lista[i].cliente + "', " + lista[i].id_descomissionamento  + " )";
 				        td_bt_revecao.appendChild(imgEdit);
 

@@ -354,9 +354,13 @@ public class DAOContratoRepository {
 			modelContrato.setId_comercial          ( resultado.getLong  ("ID_COMERCIAL")                                        );
 			modelContrato.setId_suporte_b1         ( resultado.getLong  ("ID_SUPORTE_B1")                                       );
 			modelContrato.setComissao              ( resultado.getBoolean("SETUP") == true ? "Sim":"Não"                        );
+			modelContrato.setId_moeda              ( resultado.getLong   ("ID_MOEDA")                                           );
 			
 			Locale localeBR = new Locale("pt","BR");
 			NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
+			NumberFormat dinheiroEuro = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+			NumberFormat dinheiroDolar = NumberFormat.getCurrencyInstance(Locale.US);
+						
 			Double valorReal      = 0.0;
 					
 		    String valorSetup = resultado.getString("VALOR_SETUP");				
@@ -369,16 +373,32 @@ public class DAOContratoRepository {
 			
 			valorSetup = resultado.getString("VALOR_PARCELA_SETUP");				
 			if(valorSetup != null && !valorSetup.isEmpty()) {
-				valorReal      = Double.valueOf( valorSetup );
-				modelContrato.setValor_parcela_setup( dinheiro.format(valorReal) );
+			   valorReal      = Double.valueOf( valorSetup );
+			   modelContrato.setValor_parcela_setup( dinheiro.format(valorReal) );
 			}
 
 			/*********************************************************/
 			/* Configura o atributo Valor para demostrar como Real.  */
 			/*********************************************************/
+			valorSetup = resultado.getString("VALOR_TOTAL");
+			if(valorSetup != null && !valorSetup.isEmpty()) {
+				valorReal      = Double.valueOf( valorSetup );
+				if(modelContrato.getId_moeda() == 1 )
+				   modelContrato.setValor_total( dinheiro.format(valorReal) );
+				else 
+				  if(modelContrato.getId_moeda() == 2 )
+					 modelContrato.setValor_total( dinheiroDolar.format(valorReal) );
+				else 
+				  if(modelContrato.getId_moeda() == 3 )
+					 modelContrato.setValor_total( dinheiroEuro.format(valorReal) );
+				
+				valorSetup = null;	
+			}else valorSetup = null;
+/*			
 		    valorReal = Double.valueOf( resultado.getDouble("VALOR_TOTAL") ) ;
 			String vlr = dinheiro.format(valorReal);
 			modelContrato.setValor_total( vlr );
+*/			
 			/*********************************************************/
 			valorReal = Double.valueOf( resultado.getDouble("VALOR_CONVERTIDO") ) ;
 			modelContrato.setValor_convertido(dinheiro.format(valorReal));
@@ -390,7 +410,7 @@ public class DAOContratoRepository {
 			modelContrato.setId_hub_spot        ( resultado.getString("ID_HUB_SPOT")    );
 			modelContrato.setLogin_cadastro     ( resultado.getString("LOGIN_CADASTRO") );
 			modelContrato.setObservacao         ( resultado.getString("OBSERVACAO")     );
-			modelContrato.setId_moeda           ( resultado.getLong  ("ID_MOEDA")       );
+			
 
 			vigenciaContrato = this.getContratoVigencia( modelContrato.getId_contrato() );	
 			modelContrato.setId_vigencia        (vigenciaContrato.getId_vigencia()       );
@@ -492,9 +512,12 @@ public class DAOContratoRepository {
 	    if(this.isExstContratoAtivo(idCliente)) {
 		
 			ModelVigenciaContrato vigenciaContrato = new ModelVigenciaContrato(); 
-			DAOUtil daoUtil       = new DAOUtil();
-			Locale localeBR       = new Locale("pt","BR");
-			NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
+			DAOUtil daoUtil            = new DAOUtil();
+			Locale localeBR            = new Locale("pt","BR");
+			NumberFormat dinheiro      = NumberFormat.getCurrencyInstance(localeBR);
+			NumberFormat dinheiroEuro  = NumberFormat.getCurrencyInstance(Locale.FRANCE);
+			NumberFormat dinheiroDolar = NumberFormat.getCurrencyInstance(Locale.US);
+
 			Double valorReal      = 0.0;			
 			String sql = "SELECT * FROM CONTRATO WHERE ID_CLIENTE = ? AND ID_STATUS_CONTRATO IN ( 1, 4, 5 )";
 			
@@ -532,18 +555,33 @@ public class DAOContratoRepository {
 
 				modelContrato.setId_comercial          ( resultado.getLong  ("ID_COMERCIAL")                                 );
 				modelContrato.setId_suporte_b1         ( resultado.getLong  ("ID_SUPORTE_B1")                                );
+				modelContrato.setId_moeda              ( resultado.getLong  ( "ID_MOEDA"    )                                );
 				
 				/*********************************************************/
 				/* Configura o atributo Valor para demostrar como Real.  */
 				/*********************************************************/
-				valorReal = Double.valueOf( resultado.getDouble("VALOR_TOTAL") ) ;
-				modelContrato.setValor_total( dinheiro.format(valorReal) );
+//				valorReal = Double.valueOf( resultado.getDouble("VALOR_TOTAL") ) ;
+//				modelContrato.setValor_total( dinheiro.format(valorReal) );
+				
+				String valorSetup = resultado.getString("VALOR_TOTAL");
+				if(valorSetup != null && !valorSetup.isEmpty()) {
+					valorReal      = Double.valueOf( valorSetup );
+					if(modelContrato.getId_moeda() == 1 )
+					   modelContrato.setValor_total( dinheiro.format(valorReal) );
+					else 
+					  if(modelContrato.getId_moeda() == 2 )
+						 modelContrato.setValor_total( dinheiroDolar.format(valorReal) );
+					else 
+					  if(modelContrato.getId_moeda() == 3 )
+						 modelContrato.setValor_total( dinheiroEuro.format(valorReal) );
+					
+					valorSetup = null;	
+				}else valorSetup = null;
 				/*********************************************************/
 				modelContrato.setPep                   ( resultado.getString( "PEP"                                       ) );
 				modelContrato.setId_hub_spot           ( resultado.getString( "ID_HUB_SPOT"                               ) );
 				modelContrato.setObservacao            ( resultado.getString( "OBSERVACAO"                                ) );
 				modelContrato.setLogin_cadastro        ( resultado.getString("login_cadastro"                             ) );
-				modelContrato.setId_moeda              ( resultado.getLong   ( "ID_MOEDA"                                 ) );
 				
 				valorReal = Double.valueOf( resultado.getDouble("VALOR_CONVERTIDO") ) ;
 				modelContrato.setValor_convertido(dinheiro.format(valorReal));
@@ -556,7 +594,7 @@ public class DAOContratoRepository {
 
 				modelContrato.setComissao(resultado.getBoolean("SETUP") == true? "Sim" : "Não");
 				
-				String valorSetup = resultado.getString("VALOR_SETUP");				
+				valorSetup = resultado.getString("VALOR_SETUP");				
 				if(valorSetup != null && !valorSetup.isEmpty()) {
 					valorReal      = Double.valueOf( valorSetup );
 					modelContrato.setValor_setup( dinheiro.format(valorReal) );
@@ -585,6 +623,113 @@ public class DAOContratoRepository {
 	    }
 		return modelContrato;
 	}
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 * */	
+	public ModelContrato getContratoDesativoCliente( Long idContrato ) throws SQLException {
+		ModelContrato modelContrato = new ModelContrato();
+		String nomeClienteBD = "";
+				
+		ModelVigenciaContrato vigenciaContrato = new ModelVigenciaContrato(); 
+		DAOUtil daoUtil       = new DAOUtil();
+		Locale localeBR       = new Locale("pt","BR");
+		NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
+		Double valorReal      = 0.0;			
+		String sql = "SELECT * FROM CONTRATO WHERE ID_CONTRATO = ? AND ID_STATUS_CONTRATO NOT IN ( 1, 4, 5 )";
+		
+		PreparedStatement statement = connection.prepareStatement(sql);
+		
+		statement.setLong     ( 1, idContrato);
+		ResultSet resultado = statement.executeQuery();
+				
+		while (resultado.next()) {
+			
+			modelContrato.setId_contrato           ( resultado.getLong  ( "ID_CONTRATO"                               ) );
+			modelContrato.setId_nuvem              ( resultado.getLong  ( "ID_NUVEM"                                  ) );
+			modelContrato.setId_servico_contratado ( resultado.getLong  ( "ID_SERVICO_CONTRATADO"                     ) );
+			modelContrato.setId_status_contrato    ( resultado.getLong  ( "ID_STATUS_CONTRATO"                        ) );
+			modelContrato.setId_cliente            ( resultado.getLong  ( "ID_CLIENTE"                                ) );
+			
+			nomeClienteBD = Normalizer.normalize( this.buscaCliente( resultado.getLong("ID_CLIENTE")), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", " ");
+			 modelContrato.setNomeCliente           ( nomeClienteBD );
+			// modelContrato.setNomeCliente           ( this.buscaCliente  ( resultado.getLong("ID_CLIENTE")             ) );
+			
+			
+			modelContrato.setId_ciclo_update       ( resultado.getLong  ( "ID_CICLO_UPDATE"                           ) );
+			modelContrato.setId_fase_contrato      ( resultado.getLong  ( "ID_FASE_CONTRATO"                          ) );
+			modelContrato.setDt_criacao            ( daoUtil.FormataDataStringTelaDataTime( resultado.getString("DT_CRIACAO") ) );
+			modelContrato.setQty_usuario_contratada( resultado.getString( "QTY_USUARIO_CONTRATADA"                    ) );
+			modelContrato.setId_site               ( resultado.getLong  ( "ID_SITE"                                   ) );
+			modelContrato.setTermo_admin           ( resultado.getInt   ("TERMO_ADMIN"                                ) );
+			modelContrato.setTermo_download        ( resultado.getInt   ("TERMO_DOWNLOAD"                             ) );
+			modelContrato.setContratopdf           ( resultado.getString("CONTRATOPDF")                                 );
+			modelContrato.setExtensaocontratopdf   ( resultado.getString("EXTENSAOCONTRATOPDF")                         );
+			modelContrato.setNomeaqrpdf            ( resultado.getString("NOMEAQRPDF")                                  );
+			
+			modelContrato.setId_rascunho           ( resultado.getLong  ("ID_RASCUNHO")                                  );
+			modelContrato.setMotivoRascunho        ( resultado.getString("MOTIVO_RASCUNHO")                              );
+
+			modelContrato.setId_comercial          ( resultado.getLong  ("ID_COMERCIAL")                                 );
+			modelContrato.setId_suporte_b1         ( resultado.getLong  ("ID_SUPORTE_B1")                                );
+			
+			/*********************************************************/
+			/* Configura o atributo Valor para demostrar como Real.  */
+			/*********************************************************/
+			valorReal = Double.valueOf( resultado.getDouble("VALOR_TOTAL") ) ;
+			modelContrato.setValor_total( dinheiro.format(valorReal) );
+			/*********************************************************/
+			modelContrato.setPep                   ( resultado.getString( "PEP"                                       ) );
+			modelContrato.setId_hub_spot           ( resultado.getString( "ID_HUB_SPOT"                               ) );
+			modelContrato.setObservacao            ( resultado.getString( "OBSERVACAO"                                ) );
+			modelContrato.setLogin_cadastro        ( resultado.getString("login_cadastro"                             ) );
+			modelContrato.setId_moeda              ( resultado.getLong   ( "ID_MOEDA"                                 ) );
+			
+			valorReal = Double.valueOf( resultado.getDouble("VALOR_CONVERTIDO") ) ;
+			modelContrato.setValor_convertido(dinheiro.format(valorReal));
+            
+			valorReal = Double.valueOf( resultado.getDouble("CUSTO_TOTAL") ) ;
+			modelContrato.setCusto_total(dinheiro.format(valorReal));
+			
+			valorReal = Double.valueOf( resultado.getDouble("COTACAO_MOEDA") ) ;
+			modelContrato.setCotacao_moeda(dinheiro.format(valorReal));
+
+			modelContrato.setComissao(resultado.getBoolean("SETUP") == true? "Sim" : "Não");
+			
+			String valorSetup = resultado.getString("VALOR_SETUP");				
+			if(valorSetup != null && !valorSetup.isEmpty()) {
+				valorReal      = Double.valueOf( valorSetup );
+				modelContrato.setValor_setup( dinheiro.format(valorReal) );
+				valorSetup = null;
+			}else valorSetup = null;
+							
+			modelContrato.setQty_parcela_setup( resultado.getInt("QTY_PARCELA_SETUP") );
+			modelContrato.setQty_mese_setup   ( resultado.getInt("QTY_MESE_SETUP"   ) );
+			
+			valorSetup = resultado.getString("VALOR_PARCELA_SETUP");				
+			if(valorSetup != null && !valorSetup.isEmpty()) {
+				valorReal      = Double.valueOf( valorSetup );
+				modelContrato.setValor_parcela_setup( dinheiro.format(valorReal) );
+			}
+
+		}
+		
+		vigenciaContrato = this.getContratoVigencia(modelContrato.getId_contrato());
+		
+		modelContrato.setId_vigencia(vigenciaContrato.getId_vigencia());
+		modelContrato.setId_tempo_contrato  ( vigenciaContrato.getId_tempo_contrato() );
+		modelContrato.setDt_inicio          ( vigenciaContrato.getDt_inicio()         );
+		modelContrato.setDt_final           ( vigenciaContrato.getDt_final()          );
+		modelContrato.setDt_criacao_vigencia( vigenciaContrato.getDt_criacao()        );
+		modelContrato.setObservacao_vigencia( vigenciaContrato.getObservacao()        );
+	    
+		return modelContrato;
+	}
+	
+	
+	
 	/*
 	 * 
 	 * 
@@ -746,19 +891,139 @@ public class DAOContratoRepository {
 			listaRecursoContrato.setId_familia         ( resutado.getLong  ("ID_FAMILIA_FLAVORS" ) );
 			listaRecursoContrato.setEip_Vcenter        ( resutado.getString("EIP_VCENTER"        ) );
 			listaRecursoContrato.setHost_Vcenter       ( resutado.getString("HOST_VCENTER"       ) );
-			
-			
-			
-			
-//			 valorReal = Double.valueOf                ( resutado.getString("VALOR_RECURSO"      ) );
-//			 listaRecursoContrato.setValor_recurso     ( dinheiro.format(valorReal)                );
 
-//			System.out.println(listaRecursoContrato);
 			listaRecursoContratos.add(listaRecursoContrato);
 			
 		}
 		return listaRecursoContratos;
 	}
+
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 * */	
+	public List<ModelListaRecursoContratoAditivo> getListaRecursoContratoDesativos( Long idContrato ) throws SQLException {
+		
+		List<ModelListaRecursoContratoAditivo> listaRecursoContratos = new ArrayList<ModelListaRecursoContratoAditivo>();
+		DAOUtil daoUtil       = new DAOUtil();
+//		Locale localeBR       = new Locale("pt","BR");
+//		NumberFormat dinheiro = NumberFormat.getCurrencyInstance(localeBR);
+//		Double valorReal      = 0.0;
+		
+		String sql = "SELECT                                             "
+				+ "        REC.ID_RECURSO                                "
+				+ "      , SR.STATUS_RECURSO                             "
+				+ "      , REC.ID_RETENCAO_BACKUP                        "
+				+ "      , RB.RETENCAO_BACKUP                            "
+				+ "      , REC.ID_TIPO_DISCO                             "
+				+ "      , TD.TIPO_DISCO                                 "
+				+ "      , REC.ID_STATUS_RECURSO                         "
+				+ "      , SO.SISTEMA_OPERACIONAL                        "
+				+ "      , REC.ID_AMBIENTE                               "
+				+ "      , AMB.AMBIENTE                                  "
+				+ "      , FF.FAMILIA                                    "
+				+ "      , REC.ID_TIPO_SERVICO                           "
+				+ "      , TS.TIPO_SERVICO                               " 
+				+ "      , REC.DT_CADASTRO                               " 
+				+ "      , REC.HOSTNAME                                  "
+				+ "      , REC.TAMANHO_DISCO                             "
+				+ "      , REC.PRIMARY_IP                                "
+				+ "      , REC.TAG_VCENTER                               "
+				+ "      , REC.EIP_VCENTER                               "
+				+ "      , REC.HOST_VCENTER                              "
+				+ "      , REC.VALOR_RECURSO                             "
+				+ "      , REC.OBS                                       "
+				+ "      , REC.ID_CONTRATO                               "
+				+ "      , REC.ID_NUVEM                                  "
+				+ "      , REC.SITE                                      "
+				+ "      , REC.ID_FAMILIA_FLAVORS                        "
+				+ "      , REC.ID_ADITIVADO                              "
+				+ "      , CON.LOGIN_CADASTRO                            "
+				+ "      , CASE WHEN REC.ID_ADITIVADO IS NULL THEN 'NÃO' "
+				+ "             ELSE 'SIM' END AS ISADITIVO              "
+				+ "      , CLI.RAZAO_SOCIAL                              "
+				+ "      , STC.STATUS_CONTRATO                           "
+				+ "      , NUV.MOME_PARCEIRO                             "
+				+ "      , SIT.NOME                                      " 
+				+ "  FROM                                                "
+				+ "    RECURSO             AS REC                        "
+				+ "  , STATUS_RECURSO      AS SR                         "
+				+ "  , RETENCAO_BACKUP     AS RB                         "
+				+ "  , TIPO_DISCO          AS TD                         "
+				+ "  , SISTEMA_OPERACIONAL AS SO                         "
+				+ "  , AMBIENTE            AS AMB                        "
+				+ "  , FAMILIA_FLAVORS     AS FF                         "
+				+ "  , TIPO_SERVICO        AS TS                         "
+				+ "  , CONTRATO            AS CON                        "
+				+ "  , STATUS_CONTRATO     AS STC                        "
+				+ "  , CLIENTE             AS CLI                        "
+				+ "  , NUVEM               AS NUV                        "
+				+ "  , SITE                AS SIT                        "				
+				+ "WHERE CON.ID_CLIENTE         = ?                      "
+				+ "  AND CON.ID_STATUS_CONTRATO NOT IN ( 1, 4, 5 )       "
+				+ "  AND REC.ID_CONTRATO        = CON.ID_CONTRATO        "				
+				+ "  AND SR.ID_STATUS_RECURSO   = REC.ID_STATUS_RECURSO  "
+				+ "  AND RB.ID_RETENCAO_BACKUP  = REC.ID_RETENCAO_BACKUP "
+				+ "  AND TD.ID_TIPO_DISCO       = REC.ID_TIPO_DISCO      "
+				+ "  AND SO.ID_SO               = REC.ID_SO              "
+				+ "  AND AMB.ID_AMBIENTE        = REC.ID_AMBIENTE        "
+				+ "  AND FF.ID_FAMILIA_FLAVORS  = REC.ID_FAMILIA_FLAVORS "
+				+ "  AND TS.ID_TIPO_SERVICO     = REC.ID_TIPO_SERVICO    "
+				+ "  AND REC.ID_ADITIVADO       IS NULL                  "
+				+ "  AND CLI.ID_CLIENTE         = CON.ID_CLIENTE         "
+				+ "  AND STC.ID_STATUS_CONTRATO = CON.ID_STATUS_CONTRATO "
+				+ "  AND NUV.ID_NUVEM           = REC.ID_NUVEM           "
+				+ "  AND SIT.ID_SITE            = REC.SITE               " ;
+		
+
+		PreparedStatement prepareSql = connection.prepareStatement(sql);
+		prepareSql.setLong ( 1, idContrato );
+
+		ResultSet resutado = prepareSql.executeQuery();
+		
+		while (resutado.next()) {
+			ModelListaRecursoContratoAditivo listaRecursoContrato = new ModelListaRecursoContratoAditivo();
+			listaRecursoContrato.setId_recurso         ( resutado.getLong  ("ID_RECURSO"         ) );  // 1
+			listaRecursoContrato.setStatus_recurso     ( resutado.getString("STATUS_RECURSO"     ) );  // 2
+			listaRecursoContrato.setRetencao_backup    ( resutado.getString("RETENCAO_BACKUP"    ) );  // 3
+			listaRecursoContrato.setTipo_disco         ( resutado.getString("TIPO_DISCO"         ) );  // 4
+			listaRecursoContrato.setSistema_operacional( resutado.getString("SISTEMA_OPERACIONAL") );  // 5
+			listaRecursoContrato.setAmbiente           ( resutado.getString("AMBIENTE"           ) );  // 6
+			listaRecursoContrato.setFamilia            ( resutado.getString("FAMILIA"            ) );  // 7
+			listaRecursoContrato.setTipo_servico       ( resutado.getString("TIPO_SERVICO"       ) );  // 8
+			listaRecursoContrato.setDt_cadastro        ( daoUtil.FormataDataStringTelaDataTime( resutado.getString("DT_CADASTRO") )); // 9
+			listaRecursoContrato.setHostname           ( resutado.getString("HOSTNAME"           ) );  // 10
+			listaRecursoContrato.setTamanho_disco      ( resutado.getString("TAMANHO_DISCO"      ) );  // 11
+			listaRecursoContrato.setPrimary_ip         ( resutado.getString("PRIMARY_IP"         ) );  // 12
+			listaRecursoContrato.setTag_vcenter        ( resutado.getString("TAG_VCENTER"        ) );  // 13
+			listaRecursoContrato.setObs                ( resutado.getString("OBS"                ) );  // 14
+			listaRecursoContrato.setId_contrato        ( resutado.getLong  ("ID_CONTRATO"        ) );  // 15
+			listaRecursoContrato.setId_aditivado       ( resutado.getLong  ("ID_ADITIVADO"       ) );  // 16
+			listaRecursoContrato.setIsaditivo          ( resutado.getString("ISADITIVO"          ) );  // 17
+			listaRecursoContrato.setLogin_cadastro     ( resutado.getString("LOGIN_CADASTRO"     ) );
+			listaRecursoContrato.setRazao_social       ( resutado.getString("RAZAO_SOCIAL"       ) );
+			listaRecursoContrato.setStatus_contrato    ( resutado.getString("STATUS_CONTRATO"    ) );
+			listaRecursoContrato.setMome_parceiro      ( resutado.getString("MOME_PARCEIRO"      ) );
+			listaRecursoContrato.setNome_site          ( resutado.getString("NOME"               ) );
+			listaRecursoContrato.setId_retencao_backup ( resutado.getLong  ("ID_RETENCAO_BACKUP" ) );
+			listaRecursoContrato.setId_tipo_disco      ( resutado.getLong  ("ID_TIPO_DISCO"      ) );
+			listaRecursoContrato.setId_so              ( resutado.getLong  ("ID_STATUS_RECURSO"  ) );
+			listaRecursoContrato.setId_ambiente        ( resutado.getLong  ("ID_AMBIENTE"        ) );
+			listaRecursoContrato.setId_tipo_servico    ( resutado.getLong  ("ID_TIPO_SERVICO"    ) );
+			listaRecursoContrato.setId_nuvem           ( resutado.getLong  ("ID_NUVEM"           ) );
+			listaRecursoContrato.setId_site            ( resutado.getLong  ("SITE"               ) );
+			listaRecursoContrato.setId_familia         ( resutado.getLong  ("ID_FAMILIA_FLAVORS" ) );
+			listaRecursoContrato.setEip_Vcenter        ( resutado.getString("EIP_VCENTER"        ) );
+			listaRecursoContrato.setHost_Vcenter       ( resutado.getString("HOST_VCENTER"       ) );
+
+			listaRecursoContratos.add(listaRecursoContrato);
+			
+		}
+		return listaRecursoContratos;
+	}
+
 
 	/*
 	 * 

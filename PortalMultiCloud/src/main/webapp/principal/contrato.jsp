@@ -198,7 +198,7 @@
 																<!-- Campo Moeda -->
 																<div class="form-group form-default form-static-label col-md-3 mb-4">
 																	<span  class="font-weight-bold font-italic" style="color: #708090">Moeda</span>
-																	<select style="color: #000000" name="id_moeda" id="id_moeda" class="form-control" onchange="habilitaCotacao();" required="required" >
+																	<select style="color: #000000" name="id_moeda" id="id_moeda" class="form-control" onchange="ValidaTipoMoeda();validaValorValorCotacao();validaValorConvertido();habilitaCotacao();" required="required" >
 																		<option value="" disabled selected>Selecione Moeda</option>
 																		   <tagsContrato:listaMoeda />
 																	</select> 
@@ -207,49 +207,80 @@
 																<!-- Campo Site -->
 																<div class="form-group form-default form-static-label col-md-3 mb-4">
 																    <span  class="font-weight-bold font-italic" style="color: #708090" >Valor Corrente</span>
-																	<input style="color: #000000" type="text" name="valor_total" id="valor_total" onblur="cauculoConversao();" class="form-control" required="required" placeholder="Valor do contrato" value="${modelContrato.valor_total}">
+																	<input style="color: #000000" type="text" name="valor_total" id="valor_total" onblur="validaValorConvertido(); ValidaTipoMoeda()cauculoConversao();" class="form-control" required="required" placeholder="Valor do contrato" value="${modelContrato.valor_total}">
 																</div>
 																
 
 																<!-- Campo Fase do Contrato -->
 																<div class="form-group form-default form-static-label col-md-3 mb-4">
 																	<span class="font-weight-bold font-italic" style="color: #708090">Valor Convertido</span>
-																	<input style="color: #000000" type="text" name="valor_convertido" id="valor_convertido" disabled="disabled" class="form-control" placeholder="Valor do contrato" value="${modelContrato.valor_convertido}">
+																	<input style="color: #000000" type="text" name="valor_convertido" id="valor_convertido" disabled="disabled" onblur="ValidaTipoMoeda(); cauculoConversao();" required="required" class="form-control" placeholder="Valor do contrato" value="${modelContrato.valor_convertido}">
 																</div>
 
 																<!-- Campo Fase do Contrato -->
 																<div class="form-group form-default form-static-label col-md-3 mb-4">
 																	<span class="font-weight-bold font-italic" style="color: #708090">Cotação</span>
-																	<input style="color: #000000" type="text" name="valor_Cotacao" id="valor_Cotacao" disabled="disabled" onblur="cauculoConversao();" class="form-control" placeholder="Valor do contrato" value="${modelContrato.cotacao_moeda}">
+																	<input style="color: #000000" type="text" name="valor_Cotacao" id="valor_Cotacao" disabled="disabled" required="required" onblur="validaValorValorCotacao();cauculoConversao();" onblur="ValidaTipoMoeda()" class="form-control" placeholder="Valor do contrato" value="${modelContrato.cotacao_moeda}">
 																</div>
 
 															</div>
 															
 														    <div class="form-row">
-														    
+<!--  														    
 																<div class="form-group form-default form-static-label col-md-2 mb-3">
 																    <span class="font-weight-bold font-italic" style="color: #708090">Comissão</span>
 																    <input style="color: #000000; text-align: left;" type="text" name="comissao" id="comissao" readonly class="form-control" placeholder="Comissão" value="${modelContrato.comissao}">
 																</div>
-																															
+-->
+
+
+																<div class="form-group form-default form-static-label col-md-2 mb-3">
+																
+																    <span class="font-weight-bold font-italic" style="color: #708090">Comissão</span>
+																	<select style="color: #000000" name="comissao" id="comissao" class="form-control" required="required">
+																	  <option value="" disabled selected>Selecione uma Opção</option>
+																	  <option value="1"<% 
+																			  ModelContrato modelContrato = (ModelContrato) request.getAttribute("modelContrato");
+																	          if ( modelContrato != null ) {
+																				  if( modelContrato.getComissao().equals("Sim") ){
+																					  out.print(" ");
+																					  out.print("selected=\"selected\"");
+																					  out.print(" ");
+																				  }
+																	          }
+																	  %>>Sim</option>
+																	  <option value="2"<% 
+																			  modelContrato = (ModelContrato) request.getAttribute("modelContrato");
+																	          if ( modelContrato != null ) {
+																				  if( modelContrato.getComissao().equals("Não") ){
+																					  out.print(" ");
+																					  out.print("selected=\"selected\"");
+																					  out.print(" ");
+																				  }
+																	          }
+																	  %>>Não</option>
+																	</select> <!-- <label class="float-label">Termo Administrador</label> -->
+																    
+																</div>
+
 															    <div class="form-group form-default form-static-label col-md-2 mb-4">
 																    <span class="font-weight-bold font-italic" style="color: #708090">Quantidades Meses Contrato</span>
-																    <input style="color: #000000" type="text" name="qtyMesesContrato" id="qtyMesesContrato" readonly class="form-control" placeholder="Quantidades Meses Contrato" value="${modelContrato.qty_mese_setup}">
+																    <input style="color: #000000" type="number" min="0" name="qtyMesesContrato" id="qtyMesesContrato" required="required" class="form-control" placeholder="Quantidades Meses Contrato" value="${modelContrato.qty_mese_setup}">
 															    </div>
 															    
 															    <div class="form-group form-default form-static-label col-md-3 mb-4">
 																    <span class="font-weight-bold font-italic" style="color: #708090">Valor Parcelas</span>
-																    <input style="color: #000000" type="text" name="vlrParcelas" id="vlrParcelas" readonly class="form-control" placeholder="Valor Parcelas" value="${modelContrato.valor_parcela_setup}">
+																    <input style="color: #000000" type="text" name="vlrParcelas" id="vlrParcelas" required="required" class="form-control" placeholder="Valor Parcelas" value="${modelContrato.valor_parcela_setup}">
 															    </div>
 															    
 															    <div class="form-group form-default form-static-label col-md-2 mb-4">
 																    <span class="font-weight-bold font-italic" style="color: #708090">Quantidade Parcelas Setup</span>
-																    <input style="color: #000000" type="text" name="qtyParcSetup" id="qtyParcSetup" readonly class="form-control" placeholder="Quantidade Parcelas Comissão" value="${modelContrato.qty_parcela_setup}">
+																    <input style="color: #000000" type="number" min="0" name="qtyParcSetup" id="qtyParcSetup" required="required" class="form-control" placeholder="Quantidade Parcelas Comissão" value="${modelContrato.qty_parcela_setup}">
 															    </div>
 																
 															    <div class="form-group form-default form-static-label col-md-3 mb-4">
 																    <span class="font-weight-bold font-italic" style="color: #708090">Valor Setup</span>
-																    <input style="color: #000000" type="text" name="idValorSetup" id="idValorSetup" readonly onchange="calcular();" class="form-control" placeholder="Valor Comissão" value="${modelContrato.valor_setup}">
+																    <input style="color: #000000" type="text" name="idValorSetup" id="idValorSetup" required="required" onchange="calcular();" class="form-control" placeholder="Valor Comissão" value="${modelContrato.valor_setup}">
 															    </div>																															
 
 														    </div>
@@ -360,7 +391,8 @@
 																	<select style="color: #000000" name="termo_admin" id="termo_admin" class="form-control" required="required">
 																	  <option value="" disabled selected>Selecione uma Opção</option>
 																	  <option value="1"<% 
-																			  ModelContrato modelContrato = (ModelContrato) request.getAttribute("modelContrato");
+																			  //ModelContrato modelContrato = (ModelContrato) request.getAttribute("modelContrato");
+																	          modelContrato = (ModelContrato) request.getAttribute("modelContrato");
 																	          if ( modelContrato != null ) {
 																				  if( modelContrato.getTermo_admin() == 1  ){
 																					  out.print(" ");
@@ -715,6 +747,7 @@
 																<table class="table table-striped table-hover table-sm table-bordered table-responsive-xl">
 																  <thead>
 																    <tr>
+																      <th scope="col">Editar         </th>
 																      <th scope="col">ID Recurso     </th>
 																      <th scope="col">DT Cadastro    </th>
 																      <th scope="col">Cliente        </th>
@@ -725,9 +758,9 @@
 																      <th scope="col">Familia        </th>
 																      <th scope="col">Serviço        </th>
 																      <th scope="col">IP             </th>
+																      <th scope="col">Tamanho Disco  </th>
 																      <th scope="col">Nuvem          </th>
 																      <th scope="col">Site           </th>
-																      <th scope="col">Editar         </th>
 																    </tr>
 																  </thead>
 																  <tbody id="TbodyRecusos">
@@ -1101,7 +1134,8 @@
 ******************************************************************************************************
 -->
 	<div class="modal t-modal primary" id="modalClienteContrato" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-lg" role="document">
+	  <!--  <div class="modal-dialog modal-lg" role="document">-->
+	  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title" id="exampleModalLabel">Pesquisar Cliente</h5>
@@ -1470,6 +1504,7 @@
 		         let tr = tbody.insertRow();
 		         
 		         // Crias as celulas
+		         let td_editar          = tr.insertCell();
 		         let td_id_recurso      = tr.insertCell();
 		         let td_dt_cadastro     = tr.insertCell();
 		         let td_razao_social    = tr.insertCell();
@@ -1480,9 +1515,9 @@
 		         let td_familia         = tr.insertCell();
 		         let td_tipo_servico    = tr.insertCell();
 		         let td_primary_ip      = tr.insertCell();
+		         let td_tamanhoDisco    = tr.insertCell();
 		         let td_nuvem           = tr.insertCell();
 		         let td_site            = tr.insertCell();
-		         let td_editar          = tr.insertCell();
 
 		         // Inseri os valores do objeto nas celulas
 		         td_id_recurso.innerText      = listRecursos[i].id_recurso;
@@ -1495,11 +1530,13 @@
 		         td_familia.innerText         = listRecursos[i].familia;
 		         td_tipo_servico.innerText    = listRecursos[i].tipo_servico;
 		         td_primary_ip.innerText      = listRecursos[i].primary_ip;
+		         td_tamanhoDisco.innerText    = listRecursos[i].tamanho_disco;
 		         td_nuvem.innerText           = listRecursos[i].mome_parceiro;
 		         td_site.innerText            = listRecursos[i].nome_site;
 
 		         let imgEdit = document.createElement('img');
 		         imgEdit.src = getContextPath() +'/imagens/edit-40.png';
+		         imgEdit.setAttribute('style', 'cursor:pointer;' );
 		         imgEdit.setAttribute('onclick','abriModalRecursoEditar( ' + listRecursos[i].id_recurso + ' )');
 		         td_editar.appendChild(imgEdit);
 			}
@@ -1539,10 +1576,16 @@
  
  
  function abreModalRecurso() {
-	 
+	
+		var staticBackdrop = document.getElementById('ModalRecursoEdit');
+		var myModal = new bootstrap.Modal(staticBackdrop);
+		myModal.show();
+
+/*	 
 	 $("#ModalRecursoEdit").modal({
 	      show: true
 	    });
+*/	    
  } 
  
  
@@ -1636,22 +1679,74 @@
  /*                                                                */
  /*                                                                */
  /******************************************************************/
- 
- // $("#valor_total").maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
-
-  $("#valor_total"     ).maskMoney({ showSymbol:true, symbol:""   , decimal:",", thousands:"." });
+ /*
+  $("#valor_total").maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
   $("#valor_convertido").maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
   $("#valor_Cotacao"   ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
   $("#idValorSetupCon" ).maskMoney({ showSymbol:true, symbol:"R$ ", decimal:",", thousands:"." });
-    
+*/
+  $("#valor_total"     ).maskMoney({ showSymbol:true, symbol:"" , decimal:",", thousands:"." });
+  $("#valor_convertido").maskMoney({ showSymbol:true, symbol:"" , decimal:",", thousands:"." });
+  $("#valor_Cotacao"   ).maskMoney({ showSymbol:true, symbol:"" , decimal:",", thousands:"." });
+  $("#idValorSetupCon" ).maskMoney({ showSymbol:true, symbol:"" , decimal:",", thousands:"." });
+ 
+  $("#idValorSetup"    ).maskMoney({ showSymbol:true, symbol:"" , decimal:",", thousands:"." });
+  $("#vlrParcelas"     ).maskMoney({ showSymbol:true, symbol:"" , decimal:",", thousands:"." });
+  
+  function ValidaTipoMoeda() {
+	 var idMoeda         = document.getElementById("id_moeda"        ).value;
+	 var valorTotal      = document.getElementById("valor_total"     ).value;
+	 
+	 
+	 if( valorTotal   != null && valorTotal   != '' && valorTotal.trim() != '' ) {
+	     valorTotal = valorTotal.replace(/[^\d]+/g,'');
+		 valorTotal = valorTotal /100;
+	 }else valorTotal = 0;
+	 
+	 switch(idMoeda) {
+	    case "1": // 1	Real  (R$)
+	    	valorTotal      = Intl.NumberFormat('pt-br', {currency: 'BRL', style: 'currency'}).format( valorTotal      ); // Rel
+	    	$("#valor_total"     ).val( valorTotal      ); 
+	    	break;
+	    case "2": // 2	Dólar (US$)
+	    	valorTotal      = Intl.NumberFormat('en'   , {currency: 'USD', style: 'currency'}).format( valorTotal      ); // Dollar
+	    	$("#valor_total"     ).val( valorTotal      ); 
+	    	break;
+	    case "3": // 3	Euro 
+	    	valorTotal      = Intl.NumberFormat('de' , {currency: 'EUR', style: 'currency'}).format( valorTotal      ); // Euro
+	    	$("#valor_total"     ).val( valorTotal      ); 
+	    	break;
+	}
+
+  }
+  function validaValorValorCotacao() {
+	   var valorCotacao      = document.getElementById("valor_Cotacao"     ).value;
+	   if( valorCotacao   != null && valorCotacao   != '' && valorCotacao.trim() != '' ) {
+		   valorCotacao = valorCotacao.replace(/[^\d]+/g,'');
+		   valorCotacao = valorCotacao /100;
+	   }else valorCotacao = 0;
+	   valorCotacao      = Intl.NumberFormat('pt-br', {currency: 'BRL', style: 'currency'}).format( valorCotacao      ); // Rel	 
+	   $("#valor_Cotacao" ).val( valorCotacao ); 
+  } 
+  function validaValorConvertido() {
+	   var valorConvertido      = document.getElementById("valor_convertido"     ).value;
+	   if( valorConvertido   != null && valorConvertido   != '' && valorConvertido.trim() != '' ) {
+		   valorConvertido = valorConvertido.replace(/[^\d]+/g,'');
+		   valorConvertido = valorConvertido /100;
+	   }else valorConvertido = 0;
+	   valorConvertido      = Intl.NumberFormat('pt-br', {currency: 'BRL', style: 'currency'}).format( valorConvertido      ); // Rel	 
+	   $("#valor_convertido" ).val( valorConvertido ); 
+ } 
+ 
   /******************************************************************/
   /*                                                                */
   /*                                                                */
   /******************************************************************/
   function cauculoConversao() {
 
-	 var valorTotal      = document.getElementById("valor_total"  ).value;
-	 var valorCotacao    = document.getElementById("valor_Cotacao").value;
+	 var valorTotal   = document.getElementById("valor_total"  ).value;
+	 var valorCotacao = document.getElementById("valor_Cotacao").value;
+	 
 	 var valorConvertido = '';
 	
 	 if( ( valorTotal   != null && valorTotal   != '' && valorTotal.trim() != '' ) && 
@@ -1663,12 +1758,12 @@
 		 valorCotacao = valorCotacao /100;
 		 
 		 valorConvertido = valorTotal * valorCotacao;
-		 const valorCalculado = Intl.NumberFormat('pt-br', {style: 'currency', currency: 'BRL'}).format(valorConvertido);
-		 $("#valor_convertido").val(valorCalculado ); 
+		 valorConvertido = Intl.NumberFormat('pt-br', {currency: 'BRL', style: 'currency'}).format( valorConvertido ); // Rel
+		 $("#valor_convertido").val( valorConvertido ); 
 	 }
   }  
   /******************************************************************/
-  /*                                                                */
+  /*  ==> const formattedValue = Intl.NumberFormat('en', {currency: 'USD', style: 'currency'}).format(magicCoinCurrentValue);  */
   /*                                                                */
   /******************************************************************/ 
   function habilitaCotacao() {
@@ -1711,7 +1806,7 @@
   				$('#tabelaResutado > tbody > tr').remove();
   				
   				for(var p = 0; p < json.length; p++){
-  					$('#tabelaResutado > tbody').append('<tr> <td>' + (p+1) + '</td> <td>'+ json[p].id_cliente + '</td> <td>'+json[p].razao_social+'</td> <td><button onclick="verClienteSelecionado('+json[p].id_cliente+',' + '\'' + json[p].razao_social+ '\''+');" type="button" class="btn btn-info">Selecionar</button></td></tr>');
+  					$('#tabelaResutado > tbody').append('<tr> <td>' + (p+1) + '</td> <td>'+ json[p].id_cliente + '</td> <td>'+json[p].razao_social+'</td> <td><button onclick="verClienteSelecionado('+json[p].id_cliente+',' + '\'' + json[p].razao_social+ '\''+');" type="button" style="border-radius: 25px;" class="btn btn-info">Selecionar</button></td></tr>');
   																																								   
   				}
   				document.getElementById("totalResutados").textContent = 'Resutado: ' + json.length + ' cliente(s) encontrado(s)';
@@ -2069,7 +2164,7 @@ function AlerataMensagensModal( tituloPrincipal, textoPrincipal,  nomeModal ) {
    							               + ' <td>' + json[p].razao_social + ' </td> '
    							               + ' <td>' + json[p].alias        + ' </td> '
    							               + ' <td>'
-   							               +     '<button onclick="verClienteSelecionado('+json[p].id_cliente+',' + '\'' + json[p].razao_social+ '\''+');" type="button" class="btn btn-outline-success" data-dismiss="modal">Selecionar</button>'
+   							               +     '<button onclick="verClienteSelecionado('+json[p].id_cliente+',' + '\'' + json[p].razao_social+ '\''+');" type="button" style="border-radius: 25px;" class="btn btn-outline-success" data-dismiss="modal">Selecionar</button>'
    							               + '</td>'
    							           +'</tr>'); 
    					totalPag = json[p].totalPagCli;

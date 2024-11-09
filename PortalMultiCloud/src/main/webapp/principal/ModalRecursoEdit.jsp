@@ -6,7 +6,8 @@
 
   <!-- Modal Add Recurso -->
    <div class="modal t-modal primary" id="ModalRecursoEdit" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true" data-backdrop="static">
-	  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+	  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+	  
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title" id="TituloModalCentralizado">Adicionando Recurso</h5>
@@ -218,7 +219,7 @@
 	      </div>
 	      <div class="modal-footer">
 			<button type="button" class="btn waves-effect waves-light btn-outline-success   float-right pequeno" name="btSalvarMD" id="btSalvarMD" onclick="AddRecursoModal();">Salvar</button>
-	        <button type="button" class="btn waves-effect waves-light btn-outline-secondary float-right pequeno" name="btFecharMD" id="btFecharMD" data-dismiss="modal">Fechar</button>
+	        <button type="button" class="btn waves-effect waves-light btn-outline-secondary float-right pequeno" name="btFecharMD" id="btFecharMD" onclick="FecharModal();">Fechar</button>
 	      	        
 	      </div>
 	    </div>
@@ -226,7 +227,11 @@
  </div>
 
  <script type="text/javascript">
-  
+ 
+ function FecharModal(  ){
+   $('#ModalRecursoEdit').modal('hide');
+ }
+ 
  function ValidaNumeroPonto( obj , e ) {
      var tecla = ( window.event ) ? e.keyCode : e.which;
      if ( tecla == 8 || tecla == 0 )

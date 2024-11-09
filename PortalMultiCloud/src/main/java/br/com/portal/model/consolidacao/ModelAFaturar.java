@@ -59,4 +59,12 @@ public class ModelAFaturar {
 	public void setVl_faturamento(String vl_faturamento) {
 		this.vl_faturamento = vl_faturamento;
 	}
+	@Override
+	public String toString() {
+		return "ModelAFaturar [pep=" + pep + ", nome_emissor=" + nome_emissor + ", dt_faturamento=" + dt_faturamento
+				+ ", mes=" + mes + ", ano=" + ano + ", valor=" + valor + ", moeda=" + moeda + ", vl_faturamento="
+				+ vl_faturamento + "]";
+	}
+	
+	
 }

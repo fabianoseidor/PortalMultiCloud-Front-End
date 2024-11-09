@@ -10,6 +10,7 @@ import java.util.List;
 
 import br.com.portal.connection.SingleConnectionBanco;
 import br.com.portal.model.ModelCliente;
+import br.com.portal.model.ModelContratosDesativados;
 
 public class DAOClienteRepository {
 
@@ -160,6 +161,51 @@ public class DAOClienteRepository {
 		return this.getClienteID(objeto.getId_cliente());
 	}
 
+	public List<ModelCliente> buscarListaClienteNomeDesativados(String dadoCliente) throws SQLException {
+
+	    List<ModelCliente> Clientes = new ArrayList<ModelCliente>();
+		String sql = "SELECT *                                                                      "
+				   + "  FROM CLIENTE       AS CLI                                                   "
+				   + " WHERE (UPPER( RTRIM(CLI.RAZAO_SOCIAL) ) LIKE UPPER('%"  + dadoCliente + "%') "
+				   + "     OR UPPER( RTRIM(CLI.ALIAS       ) ) LIKE UPPER('%"  + dadoCliente + "%') "
+				   + "     OR RTRIM(CLI.CNPJ                 ) LIKE '%"        + dadoCliente + "%') ";
+		
+		
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {
+			ModelCliente cliente = new ModelCliente();
+			
+			cliente.setId_cliente         ( resultado.getLong           ("id_cliente")                                 );
+			cliente.setId_porte_emp       ( resultado.getLong         ("id_porte_emp")                                 );
+			cliente.setId_status_emp      ( resultado.getLong        ("id_status_emp")                                 );
+			cliente.setRazao_social       ( resultado.getString       ("razao_social")                                 );
+			cliente.setNome_fantasia      ( resultado.getString      ("nome_fantasia")                                 );
+			cliente.setSite               ( resultado.getString               ("site")                                 );
+			cliente.setCep                ( resultado.getString                ("cep")                                 );
+			cliente.setEndereco           ( resultado.getString           ("endereco")                                 );
+			cliente.setBairro             ( resultado.getString             ("bairro")                                 );
+			cliente.setNumero             ( resultado.getString             ("numero")                                 );
+			cliente.setComplemento        ( resultado.getString        ("complemento")                                 );
+			cliente.setCidade             ( resultado.getString             ("cidade")                                 );
+			cliente.setEstado             ( resultado.getString             ("estado")                                 );
+			cliente.setPais               ( resultado.getString               ("pais")                                 );
+			cliente.setCnpj               ( resultado.getString               ("cnpj")                                 );
+			cliente.setInscricao_estadual ( resultado.getString ("inscricao_estadual")                                 );
+			cliente.setInscricao_municipal( resultado.getString("inscricao_municipal")                                 );
+			cliente.setNicho_mercado      ( resultado.getString      ("nicho_mercado")                                 );
+			cliente.setDt_criacao         ( daoUtil.FormataDataStringTelaDataTime( resultado.getString("dt_criacao") ) );
+			cliente.setObservacao         ( resultado.getString("observacao")                                          );
+			cliente.setStatus_emp         ( daoStatusCliente.getNomeStatus(cliente.getId_status_emp())                 );
+			cliente.setLogin_cadastro     ( resultado.getString("login_cadastro")                                      );
+			cliente.setAlias              ( resultado.getString("alias")                                               );
+			Clientes.add(cliente);
+			
+		}
+		
+		return Clientes;
+}
 	
 	
 	public List<ModelCliente> buscarListaClienteNome(String dadoCliente) throws SQLException {
@@ -224,6 +270,111 @@ public class DAOClienteRepository {
 			
 			return Clientes;
     }
+	
+	public List<ModelContratosDesativados> buscarDadosContratoDesativados(Long  idCliente) throws SQLException {
+
+	    List<ModelContratosDesativados> contratosDesativados = new ArrayList<ModelContratosDesativados>();
+		String sql = "SELECT                                                                          "
+				+ "     CLI.ID_CLIENTE                                                                "
+				+ "   , CLI.RAZAO_SOCIAL                                                              "
+				+ "   , CLI.ALIAS                                                                     "
+				+ "   , CON.ID_CONTRATO                                                               "
+				+ "   , CON.DT_CRIACAO                                                                "
+				+ "   , CON.PEP                                                                       "
+				+ "   , CASE                                                                          "
+				+ "        WHEN CON.ID_MOEDA = 1 THEN FORMAT( CON.VALOR_TOTAL, 'C', 'pt-br')          "
+				+ "        WHEN CON.ID_MOEDA = 2 THEN FORMAT( CON.VALOR_TOTAL, 'C', 'en-us')          "
+				+ "        WHEN CON.ID_MOEDA = 3 THEN FORMAT( CON.VALOR_TOTAL, 'C', 'fr-FR')          "
+				+ "     END AS VALOR_TOTAL                                                            "
+				+ "   , VIG.ID_VIGENCIA                                                               "
+				+ "   , CONVERT(VARCHAR(10), VIG.DT_INICIO, 103)  AS DT_INICIO                        "
+				+ "   , CONVERT(VARCHAR(10), VIG.DT_FINAL, 103)   AS DT_FINAL                         "
+				+ "   , FORMAT( VIG.DT_DESATIVACAO, 'dd/MM/yyyy HH:mm:ss', 'en-us') AS DT_DESATIVACAO "
+				+ "  FROM                                                                             "
+				+ "     CONTRATO AS CON                                                               "
+				+ "   , CLIENTE  AS CLI                                                               "
+				+ "   , VIGENCIA AS VIG                                                               "
+				+ " WHERE CLI.ID_CLIENTE = ?                                                          "
+				+ "   AND CON.ID_CLIENTE = CLI.ID_CLIENTE                                             "
+				+ "   AND CON.ID_STATUS_CONTRATO NOT IN ( 1, 4, 5 )                                   "
+				+ "   AND VIG.ID_CONTRATO = CON.ID_CONTRATO                                           ";
+		
+		
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setLong( 1, idCliente);	
+		ResultSet resultado = statement.executeQuery();
+		
+		while (resultado.next()) {
+			ModelContratosDesativados contratosDesativado = new ModelContratosDesativados();
+			contratosDesativado.setIdCliente    ( resultado.getLong  ("ID_CLIENTE"    ) );
+			contratosDesativado.setRazaoSocial  ( resultado.getString("RAZAO_SOCIAL"  ) );
+			contratosDesativado.setAlias        ( resultado.getString("ALIAS"         ) );
+			contratosDesativado.setIdContrato   ( resultado.getLong  ("ID_CONTRATO"   ) );
+			contratosDesativado.setDtCriacao    ( daoUtil.FormataDataStringTelaDataTime( resultado.getString("DT_CRIACAO") ));
+			contratosDesativado.setPep          ( resultado.getString("PEP"           ) );
+			contratosDesativado.setValorTotal   ( resultado.getString("VALOR_TOTAL"   ) );
+			contratosDesativado.setIdContrato   ( resultado.getLong  ("ID_CONTRATO"   ) );
+			contratosDesativado.setDt_inicio    ( resultado.getString("DT_INICIO"     ) );
+			contratosDesativado.setDtFinal      ( resultado.getString("DT_FINAL"      ) );
+			if( resultado.getString("DT_DESATIVACAO") == null )
+			    contratosDesativado.setDtDesativacao( " - " );
+			else 
+				contratosDesativado.setDtDesativacao( resultado.getString("DT_DESATIVACAO") );
+			contratosDesativados.add(contratosDesativado);			
+		}
+		
+		return contratosDesativados;
+    }
+
+	
+	
+	public List<ModelCliente> buscarListaClienteNomeDesativado(String dadoCliente) throws SQLException {
+
+	    List<ModelCliente> Clientes = new ArrayList<ModelCliente>();
+		String sql = "SELECT *                                                                      "
+				   + "  FROM CLIENTE       AS CLI                                                   "
+				   + " WHERE (UPPER( RTRIM(CLI.RAZAO_SOCIAL) ) LIKE UPPER('%"  + dadoCliente + "%') "
+				   + "     OR UPPER( RTRIM(CLI.ALIAS       ) ) LIKE UPPER('%"  + dadoCliente + "%') "
+				   + "     OR RTRIM(CLI.CNPJ                 ) LIKE '%"        + dadoCliente + "%') "
+				   + " AND CLI.ID_STATUS_EMP NOT IN( 1, 4, 5 )                                      ";
+		
+		
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {
+			ModelCliente cliente = new ModelCliente();
+			
+			cliente.setId_cliente         ( resultado.getLong           ("id_cliente")                                 );
+			cliente.setId_porte_emp       ( resultado.getLong         ("id_porte_emp")                                 );
+			cliente.setId_status_emp      ( resultado.getLong        ("id_status_emp")                                 );
+			cliente.setRazao_social       ( resultado.getString       ("razao_social")                                 );
+			cliente.setNome_fantasia      ( resultado.getString      ("nome_fantasia")                                 );
+			cliente.setSite               ( resultado.getString               ("site")                                 );
+			cliente.setCep                ( resultado.getString                ("cep")                                 );
+			cliente.setEndereco           ( resultado.getString           ("endereco")                                 );
+			cliente.setBairro             ( resultado.getString             ("bairro")                                 );
+			cliente.setNumero             ( resultado.getString             ("numero")                                 );
+			cliente.setComplemento        ( resultado.getString        ("complemento")                                 );
+			cliente.setCidade             ( resultado.getString             ("cidade")                                 );
+			cliente.setEstado             ( resultado.getString             ("estado")                                 );
+			cliente.setPais               ( resultado.getString               ("pais")                                 );
+			cliente.setCnpj               ( resultado.getString               ("cnpj")                                 );
+			cliente.setInscricao_estadual ( resultado.getString ("inscricao_estadual")                                 );
+			cliente.setInscricao_municipal( resultado.getString("inscricao_municipal")                                 );
+			cliente.setNicho_mercado      ( resultado.getString      ("nicho_mercado")                                 );
+			cliente.setDt_criacao         ( daoUtil.FormataDataStringTelaDataTime( resultado.getString("dt_criacao") ) );
+			cliente.setObservacao         ( resultado.getString("observacao")                                          );
+			cliente.setStatus_emp         ( daoStatusCliente.getNomeStatus(cliente.getId_status_emp())                 );
+			cliente.setLogin_cadastro     ( resultado.getString("login_cadastro")                                      );
+			cliente.setAlias              ( resultado.getString("alias")                                               );
+			Clientes.add(cliente);
+			
+		}
+		
+		return Clientes;
+}
+
 
 	public List<ModelCliente> buscarListaClienteAlias( String nomeAlias ) throws SQLException {
 
@@ -358,6 +509,55 @@ public class DAOClienteRepository {
 		
 		return Clientes;
 	}
+	
+	public List<ModelCliente> buscarListaClienteDesativado( Integer offsetBegin, Integer offsetEnd ) throws SQLException {
+
+	    List<ModelCliente> Clientes = new ArrayList<ModelCliente>();
+	    Integer totalPag = getTotalPag( offsetEnd );
+		
+		String sql = "SELECT * FROM CLIENTE AS CLI                                                   "
+				   + "WHERE  CLI.ID_CLIENTE   IN  (SELECT CON.ID_CLIENTE                             "
+				   + "                                  FROM CONTRATO AS CON                         "
+				   + "                                 WHERE CON.ID_STATUS_CONTRATO NOT IN( 1,4, 5)) "
+				   + " ORDER BY ID_CLIENTE OFFSET                                                    "
+		           + offsetBegin + " ROWS FETCH NEXT "+ offsetEnd +" ROWS ONLY                       ";
+		
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) {
+			ModelCliente cliente = new ModelCliente();
+			
+			cliente.setId_cliente(resultado.getLong           ("id_cliente")                                  );
+			cliente.setId_porte_emp(resultado.getLong         ("id_porte_emp")                                );
+			cliente.setId_status_emp(resultado.getLong        ("id_status_emp")                               );
+			cliente.setRazao_social(resultado.getString       ("razao_social")                                );
+			cliente.setNome_fantasia(resultado.getString      ("nome_fantasia")                               );
+			cliente.setSite(resultado.getString               ("site")                                        );
+			cliente.setCep(resultado.getString                ("cep")                                         );
+			cliente.setEndereco(resultado.getString           ("endereco")                                    );
+			cliente.setBairro(resultado.getString             ("bairro")                                      );
+			cliente.setNumero(resultado.getString             ("numero")                                      );
+			cliente.setComplemento(resultado.getString        ("complemento")                                 );
+			cliente.setCidade(resultado.getString             ("cidade")                                      );
+			cliente.setEstado(resultado.getString             ("estado")                                      );
+			cliente.setPais(resultado.getString               ("pais")                                        );
+			cliente.setCnpj(resultado.getString               ("cnpj")                                        );
+			cliente.setInscricao_estadual(resultado.getString ("inscricao_estadual")                          );
+			cliente.setInscricao_municipal(resultado.getString("inscricao_municipal")                         );
+			cliente.setNicho_mercado(resultado.getString      ("nicho_mercado")                               );
+			cliente.setDt_criacao( daoUtil.FormataDataStringTelaDataTime( resultado.getString("DT_CRIACAO") ) );
+			cliente.setObservacao(resultado.getString("observacao")                                           );
+			cliente.setStatus_emp( daoStatusCliente.getNomeStatus(cliente.getId_status_emp())                 );
+			cliente.setLogin_cadastro( resultado.getString("login_cadastro")                                  );
+			cliente.setAlias(resultado.getString("alias")                                                     );
+			cliente.setTotalPagCli(totalPag);
+			Clientes.add(cliente);
+		}
+		
+		return Clientes;
+	}
+
 
 	public Integer getTotalPag( Integer offsetEnd ) throws SQLException {
 		String sql = "SELECT COUNT(ID_CLIENTE) AS COUNT_ID_CLIENTE                 "

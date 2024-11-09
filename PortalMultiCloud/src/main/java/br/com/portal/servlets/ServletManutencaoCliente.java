@@ -12,11 +12,12 @@ import br.com.portal.dao.DAOStatusCliente;
 import br.com.portal.model.ModelCliente;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-public class ServletManutencaoCliente extends ServletGeniricUtil {
+public class ServletManutencaoCliente extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOStatusCliente daoStatusCliente = new DAOStatusCliente();
 	DAOClienteRepository daoClienteRepository = new DAOClienteRepository();

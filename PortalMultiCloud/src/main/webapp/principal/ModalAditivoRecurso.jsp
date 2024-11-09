@@ -4,7 +4,11 @@
        
     <!-- Modal Add Produto -->
    <div class="modal t-modal primary" id="ModalAditivoRecurso" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true" data-backdrop="static">
-	  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+  
+	  <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+<!--
+	  <div class="modal-dialog modal-dialog-centered modal-fullscreen" role="document">
+-->
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <h5 class="modal-title" id="TituloModalCentralizado">Contratação de Recurso via Aditivo</h5>
@@ -688,6 +692,7 @@
 
 	      <div class="modal-body">
             <div style="height: 300px; overflow: scroll;   ">
+            
 				<table class="table table-striped table-hover table-sm table-bordered table-responsive-sm" id="tabelaResutadoAditivoRecurso" >
 				  <thead>
 				    <tr>
@@ -724,6 +729,8 @@
 				
 				    
 			</div>
+			
+			
 	      </div>
 
 	      <div class="modal-footer">

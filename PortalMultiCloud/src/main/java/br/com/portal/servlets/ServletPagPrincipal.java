@@ -14,11 +14,12 @@ import br.com.portal.dao.DAOpagPrincipal;
 import br.com.portal.model.ModelPagPrincipal;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-public class ServletPagPrincipal extends ServletGeniricUtil {
+public class ServletPagPrincipal extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private static final DecimalFormat df = new DecimalFormat("0.00");
        

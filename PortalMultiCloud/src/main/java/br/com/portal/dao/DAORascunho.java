@@ -83,7 +83,7 @@ public class DAORascunho {
 			       + "  AND STA.ID_STATUS_CONTRATO = ADT.ID_STATUS_ADITIVO                                                                          "
 			       + "  AND TIR.ID_RASCUNHO        = ADT.ID_RASCUNHO                                                                                "
 			       + "  AND VIG.ID_CONTRATO        = ADT.ID_CONTRATO                                                                                "
-			       + ") RESULT_SELECT ORDER BY  TIPO_RASCUNHO DESC, ID_CONTRATO                                                                     ";
+			       + ") RESULT_SELECT ORDER BY QTY_TEMPO_RASCUNHO DESC                                               ";
 		
 		PreparedStatement prepareSql = connection.prepareStatement(sql);
 		ResultSet resutado = prepareSql.executeQuery();

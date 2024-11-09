@@ -8,6 +8,7 @@ public class ModalRecursosContrato {
 	private String familia_flavors;  
 	private String recurso_temporario;
 	private String periodo_utilizacao_bolha;
+	private String ip;
 	private String tamanho_disco;
 	private String dt_cadastro;
 	private String retencao_backup;
@@ -18,7 +19,13 @@ public class ModalRecursosContrato {
 	private String dt_final_vigencia;
 	private String qty_dias_vigencia;
 	private String desc_tempo_vigencia;
-	
+
+	public String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 	public String getHostname() {
 		return hostname;
 	}

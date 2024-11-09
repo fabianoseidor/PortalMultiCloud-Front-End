@@ -245,6 +245,7 @@
 													<th scope="col" style="vertical-align: middle;color: white">Ambiente           </th>
 													<th scope="col" style="vertical-align: middle;color: white">Sistema Operacional</th>
 													<th scope="col" style="vertical-align: middle;color: white">Tamanho Disco      </th>
+													<th scope="col" style="vertical-align: middle;color: white">IP                 </th>
 													<th scope="col" style="vertical-align: middle;color: white">Tipo Serviço       </th>
 													<th scope="col" style="vertical-align: middle;color: white">Retenção Backup    </th>
 													<th scope="col" style="vertical-align: middle;color: white">Recurso Temporário </th>
@@ -533,7 +534,8 @@ function montapepCnpj( modalPepCnpj, cnpj ) {
 
 		if( modalPepCnpj[p].cnpj === cnpj ) selected = 'selected';
 		else selected = '';
-		option += '<option value=' + modalPepCnpj[p].id_contrato + ' ' + selected + '>' + modalPepCnpj[p].cnpj + '</option>';
+//		option += '<option value=' + modalPepCnpj[p].id_contrato + ' ' + selected + '>' + modalPepCnpj[p].cnpj + '</option>';
+		option += '<option value=' + modalPepCnpj[p].id_contrato + ' ' + selected + '>' + modalPepCnpj[p].pep + ' --> ' + modalPepCnpj[p].cnpj  + '</option>';
 	}
 	$("#pepCnpj").html(option).show(); 
 }
@@ -639,6 +641,7 @@ function montaRecursosContrato( mdRecursosContrato ){
 		let td_ambiente           = tr.insertCell();
 		let td_sistemaOperacional = tr.insertCell();
 		let td_tamanhoDisco       = tr.insertCell();
+		let td_ip                 = tr.insertCell();
 		let td_tipoServico        = tr.insertCell();
 		let td_retencaoBackup     = tr.insertCell();
 		let td_recursoTemporario  = tr.insertCell();
@@ -654,6 +657,7 @@ function montaRecursosContrato( mdRecursosContrato ){
 		td_familiaFlavors.innerText     = ( mdRecursosContrato[i].familia_flavors     !== undefined ? mdRecursosContrato[i].familia_flavors     : ' - ' );
 		td_ambiente.innerText           = ( mdRecursosContrato[i].ambiente            !== undefined ? mdRecursosContrato[i].ambiente            : ' - ' );
 		td_sistemaOperacional.innerText = ( mdRecursosContrato[i].sistema_operacional !== undefined ? mdRecursosContrato[i].sistema_operacional : ' - ' );
+		td_ip.innerText                 = ( mdRecursosContrato[i].ip                  !== undefined ? mdRecursosContrato[i].ip                  : ' - ' );
 		td_tamanhoDisco.innerText       = ( mdRecursosContrato[i].tamanho_disco       !== undefined ? mdRecursosContrato[i].tamanho_disco       : ' - ' );
 		td_tipoServico.innerText        = ( mdRecursosContrato[i].tipo_servico        !== undefined ? mdRecursosContrato[i].tipo_servico        : ' - ' );
 		td_retencaoBackup.innerText     = ( mdRecursosContrato[i].retencao_backup     !== undefined ? mdRecursosContrato[i].retencao_backup     : ' - ' );
@@ -667,6 +671,7 @@ function montaRecursosContrato( mdRecursosContrato ){
 		
 		/////////////////////////////////////////////////////////////////
 		td_hostname.setAttribute          ('style', 'vertical-align: middle' );
+		td_ip.setAttribute                ('style', 'vertical-align: middle' );
 		td_familiaFlavors.setAttribute    ('style', 'vertical-align: middle' );
 		td_ambiente.setAttribute          ('style', 'vertical-align: middle' );
 		td_sistemaOperacional.setAttribute('style', 'vertical-align: middle' );

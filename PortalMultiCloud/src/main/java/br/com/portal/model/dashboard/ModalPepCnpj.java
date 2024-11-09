@@ -4,6 +4,14 @@ public class ModalPepCnpj {
 	
 	private String id_contrato;
 	private String cnpj;
+	private String pep;
+
+	public String getPep() {
+		return pep;
+	}
+	public void setPep(String pep) {
+		this.pep = pep;
+	}
 	public String getId_contrato() {
 		return id_contrato;
 	}

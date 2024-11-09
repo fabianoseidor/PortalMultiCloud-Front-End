@@ -74,7 +74,6 @@
       
       <div class="pcoded-main-container">
           <div class="pcoded-wrapper">
-          
                     <div class="pcoded-inner-content">
                         <div class="main-body">
                             <div class="page-wrapper">
@@ -224,6 +223,27 @@
 												            </div>
 												        </div>
 												    </div>
+												    
+												    
+												    
+												    
+												    <div class="col-md-4" style="max-width: 15rem;">
+												       <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+												           <div class="card-block">
+										                         <div class="text-c-purple text-right">
+				                                                     <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+				                                                 </div>
+                                                                    <a href="<%= request.getContextPath() %>/principal/contratosOld.jsp" class="waves-effect waves-dark">
+												                    <h6><i class="fa fa-edit fa-3x text-primary"></i></h6>
+												                    <h6 class="card-title text-dark">Contratos Históricos</h6>
+                                                                 </a>
+												           </div>
+												       </div>
+												    </div>
+
+
+												    
+												    
 					                    <%          perfilLogado = perfilUserLogados.stream().filter( x -> "mautencaoRascunho".equals(x.getDesc_pagina() ) ).findFirst();  %>
 					                                <!-- Menu Manutenção de Cadastro Contrato -->
 												    <div class="col-md-4" style="max-width: 15rem;">
@@ -768,8 +788,10 @@
 									<!-- ########################### -->
 									<br><br>
 								    <p class="h5"><strong>Relatórios</strong></p>
+								    
 								    <div class="row my-12 text-primary">
-								       <div class="col-md-12" style="max-width: 15rem;">
+								    
+								       <div class="col-md-6" style="max-width: 15rem;">
 							             <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
 							                <div class="card-block">
 	                                           <div class="text-c-purple text-right">
@@ -782,7 +804,29 @@
 							                </div>
 							             </div>
 							           </div>
+
+
+								       <div class="col-md-6" style="max-width: 15rem;">
+							             <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+							                <div class="card-block">
+	                                           <div class="text-c-purple text-right">
+                                                 <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+                                               </div>
+	                                           <a href="<%= request.getContextPath() %>/relatorios/relFaturamentoSAP.jsp" class="waves-effect waves-dark">
+							                      <h6><i class="fa fa-pencil-square-o fa-3x text-primary"></i></h6>
+							                      <h6 class="card-title text-dark">Rel. Fatauramento SAP</h6>
+							                   </a>											                
+							                </div>
+							             </div>
+							           </div>
+
+							           
                                     </div>
+ 
+                                  
+                                    
+                                  
+                                    
                                 </div>
                             </div>
                         </div>

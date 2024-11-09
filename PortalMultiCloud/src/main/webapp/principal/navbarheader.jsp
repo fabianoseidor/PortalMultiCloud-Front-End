@@ -52,7 +52,7 @@
                     </div>
                 </li>
                 <li>
-                   <a href="<%= session.getAttribute("urlAPIInicioPortalLogin")%>" class="waves-effect waves-dark" style="margin-top: 10px"> 
+                   <a href="<%= request.getContextPath() %>/ServletLogin?acao=manuLoginUnificado" class="waves-effect waves-dark" style="margin-top: 10px"> 
          <!--         <a href="<%= request.getContextPath() %>/principal/PagPrincipal.jsp" class="waves-effect waves-dark" style="margin-top: 10px">    -->              
                       <span class="pcoded-micon"><i class="ti-home"></i></span>
                       <span class="pcoded-mtext" data-i18n="nav.dash.main">Início</span>
