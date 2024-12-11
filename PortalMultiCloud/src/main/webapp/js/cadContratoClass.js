@@ -571,7 +571,7 @@ class Contrato{
 		contrato.valor_setup            = '';
 		contrato.qty_parcela_setup      = '';		
 		contrato.valor_parcela_setup    = '';
-		contrato.isGmud                 = (document.getElementById("isGmud").value === 1 ? true : false);
+		contrato.isGmud                 = (parseInt(document.getElementById("isGmud").value) === 1 ? true : false);
 	
 		return contrato;
 	}

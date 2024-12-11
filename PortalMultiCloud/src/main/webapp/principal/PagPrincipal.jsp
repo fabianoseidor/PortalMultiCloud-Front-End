@@ -166,6 +166,51 @@
 		                                        <%  } 
                                             }
                                             %>
+                                            
+                                                                                       
+                                            
+									       <div class="col-md-6" style="max-width: 15rem;">
+									         <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+									            <div class="card-block">
+									                <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Você não tem acesso a esta área!">
+			                                             <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+			                                       </div>
+			                                       <a href="<%= request.getContextPath() %>/cadastro/cadGrupoEconomico.jsp" class="waves-effect waves-dark">
+									                  <img src="<%= request.getContextPath() %>/imagens/business-group-C50.png" class="text-primary"/>
+									                  <h6 class="card-title text-dark">Cad. Grupo Econônomico</h6>
+									               </a> 
+									            </div>
+									         </div>
+									       </div>								
+                                            
+                                            
+                                            
+                                            
+                                            
+									       <div class="col-md-6" style="max-width: 15rem;">
+									         <div class="card text-center h-10 wrimagecard wrimagecard-topimage" style="max-width: 15rem;">
+									            <div class="card-block">
+									                <div class="text-c-purple text-right" data-toggle="tooltip" data-placement="top" title="Você não tem acesso a esta área!">
+			                                             <i class="fa fa-lock f-1" style="font-size: 22px; color: white;"></i>
+			                                       </div>
+			                                       <a href="<%= request.getContextPath() %>/cadastro/cadClientesGrupoEco.jsp" class="waves-effect waves-dark">									                  
+									                  <img src="<%= request.getContextPath() %>/imagens/business-group-C50.png" class="text-primary"/>									                  
+									                  <h6 class="card-title text-dark">Cad. Cliente x Grupo</h6>
+									               </a> 
+									            </div>
+									         </div>
+									       </div>								
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
 								    </div>
 
 								    <!-- ########################### -->

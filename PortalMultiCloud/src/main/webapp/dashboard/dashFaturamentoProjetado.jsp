@@ -39,7 +39,7 @@
       <div class="pcoded-overlay-box"></div>
       <div class="pcoded-container navbar-wrapper">
           <jsp:include page="/util/navbarheader.jsp"></jsp:include>
-          <div class="pcoded-main-container" style="background: #dddee0;"> 
+          <div class="pcoded-main-container" style="background: #FFFFFF;"> 
              <jsp:include page="/principal/navbarmainmenu.jsp"></jsp:include>
              <form class="form-material" action="<%= request.getContextPath() %>/ServletsFaturamentoProjetado" method="post" id="formDashFaturamentoProjetado">
                 <div class="container-fluid">
@@ -144,6 +144,35 @@
 	                          </div>
                           
  	                          <div class="col-3">
+ 	                          
+ 	                          
+ 			                     <div class="row">
+			                        <div class="form-group form-default form-static-label col" style="text-align: center;">
+			                           <span class="text-dark  font-italic">Serviço Contratado</span>
+			                           <br><br>
+                                       <div style="height: 150px; overflow: scroll;">
+										  <table class="table table-borderless table-striped table-hover table-sm table-bordered table-responsive-sm" style="line-height:0px;">
+										    <thead >
+										      <tr class="table-primary" style="font-size: 10px;" >
+										        <th scope="col" style="vertical-align: middle;">ID           </th>
+										        <th scope="col" style="vertical-align: middle;">Produto      </th>
+										        <th scope="col" style="vertical-align: middle;">Tipo Contrato</th>
+										        <th scope="col" style="vertical-align: middle;">Quantidade   </th>
+										        <th scope="col" style="vertical-align: middle;">Vlr Unitário </th>
+										        <th scope="col" style="vertical-align: middle;">Vlr Total    </th>
+										      </tr>
+										    </thead>
+										    <tbody id="TbodyShowServicoContratado" style="font-size: 10px;">
+										  
+										    </tbody>
+								          </table>
+								       </div>
+			                        </div>
+	                             </div>
+	                          
+ 	                          
+ <!--  
+ fabiano	                          
 	                             <div class="row">
 			                        <div class="form-group form-default form-static-label col" style="text-align: center;">
 			                           <span class="text-dark  font-italic" style="text-align: center;">PEP ->> CNPJ</span>
@@ -152,6 +181,7 @@
 										</select>
 			                        </div>
 			                     </div>
+-->			                     
 	                          </div>
                           
                            </div>
@@ -186,16 +216,16 @@
                                        <div style="height: 150px; overflow: scroll;">
 										  <table class="table table-borderless table-striped table-hover table-sm table-bordered table-responsive-sm" style="line-height:0px;">
 										    <thead >
-										      <tr class="table-primary">
-										        <th scope="col" style="vertical-align: middle;color: white">ID           </th>
-										        <th scope="col" style="vertical-align: middle;color: white">Produto      </th>
-										        <th scope="col" style="vertical-align: middle;color: white">Tipo Contrato</th>
-										        <th scope="col" style="vertical-align: middle;color: white">Quantidade   </th>
-										        <th scope="col" style="vertical-align: middle;color: white">Vlr Unitário </th>
-										        <th scope="col" style="vertical-align: middle;color: white">Vlr Total    </th>
+										      <tr class="table-primary" style="font-size: 10px;" >
+										        <th scope="col" style="vertical-align: middle;">ID           </th>
+										        <th scope="col" style="vertical-align: middle;">Produto      </th>
+										        <th scope="col" style="vertical-align: middle;">Tipo Contrato</th>
+										        <th scope="col" style="vertical-align: middle;">Quantidade   </th>
+										        <th scope="col" style="vertical-align: middle;">Vlr Unitário </th>
+										        <th scope="col" style="vertical-align: middle;">Vlr Total    </th>
 										      </tr>
 										    </thead>
-										    <tbody id="TbodyShowServicoContratado">
+										    <tbody id="TbodyShowServicoContratado" style="font-size: 10px;">
 										  
 										    </tbody>
 								          </table>
@@ -212,16 +242,16 @@
                                        <div style="height: 150px; overflow: scroll;">
 										  <table class="table table-borderless table-striped table-hover table-sm table-bordered table-responsive-sm" style="line-height:0px;">
 										    <thead >
-										      <tr class="table-primary">
-										        <th scope="col" style="vertical-align: middle;color: white">ID              </th>
-										        <th scope="col" style="vertical-align: middle;color: white">Tipo Contrato   </th>
-										        <th scope="col" style="vertical-align: middle;color: white">ID Origem       </th>
-										        <th scope="col" style="vertical-align: middle;color: white">Data Inicio     </th>
-										        <th scope="col" style="vertical-align: middle;color: white">Data Fim        </th>
-										        <th scope="col" style="vertical-align: middle;color: white">Meses Contratado</th>
+										      <tr class="table-primary" style="font-size: 10px;">
+										        <th scope="col" style="vertical-align: middle;">ID              </th>
+										        <th scope="col" style="vertical-align: middle;">Tipo Contrato   </th>
+										        <th scope="col" style="vertical-align: middle;">ID Origem       </th>
+										        <th scope="col" style="vertical-align: middle;">Data Inicio     </th>
+										        <th scope="col" style="vertical-align: middle;">Data Fim        </th>
+										        <th scope="col" style="vertical-align: middle;">Meses Contratado</th>
 										      </tr>
 										    </thead>
-										    <tbody id="TbodyShowHistoricoContrato">
+										    <tbody id="TbodyShowHistoricoContrato" style="font-size: 10px;">
 										    </tbody>
 								          </table>
 								       </div>
@@ -236,28 +266,28 @@
 			                        <div class="form-group form-default form-static-label col" style="text-align: center;">
 			                           <span class="text-dark font-italic">Instâncias</span>
 			                           <br><br>
-                                       <div style="height: 150px; overflow: scroll;">
-										  <table class="table table-borderless table-striped table-hover table-sm table-bordered table-responsive-sm" style="line-height:0px;">
+                                       <div style="height: 200px; overflow: scroll;">
+										  <table class="table table-borderless table-striped table-hover table-sm table-bordered table-responsive-sm" id="tbInstancia" style="line-height:0px;">
 										    <thead >
-										      <tr class="table-primary">
-													<th scope="col" style="vertical-align: middle;color: white">Hostname           </th>
-													<th scope="col" style="vertical-align: middle;color: white">Familia Flavors    </th>
-													<th scope="col" style="vertical-align: middle;color: white">Ambiente           </th>
-													<th scope="col" style="vertical-align: middle;color: white">Sistema Operacional</th>
-													<th scope="col" style="vertical-align: middle;color: white">Tamanho Disco      </th>
-													<th scope="col" style="vertical-align: middle;color: white">IP                 </th>
-													<th scope="col" style="vertical-align: middle;color: white">Tipo Serviço       </th>
-													<th scope="col" style="vertical-align: middle;color: white">Retenção Backup    </th>
-													<th scope="col" style="vertical-align: middle;color: white">Recurso Temporário </th>
-													<th scope="col" style="vertical-align: middle;color: white">Data Cadastro      </th>
-													<th scope="col" style="vertical-align: middle;color: white">Tipo Recurso       </th>
-													<th scope="col" style="vertical-align: middle;color: white">Início Vigência    </th>
-													<th scope="col" style="vertical-align: middle;color: white">Final Vigência     </th>
-													<th scope="col" style="vertical-align: middle;color: white">Dias Vigência      </th>
-													<th scope="col" style="vertical-align: middle;color: white">Tempo Vigência     </th>
+										      <tr class="table-primary" style="font-size: 10px;">
+													<th scope="col" style="vertical-align: middle;">Hostname           </th>
+													<th scope="col" style="vertical-align: middle;">Familia Flavors    </th>
+													<th scope="col" style="vertical-align: middle;">Ambiente           </th>
+													<th scope="col" style="vertical-align: middle;">Sistema Operacional</th>
+													<th scope="col" style="vertical-align: middle;">Tamanho Disco      </th>
+													<th scope="col" style="vertical-align: middle;">IP                 </th>
+													<th scope="col" style="vertical-align: middle;">Tipo Serviço       </th>
+													<th scope="col" style="vertical-align: middle;">Retenção Backup    </th>
+													<th scope="col" style="vertical-align: middle;">Recurso Temporário </th>
+													<th scope="col" style="vertical-align: middle;">Data Cadastro      </th>
+													<th scope="col" style="vertical-align: middle;">Tipo Recurso       </th>
+													<th scope="col" style="vertical-align: middle;">Início Vigência    </th>
+													<th scope="col" style="vertical-align: middle;">Final Vigência     </th>
+													<th scope="col" style="vertical-align: middle;">Dias Vigência      </th>
+													<th scope="col" style="vertical-align: middle;">Tempo Vigência     </th>
 										      </tr>
 										    </thead>
-										    <tbody id="TbodyShowInstancias">
+										    <tbody id="TbodyShowInstancias" style="font-size: 10px;">
 										  
 										    </tbody>
 								          </table>

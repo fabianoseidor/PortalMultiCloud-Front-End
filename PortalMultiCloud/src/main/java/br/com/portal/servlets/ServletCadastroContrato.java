@@ -248,8 +248,8 @@ public class ServletCadastroContrato extends HttpServlet {
 						if(daoContratoRepository.isExstContratoAtivo( Long.parseLong(idCliente) ) ) {
 						    
 							modelContrato = daoContratoRepository.getContratoAtivoCliente( Long.parseLong(idCliente)  );
-							List<ModelListaRecursoContratoAditivo> listaRecursoContratos = daoContratoRepository.getListaRecursoContrato   ( Long.parseLong(idCliente.trim()) );
-	    					List<ModelAitivoRecursoModal>          listaAitivoRecurso    = daoAditivoModalRecurso.getListaAditivoRecursoID ( modelContrato.getId_contrato()           );
+							List<ModelListaRecursoContratoAditivo> listaRecursoContratos = daoContratoRepository.getListaRecursoContrato   ( modelContrato.getId_contrato() );
+	    					List<ModelAitivoRecursoModal>          listaAitivoRecurso    = daoAditivoModalRecurso.getListaAditivoRecursoID ( modelContrato.getId_contrato() );
 	 
 	    					List<ModelRenovacaoContrato> listaRenovacaoContratos = new ArrayList<ModelRenovacaoContrato>();
 	    					//Informacoes dos recursos

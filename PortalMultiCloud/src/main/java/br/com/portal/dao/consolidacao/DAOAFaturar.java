@@ -170,28 +170,28 @@ public class DAOAFaturar {
 		
 		List<ModelAFaturar> listaAFaturar = null;
 		
-		String sql = "SELECT                               "
-				+ "    vw.pep                              "
-				+ "  , vw.NomeParceiro                     "
-				+ "  , vw.DataVencimentoOriginal           "
-				+ "  , Month(vw.DataVencimentoOriginal) mes"
-				+ "  , vw.AnoFaturamento                   "
-				+ "  , vw.CodigoMoeda                      "
-				+ "  , vw.ValorBruto                       "
-				+ "FROM prd.vw_fluxo_receita as vw         ";
+		String sql = "SELECT                       "
+				+ "    vw.pep                      "
+				+ "  , vw.NomeParceiro             "
+				+ "  , vw.DataLancamento           "
+				+ "  , Month(vw.DataLancamento) mes"
+				+ "  , vw.AnoFaturamento           "
+				+ "  , vw.CodigoMoeda              "
+				+ "  , vw.ValorBruto               "
+				+ "FROM prd.vw_fluxo_receita as vw ";
 		PreparedStatement statemet = connectionMySql.prepareStatement(sql);
 		ResultSet resutado = statemet.executeQuery();
 		
 		while (resutado.next())  {
 			ModelAFaturar aFaturar = new ModelAFaturar();
-	    	aFaturar.setPep           ( resutado.getString("pep"                   ).trim() != null && !resutado.getString("pep"                   ).trim().isEmpty() ? resutado.getString("pep"                   ).trim() : null );   // - 0  razaoSocial 	                        
-	    	aFaturar.setNome_emissor  ( resutado.getString("NomeParceiro"          ).trim() != null && !resutado.getString("NomeParceiro"          ).trim().isEmpty() ? resutado.getString("NomeParceiro"          ).trim() : null );   // - 1  pep                                   
-	    	aFaturar.setDt_faturamento( resutado.getString("DataVencimentoOriginal").trim() != null && !resutado.getString("DataVencimentoOriginal").trim().isEmpty() ? resutado.getString("DataVencimentoOriginal").trim() : null );   // - 2  alias 	                              
-	    	aFaturar.setMes           ( resutado.getString("mes"                   ).trim() != null && !resutado.getString("mes"                   ).trim().isEmpty() ? resutado.getString("mes"                   ).trim() : null );   // - 3  status	                              
-	    	aFaturar.setAno           ( resutado.getString("AnoFaturamento"        ).trim() != null && !resutado.getString("AnoFaturamento"        ).trim().isEmpty() ? resutado.getString("AnoFaturamento"        ).trim() : null );   // - 4  comercial	                            
-	    	aFaturar.setValor         ( resutado.getString("ValorBruto"            ).trim() != null && !resutado.getString("ValorBruto"            ).trim().isEmpty() ? resutado.getString("ValorBruto"            ).trim() : null );   // - 5  emailCriseSeidor                      
-	    	aFaturar.setMoeda         ( resutado.getString("CodigoMoeda"           ).trim() != null && !resutado.getString("CodigoMoeda"           ).trim().isEmpty() ? resutado.getString("CodigoMoeda"           ).trim() : null );   // - 6  obsCriseSeidor 	                      
-	    	aFaturar.setVl_faturamento( resutado.getString("ValorBruto"            ).trim() != null && !resutado.getString("ValorBruto"            ).trim().isEmpty() ? resutado.getString("ValorBruto"            ).trim() : null );   // - 7  Vlr faturamento 
+	    	aFaturar.setPep           ( resutado.getString("pep"           ).trim() != null && !resutado.getString("pep"           ).trim().isEmpty() ? resutado.getString("pep"           ).trim() : null );   // - 0  razaoSocial 	                        
+	    	aFaturar.setNome_emissor  ( resutado.getString("NomeParceiro"  ).trim() != null && !resutado.getString("NomeParceiro"  ).trim().isEmpty() ? resutado.getString("NomeParceiro"  ).trim() : null );   // - 1  pep                                   
+	    	aFaturar.setDt_faturamento( resutado.getString("DataLancamento").trim() != null && !resutado.getString("DataLancamento").trim().isEmpty() ? resutado.getString("DataLancamento").trim() : null );   // - 2  alias 	                              
+	    	aFaturar.setMes           ( resutado.getString("mes"           ).trim() != null && !resutado.getString("mes"           ).trim().isEmpty() ? resutado.getString("mes"           ).trim() : null );   // - 3  status	                              
+	    	aFaturar.setAno           ( resutado.getString("AnoFaturamento").trim() != null && !resutado.getString("AnoFaturamento").trim().isEmpty() ? resutado.getString("AnoFaturamento").trim() : null );   // - 4  comercial	                            
+	    	aFaturar.setValor         ( resutado.getString("ValorBruto"    ).trim() != null && !resutado.getString("ValorBruto"    ).trim().isEmpty() ? resutado.getString("ValorBruto"    ).trim() : null );   // - 5  emailCriseSeidor                      
+	    	aFaturar.setMoeda         ( resutado.getString("CodigoMoeda"   ).trim() != null && !resutado.getString("CodigoMoeda"   ).trim().isEmpty() ? resutado.getString("CodigoMoeda"   ).trim() : null );   // - 6  obsCriseSeidor 	                      
+	    	aFaturar.setVl_faturamento( resutado.getString("ValorBruto"    ).trim() != null && !resutado.getString("ValorBruto"    ).trim().isEmpty() ? resutado.getString("ValorBruto"    ).trim() : null );   // - 7  Vlr faturamento 
 	    	
 	    	if( listaAFaturar == null ) listaAFaturar = new ArrayList<ModelAFaturar>();
 	    	listaAFaturar.add(aFaturar);

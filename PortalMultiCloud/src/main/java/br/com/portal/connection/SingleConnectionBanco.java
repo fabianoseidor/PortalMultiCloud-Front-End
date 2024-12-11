@@ -10,12 +10,12 @@ public class SingleConnectionBanco {
 	
 	public static String status = "Não conectou...";
 
-	private static String url            = "jdbc:sqlserver://PISEIDORSQL:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=PORTALMULTICLOUD_PRD;";         
-//    private static String url            = "jdbc:sqlserver://PISEIDORSQL:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=PORTALMULTICLOUD_DEV;";         
-//	private static String url            = "jdbc:sqlserver://10.154.20.130:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=PORTALMULTICLOUD_DEV;";         
+//	private static String url      = "jdbc:sqlserver://PISEIDORSQL:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=PORTALMULTICLOUD_PRD;";         
+    private static String url      = "jdbc:sqlserver://PISEIDORSQL:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=PORTALMULTICLOUD_DEV;";         
+//	private static String url        = "jdbc:sqlserver://10.154.20.130:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=PORTALMULTICLOUD_DEV;";         
 
-	private static String urlGM          = "jdbc:sqlserver://PISEIDORSQL:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=LOGINUNIFICADO_PRD;";         
-//    private static String urlGM          = "jdbc:sqlserver://PISEIDORSQL:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=LOGINUNIFICADO_DEV;";         
+//	private static String urlGM    = "jdbc:sqlserver://PISEIDORSQL:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=LOGINUNIFICADO_PRD;";         
+    private static String urlGM    = "jdbc:sqlserver://PISEIDORSQL:1433;encrypt=false;instanceName=PORTALMULTICLOUD;database=LOGINUNIFICADO_DEV;";         
     
     
     private static String password       = "59~49h\"0FtgnNbi1";

@@ -136,13 +136,11 @@ public class ServletManutencaoCliente extends HttpServlet {
 		    String dt_criacao          = request.getParameter("dt_criacao");
 		    String observacao          = request.getParameter("observacao");
 		    String alias               = request.getParameter("alias");
-		    
-		    
-		    
-		    ModelCliente modelClienteManu = new ModelCliente();
-		    HttpServletRequest req = (HttpServletRequest) request;
-			HttpSession session = req.getSession();
-		    String usuarioLogado = (String) session.getAttribute("usuario");
+
+		    ModelCliente       modelClienteManu = new ModelCliente();
+		    HttpServletRequest req              = (HttpServletRequest) request;
+			HttpSession        session          = req.getSession();
+		    String             usuarioLogado    = (String) session.getAttribute("usuario");
 		    
 		    modelClienteManu.setId_cliente         ( id_cliente          != null && !id_cliente.isEmpty()          ? Long.parseLong(id_cliente   ): null );
 		    modelClienteManu.setId_porte_emp       ( id_porte_emp        != null && !id_porte_emp.isEmpty()        ? Long.parseLong(id_porte_emp ): null );
@@ -180,8 +178,7 @@ public class ServletManutencaoCliente extends HttpServlet {
 					msg = "Registro gravado com sucesso!";
 				}else msg = "Registro atualizado com sucesso!";
 				
-				modelClienteManu = daoClienteRepository.gravarCliente(modelClienteManu);
-		
+				modelClienteManu = daoClienteRepository.gravarCliente(modelClienteManu);		
 			}
 
 		    // Carrega as informacoes na Tela apos uma acao de Insert ou Update

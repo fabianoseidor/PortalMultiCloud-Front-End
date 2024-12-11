@@ -66,6 +66,8 @@ public class DAOFaturamentoProjetado {
 				+ " WHERE UPPER( CLI.ALIAS ) LIKE UPPER('%" + alias + "%') "
 				+ "   AND CON.ID_CLIENTE = CLI.ID_CLIENTE                  "
 				+ "   AND CON.ID_STATUS_CONTRATO IN ( 1, 4 )               ";
+
+// System.out.println(sql);
 		
 		PreparedStatement ps = connection.prepareStatement(sql);
 		
@@ -110,7 +112,61 @@ public class DAOFaturamentoProjetado {
 		
 		return mdPesquisas;
 	}
-	
+
+	public List<ModalPesquisa> getListaPesquisaRS( String razaSocial ) throws SQLException {
+		List<ModalPesquisa> mdPesquisas = new ArrayList<ModalPesquisa>();
+		
+		String sql = "SELECT                                                           "
+				+ "      CLI.ID_CLIENTE                                                "
+				+ "    , CLI.CNPJ                                                      "
+				+ "    , CLI.RAZAO_SOCIAL                                              "
+				+ "    , CLI.ALIAS                                                     "
+				+ "  FROM CLIENTE  AS CLI                                              "
+				+ " WHERE UPPER( CLI.RAZAO_SOCIAL ) LIKE UPPER('%" + razaSocial + "%') ";
+		
+		PreparedStatement ps = connection.prepareStatement(sql);
+		
+		ResultSet set = ps.executeQuery();
+		
+		while(set.next()) {
+		   ModalPesquisa mdPesquisa = new ModalPesquisa();
+		   mdPesquisa.setId_cliente  ( set.getString( "ID_CLIENTE"  ) );
+		   mdPesquisa.setCnpj        ( set.getString( "CNPJ"        ) );
+		   mdPesquisa.setRazao_social( set.getString( "RAZAO_SOCIAL") );
+		   mdPesquisa.setAlias       ( set.getString( "ALIAS"       ) );
+		   mdPesquisas.add(mdPesquisa);
+		}
+		
+		return mdPesquisas;
+	}
+
+	public List<ModalPesquisa> getListaPesqAlias( String alias ) throws SQLException {
+		List<ModalPesquisa> mdPesquisas = new ArrayList<ModalPesquisa>();
+		
+		String sql = "SELECT                                                           "
+				+ "      CLI.ID_CLIENTE                                                "
+				+ "    , CLI.CNPJ                                                      "
+				+ "    , CLI.RAZAO_SOCIAL                                              "
+				+ "    , CLI.ALIAS                                                     "
+				+ "  FROM CLIENTE  AS CLI                                              "
+				+ " WHERE UPPER( CLI.ALIAS ) LIKE UPPER('%" + alias + "%') ";
+		
+		PreparedStatement ps = connection.prepareStatement(sql);
+		
+		ResultSet set = ps.executeQuery();
+		
+		while(set.next()) {
+		   ModalPesquisa mdPesquisa = new ModalPesquisa();
+		   mdPesquisa.setId_cliente  ( set.getString( "ID_CLIENTE"  ) );
+		   mdPesquisa.setCnpj        ( set.getString( "CNPJ"        ) );
+		   mdPesquisa.setRazao_social( set.getString( "RAZAO_SOCIAL") );
+		   mdPesquisa.setAlias       ( set.getString( "ALIAS"       ) );
+		   mdPesquisas.add(mdPesquisa);
+		}
+		
+		return mdPesquisas;
+	}
+
 	public ModalFaturamentoProjetado montaContrato( Long idContrato ) throws SQLException {
 		ModalFaturamentoProjetado mdFaturamentoProjetado = new ModalFaturamentoProjetado();
 		

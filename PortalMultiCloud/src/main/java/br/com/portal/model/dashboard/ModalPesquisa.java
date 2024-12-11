@@ -5,9 +5,16 @@ public class ModalPesquisa {
 	private String id_cliente;
 	private String id_contrato;  
 	private String razao_social;
+	private String cnpj;
 	private String alias;
 	private String pep;
 	
+	public String getCnpj() {
+		return cnpj;
+	}
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
 	public String getId_cliente() {
 		return id_cliente;
 	}

@@ -724,7 +724,6 @@
 										  </button>
 										</div>
 
-
 										<!-- Campo destinado listar os Cliente no pe da tela -->
 										<div class="row">
 											<div class="col-sm-12">
@@ -1327,7 +1326,10 @@
              }
         }	   
     }else{
- 	  $('#pep').append('<option>PEP PROVISÓRIO</option>');
+ 	  // $('#pep').append('<option>PEP PROVISÓRIO</option>');
+ 	  
+ 	  $('#pep').append("<option value='PEP PROVISÓRIO'> PEP PROVISÓRIO </option>");
+ 	  alert('PEP');
  	  //$('#pep').get(0).selectedIndex = 'PEP PROVISÓRIO';
     }	
  }
@@ -1354,7 +1356,7 @@
  	 			else selected = '';
  				
 // 				option += '<option value=' + json[p].idContrato + ' ' + selected + '>' + json[p].pep + '</option>';
- 				option += '<option value=' + json[p].pep + ' ' + selected + '>' + json[p].pep + '</option>';
+ 				option += "<option value='" + json[p].pep + "' " + selected + ">" + json[p].pep + "</option>";
  			}
  			
  			let idStatusContrato = document.getElementById("id_status_contrato").value;
@@ -1363,7 +1365,6 @@
  				
  				option += '<option value="PEP" selected >"PEP PROVISÓRIO"</option>';
             }
- 			
  			
  			$("#pep").html(option).show();  
  /*			
@@ -1487,13 +1488,13 @@
  /*                                                                */
  /******************************************************************/
  function montaTabelaRecursos(){
-    var urlAction         = document.getElementById("formContrato").action;
-    var idContratoCliente = document.getElementById("id_cliente"    ).value; 
+    var urlAction  = document.getElementById("formContrato").action;
+    var idContrato = document.getElementById("id_contrato" ).value; 
     
 	$.ajax({     			
 		method : "get",
 		url  : urlAction,
-		data : 'acao=montaListaRecursos&idContratoCliente=' + idContratoCliente,
+		data : 'acao=montaListaRecursos&idContrato=' + idContrato,
 		success: function(lista){
 			var listRecursos = JSON.parse(lista); 
 			let tbody = document.getElementById('TbodyRecusos');

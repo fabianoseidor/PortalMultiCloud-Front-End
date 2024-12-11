@@ -119,7 +119,7 @@
 												     <br>
 												     <div class="form-row">
 												        <div class="form-group form-default form-static-label col-md-12 mb-12">
-												            <button type="submit" class="btn btn-outline-primary btn-sw btn-block" id="btproc" name="btproc" onclick='informe();'>Processar Arquivo</button>
+												            <button type="submit" class="btn btn-outline-primary btn-sw btn-block" id="btproc" name="btproc" onclick='informe();'>Processar</button>
 												        </div>
 												     </div>
 											       </div>

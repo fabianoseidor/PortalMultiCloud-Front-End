@@ -43,7 +43,6 @@
     <servlet-name>ServletCliente</servlet-name>
     <url-pattern>/ServletCliente</url-pattern>
   </servlet-mapping>
-
   <servlet>
     <description></description>
     <display-name>ServletContratoController</display-name>
@@ -476,5 +475,25 @@
   <servlet-mapping>
     <servlet-name>ServletFaturamentoSAP</servlet-name>
     <url-pattern>/ServletFaturamentoSAP</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ServletCadastroGrupoEconomica</display-name>
+    <servlet-name>ServletCadastroGrupoEconomica</servlet-name>
+    <servlet-class>br.com.portal.servlets.ServletCadastroGrupoEconomica</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletCadastroGrupoEconomica</servlet-name>
+    <url-pattern>/ServletCadastroGrupoEconomica</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ServletCadClienteGrupoEco</display-name>
+    <servlet-name>ServletCadClienteGrupoEco</servlet-name>
+    <servlet-class>br.com.portal.servlets.ServletCadClienteGrupoEco</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletCadClienteGrupoEco</servlet-name>
+    <url-pattern>/ServletCadClienteGrupoEco</url-pattern>
   </servlet-mapping>
 </web-app>

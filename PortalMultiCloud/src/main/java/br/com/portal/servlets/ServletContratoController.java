@@ -151,9 +151,9 @@ public class ServletContratoController extends HttpServlet {
 		   		}
 		   		
 			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("montaListaRecursos") ) {
-				String idContratoCliente = request.getParameter("idContratoCliente");  
-				if( (idContratoCliente != null && !idContratoCliente.isEmpty()) ) {
-				     List<ModelListaRecursoContratoAditivo> listaRecursoContratos = daoContratoRepository.getListaRecursoContrato( Long.parseLong(idContratoCliente.trim()) );
+				String idContrato = request.getParameter("idContrato");  
+				if( (idContrato != null && !idContrato.isEmpty()) ) {
+				     List<ModelListaRecursoContratoAditivo> listaRecursoContratos = daoContratoRepository.getListaRecursoContrato( Long.parseLong(idContrato.trim()) );
 
 				     Gson gson = new Gson();
 				     String lista = gson.toJson(listaRecursoContratos);
